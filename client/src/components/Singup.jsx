@@ -64,7 +64,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Singup() {
-
   const [open, setOpen] = React.useState(false);
   const classes = useStyles();
   const [modalStyle] = React.useState(getModalStyle);
@@ -102,7 +101,7 @@ function Singup() {
         onClick={handleOpenSingUp}
         variant="outlined"
         color="secondary">
-        Sing Up
+        Sign Up
         </Button>
       <Modal
         open={open}

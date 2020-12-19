@@ -1,8 +1,9 @@
 import React from "react";
 import { makeStyles } from '@material-ui/core/styles';
-import Login from './Login'
-import Singup from "./Singup";
-import Timer from "./Timer"
+// import Login from './Login';
+// import Singup from "./Singup";
+import Timer from "./Timer";
+import Header from "./Header/Header";
 
 
 
@@ -21,10 +22,9 @@ function Start() {
 
   return (
     <div>
-      <div className={classes.root}>
-        <Login />
-        <Singup />
-      </div>
+        <Header />
+        {/* <Login /> */}
+        {/* <Singup /> */}
       <div>
         <Timer />
       </div>
