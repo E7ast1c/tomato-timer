@@ -4,10 +4,12 @@ import (
 	"fmt"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
-	"log"
+	log "github.com/sirupsen/logrus"
 	"tomato-timer/server/helpers"
 	"tomato-timer/server/models"
 )
+
+var db = ConnectDB()
 
 func ConnectDB() *gorm.DB {
 	dbcnfg := helpers.GetConfig().DBConfig
@@ -19,11 +21,9 @@ func ConnectDB() *gorm.DB {
 		log.Fatalf("db connect error %s\n", err)
 	}
 
-	// defer db.Close()
-
 	db.AutoMigrate(
 		&models.User{})
 
-	fmt.Println("PG DB successfully connected \n", db)
+	log.Infof("PG DB successfully connected \n", db)
 	return db
 }

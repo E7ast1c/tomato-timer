@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"golang.org/x/crypto/bcrypt"
+	log "github.com/sirupsen/logrus"
 	"net/http"
 	"time"
 	"tomato-timer/server/dao"
@@ -102,4 +103,11 @@ func FindOne(email, password string) map[string]interface{} {
 	resp["token"] = tokenString
 	resp["user"] = user
 	return resp
+}
+
+func FetchUsers(w http.ResponseWriter, r *http.Request) {
+	res := dao.GetAllUsers()
+	if err := json.NewEncoder(w).Encode(res); err != nil {
+		log.Errorf("FetchUsers error = %v", err)
+	}
 }
