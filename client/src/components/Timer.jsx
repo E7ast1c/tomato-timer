@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 
 import Clock from './Clock'
+import ViewClock from './ViewClock'
 
 
 const useStyles = makeStyles({
@@ -15,41 +16,25 @@ const useStyles = makeStyles({
 export default function Timer() { 
   const initial = 0
   const classes = useStyles();
-  const [progress, setProgress] = React.useState(initial);
-  const [clockEnabled, setClockEnabled] = useState(0)
+  const [clockEnabled, setClockEnabled] = useState(false)
+  const [pauseClock, setPauseClock] = useState(false)
+  const [progress, setProgress] = useState(1);
 
 
   const start = () => {
-    // console.log(clockEnabled)
     setClockEnabled(true)
+    setPauseClock(false)
   }
-  // const tick = (a) => {
-  //   let t 
 
-  //   if(a){
-  //     t = setInterval(() => {
-  //       setProgress((prevProgress) => (prevProgress >= 100 ? 10 : prevProgress + 1));
-  //     }, 1000); 
-  //   }
-
-  //   if (!a){
-  //     clearInterval(t)
-  //   }
-  // }
   const stop = () => {
-    setClockEnabled(0)
-  }
-
-  const pause = () => {
-    // setClockEnabled(12)
+    setProgress(0)
+    setClockEnabled(false)
   }
 
   return (
     <div>
-    {clockEnabled && <Clock />}
-      {/* <div className={classes.root}>
-        <LinearProgressWithLabel value={progress} />
-      </div> */}
+    {clockEnabled && !pauseClock && <Clock params={{progress, setProgress}} />}
+    {clockEnabled && pauseClock && <ViewClock params={{progress}} />}
       <div>
         <Button 
           variant="contained"  
@@ -61,7 +46,7 @@ export default function Timer() {
         <Button 
           variant="contained" 
           style={{"backgroundColor": "yellow"}}
-          onClick={() => pause()}
+          onClick={() => setPauseClock(true)}
           >
           Pause
         </Button>
