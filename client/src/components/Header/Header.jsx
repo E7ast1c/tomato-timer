@@ -1,13 +1,11 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
 import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import SearchIcon from '@material-ui/icons/Search';
 import Typography from '@material-ui/core/Typography';
-import Link from '@material-ui/core/Link';
 import GitHubIcon from '@material-ui/icons/GitHub';
+import Register from "./RegisterModal";
+
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
@@ -34,11 +32,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Header(props) {
+  const [registerModal, setRegisterModal] = React.useState(false);
+  const [isLogIn, setIsLogIn] = React.useState(false);
   const classes = useStyles();
   const title = "Tomato timer";
   return (
     <React.Fragment>
-    <Toolbar className={classes.toolbar}>
+      <Toolbar className={classes.toolbar}>
         <GitHubIcon className={classes.toolbarIcon} />
         <Typography
           component="h2"
@@ -50,17 +50,20 @@ export default function Header(props) {
         >
           {title}
         </Typography>
-        
-      
-      <Toolbar className={classes.toolbarSecondary}>
-      <Button className={classes.toolbarButton} variant="outlined" size="small">
-          Log in
+
+
+        <Toolbar className={classes.toolbarSecondary}>
+          <Button className={classes.toolbarButton} variant="outlined" size="small"
+            onClick={() => setIsLogIn(!isLogIn)} >
+            Log in
         </Button>
-        <Button className={classes.toolbarButton} variant="outlined" size="small">
-          Sign up
+          <Button className={classes.toolbarButton} variant="outlined" size="small"
+            onClick={() => setRegisterModal(!registerModal)} >
+            Register
         </Button>
+        </Toolbar>
       </Toolbar>
-      </Toolbar>
+      {registerModal && <Register prop={{registerModal, setRegisterModal}}/>}
     </React.Fragment>
   );
 }
