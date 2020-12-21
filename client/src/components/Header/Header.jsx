@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
   },
   toolbarIcon: {
     marginLeft: "1em",
-    marginRight: "8em",
+    marginRight: "2em",
   },
   toolbarTitle: {
     flex: 1,
@@ -39,6 +39,11 @@ export default function Header(props) {
     <React.Fragment>
       <Toolbar className={classes.toolbar}>
         <GitHubIcon className={classes.toolbarIcon} />
+        <Button className={classes.toolbarButton} variant="outlined" size="small"
+        >
+          Settings
+        </Button>
+
         <Typography
           component="h2"
           variant="h5"
@@ -62,7 +67,7 @@ export default function Header(props) {
         </Button>
         </Toolbar>
       </Toolbar>
-      {registerModal && <Register prop={{registerModal, setRegisterModal}}/>}
+      {registerModal && <Register prop={{ registerModal, setRegisterModal }} />}
     </React.Fragment>
   );
 }
