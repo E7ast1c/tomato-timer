@@ -6,7 +6,6 @@ import Typography from '@material-ui/core/Typography';
 import GitHubIcon from '@material-ui/icons/GitHub';
 import Register from "./RegisterModal";
 
-
 const useStyles = makeStyles((theme) => ({
   toolbar: {
     borderBottom: `1px solid `
