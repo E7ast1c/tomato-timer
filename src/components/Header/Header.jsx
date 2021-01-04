@@ -5,8 +5,8 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import GitHubIcon from '@material-ui/icons/GitHub';
 import Register from "./RegisterModal";
-
-// import SettingModal from './SettingsModal'
+import SettingModal from './SettingsModal'
+import LoiginModal from './LoiginModal'
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
@@ -34,6 +34,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Header(props) {
   const [registerModal, setRegisterModal] = useState(false);
+  const [settingsModal, setSettingsModal] = useState(false);
   const [isLogIn, setIsLogIn] = useState(false);
   const classes = useStyles();
   const title = "Tomato timer";
@@ -45,7 +46,7 @@ export default function Header(props) {
           className={classes.toolbarButton} 
           variant="outlined" 
           size="small"
-          // onClick={handleOpen}
+          onClick={() => setSettingsModal(!settingsModal)}
         >
           Settings
         </Button>
@@ -73,7 +74,9 @@ export default function Header(props) {
         </Button>
         </Toolbar>
       </Toolbar>
+      {isLogIn && <LoiginModal prop={{ isLogIn, setIsLogIn }} />}
       {registerModal && <Register prop={{ registerModal, setRegisterModal }} />}
+      {settingsModal && <SettingModal prop={{ settingsModal, setSettingsModal}} />}
     </React.Fragment>
   );
 }

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-// import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 
 import LinearProgress from '@material-ui/core/LinearProgress';
@@ -10,14 +10,19 @@ import Clock from './Clock'
 import ViewClock from './ViewClock'
 
 
-// const useStyles = makeStyles({
-//   root: {
-//     width: '100%',
-//   },
-// });
+const useStyles = makeStyles({
+  timer: {
+    display: 'flex',
+    flexDirection: 'column',
+    marginTop: '32vh'
+  },
+  btn: {
+    margin: '.2em'
+  }
+});
 
 export default function Timer() {
-  // const classes = useStyles();
+  const classes = useStyles();
   const [clockEnabled, setClockEnabled] = useState(false)
   const [pauseClock, setPauseClock] = useState(false)
   const [progress, setProgress] = useState(1);
@@ -34,7 +39,7 @@ export default function Timer() {
   }
 
   return (
-    <div>
+    <div className={classes.timer}> 
       { !clockEnabled && 
       <Box display="flex" alignItems="center" justifyContent="center">
         <Box width="60%" mr={1}>
@@ -48,6 +53,7 @@ export default function Timer() {
       {clockEnabled && pauseClock && <ViewClock params={{ progress }} />}
       <div>
         <Button
+          className={classes.btn}
           variant="contained"
           color="primary"
           onClick={() => start()}
@@ -55,6 +61,7 @@ export default function Timer() {
           Start
         </Button>
         <Button
+          className={classes.btn}
           variant="contained"
           style={{ "backgroundColor": "yellow" }}
           onClick={() => setPauseClock(true)}
@@ -62,6 +69,7 @@ export default function Timer() {
           Pause
         </Button>
         <Button
+          className={classes.btn}
           variant="contained"
           color="secondary"
           onClick={() => stop()}
