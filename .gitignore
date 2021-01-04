@@ -17,4 +17,5 @@ vendor/
 # Other stuff
 .env
 .DS_Store
+.idea
 
