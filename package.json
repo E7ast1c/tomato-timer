@@ -48,8 +48,7 @@
     },
     "git": {
         "scripts": {
-            "build": "npm run bild",
-            "pre-push": "surge --project ./build --domain tomato-timer.surge.sh"
+            "pre-push": "npm run build && surge --project ./build --domain tomato-timer.surge.sh"
         }
     }
 }
