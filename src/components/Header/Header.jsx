@@ -6,6 +6,8 @@ import Typography from '@material-ui/core/Typography';
 import GitHubIcon from '@material-ui/icons/GitHub';
 import Register from "./RegisterModal";
 
+// import SettingModal from './SettingsModal'
+
 const useStyles = makeStyles((theme) => ({
   toolbar: {
     borderBottom: `1px solid `
@@ -39,7 +41,11 @@ export default function Header(props) {
     <React.Fragment>
       <Toolbar className={classes.toolbar}>
         <GitHubIcon className={classes.toolbarIcon} />
-        <Button className={classes.toolbarButton} variant="outlined" size="small"
+        <Button 
+          className={classes.toolbarButton} 
+          variant="outlined" 
+          size="small"
+          // onClick={handleOpen}
         >
           Settings
         </Button>
