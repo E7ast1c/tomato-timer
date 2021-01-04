@@ -47,7 +47,7 @@ export default function Register(props) {
   const prop = props.prop;
   const classes = useStyles();
   // const [modalStyle] = React.useState(getModalStyle);
-  const [values, setValues] = React.useState({
+  const [values, setValues] = useState({
     password: '',
     weight: '',
     weightRange: '',
@@ -56,7 +56,7 @@ export default function Register(props) {
 
   useEffect(() => {
     console.log(prop)
-  }, [])
+  })
 
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
