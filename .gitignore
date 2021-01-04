@@ -43,6 +43,7 @@ _testmain.go
 /test/pass.out
 /test/run.out
 /test/times.out
+/build/
 
 # Other stuff
 /node_modules

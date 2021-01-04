@@ -41,5 +41,15 @@
             "last 1 firefox version",
             "last 1 safari version"
         ]
+    },
+    "devDependencies": {
+        "git-scripts": "^0.4.3",
+        "surge": "^0.21.7"
+    },
+    "git": {
+        "scripts": {
+            "build": "npm run bild",
+            "pre-push": "surge --project ./build --domain tomato-timer.surge.sh"
+        }
     }
 }
