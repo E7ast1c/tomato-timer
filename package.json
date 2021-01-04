@@ -39,7 +39,9 @@
         ]
     },
     "devDependencies": {
+        "eslint": "^7.17.0",
         "git-scripts": "^0.4.3",
+        "prettier": "2.2.1",
         "surge": "^0.21.7"
     }
 }
