@@ -1,7 +1,7 @@
 package dao
 
 import (
-	"fmt"
+	"context"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	log "github.com/sirupsen/logrus"
@@ -9,21 +9,31 @@ import (
 	"tomato-timer/server/models"
 )
 
-var db = ConnectDB()
+type Conn struct {
+	DB *gorm.DB
+}
 
-func ConnectDB() *gorm.DB {
-	dbcnfg := helpers.GetConfig().DBConfig
+const dialect = "postgres"
 
-	dbURI := fmt.Sprintf("host=%s user=%s dbname=%s sslmode=disable password=%s",
-		dbcnfg.DBHost, dbcnfg.DBUser, dbcnfg.DBName, dbcnfg.DBPassword)
-
-	db, err := gorm.Open("postgres", dbURI); if err != nil {
+func ConnectDB() Conn {
+	db, err := gorm.Open(dialect, helpers.GetConfig().URI)
+	if err != nil {
 		log.Fatalf("db connect error %s\n", err)
 	}
 
-	db.AutoMigrate(
-		&models.User{})
+	db.AutoMigrate(&models.User{})
 
 	log.Infof("PG DB successfully connected \n", db)
-	return db
+
+	return Conn{DB: db}
+}
+
+func (conn Conn) CloseConn(ctx context.Context) {
+	select {
+	case <-ctx.Done():
+		{
+			conn.DB.Close()
+			log.Printf("Connection to DB closed")
+		}
+	}
 }

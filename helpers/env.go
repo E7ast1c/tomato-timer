@@ -1,36 +1,26 @@
 package helpers
 
 import (
-	"fmt"
 	"github.com/caarlos0/env/v6"
 	"github.com/joho/godotenv"
 	"log"
 )
 
-type dbconfig struct {
-	DBName     string `env:"DBNAME" envDefault:"postgres"`
-	DBPassword string `env:"DBPASSWORD" envDefault:"qwerty"`
-	DBUser     string `env:"DBUSER" envDefault:"postgres"`
-	DBType     string `env:"DBTYPE" envDefault:"postgres"`
-	DBHost     string `env:"DBHOST" envDefault:"localhost"`
-	DBPort     string `env:"DBPORT" envDefault:"5434"`
-}
-
 type config struct {
-	PORT     string `env:"port" envDefault:"8080"`
-	DBConfig dbconfig
+	URI string `env:"URI" envDefault:"host=5432 user=postgres dbname=postgres sslmode=disable password=12345"`
+	PORT string `env:"PORT" envDefault:"8080"`
 }
 
 func GetConfig() config {
-	e := godotenv.Load(); if e != nil {
+	if err := godotenv.Load(); err != nil {
 		log.Fatal("Error loading .env file")
 	}
 
 	var cfg config
 	if err := env.Parse(&cfg); err != nil {
-		fmt.Println("failed:", err)
+		log.Fatalf("parse env error %s\n", err)
 	}
-	fmt.Printf("read config values %+v \n", cfg)
+	log.Printf("read config values %+v \n", cfg)
 
 	return cfg
 }
