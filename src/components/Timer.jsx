@@ -8,6 +8,7 @@ import Box from '@material-ui/core/Box';
 
 import Clock from './Clock'
 import ViewClock from './ViewClock'
+import Time from './Time'
 
 
 const useStyles = makeStyles({
@@ -40,6 +41,7 @@ export default function Timer() {
 
   return (
     <div className={classes.timer}> 
+    <Time/>
       { !clockEnabled && 
       <Box display="flex" alignItems="center" justifyContent="center">
         <Box width="60%" mr={1}>
