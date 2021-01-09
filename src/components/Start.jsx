@@ -10,8 +10,6 @@ function Start() {
   return (
     <div>
         <Header />
-        {/* <Login /> */}
-        {/* <Singup /> */}
       <div>
         <Timer />
       </div>
