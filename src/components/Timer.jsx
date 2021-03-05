@@ -34,32 +34,20 @@ function Timer(props) {
   const [pauseClock, setPauseClock] = useState(false)
   const [progress, setProgress] = useState(1);
 
-  // const start = () => {
-  //   setClockEnabled(true)
-  //   setPauseClock(false)
-  // }
+  const start = () => {
+    setClockEnabled(true)
+    setPauseClock(false)
+  }
 
   const stop = () => {
     setProgress(0)
     setClockEnabled(false)
   }
 
-  const timerStatus = {
-    START:"START",
-    STOP:"STOP"
-  }
-
-  const start = (e) => {
-    e.preventDefault()
-    store.dispatch(startTimer(timerStatus.START))
-  }
-
-  // const i = props.start.value
-  // console.log(props.start.value + Date.now());
   return (
     <div className={classes.timer}> 
     <Time/>
-      {/* { !clockEnabled && 
+      { !clockEnabled && 
       <Box display="flex" alignItems="center" justifyContent="center">
         <Box width="60%" mr={1}>
           <LinearProgress variant="determinate" value={0} />
@@ -67,17 +55,16 @@ function Timer(props) {
         <Box minWidth={35}>
           <Typography variant="body2" >{"0%"}</Typography>
         </Box>
-      </Box>} */}
-      { props.timer.value === timerStatus.START && !pauseClock && <Clock params={{ progress, setProgress }} />}
-      {/* {clockEnabled && pauseClock && <ViewClock params={{ progress }} />} */}
+      </Box>}
+      {clockEnabled && !pauseClock && <Clock params={{ progress, setProgress }} />}
+      {clockEnabled && pauseClock && <ViewClock params={{ progress }}/>}
+      {}
       <div>
         <Button
           className={classes.btn}
           variant="contained"
           color="primary"
-          // onClick={() => start()}
-          onClick={start}
-        
+          onClick={() => start()}        
         >
           Start
         </Button>
