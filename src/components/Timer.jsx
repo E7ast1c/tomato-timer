@@ -14,9 +14,6 @@ import { startTimer } from '../Store/Actions/actions'
 import store from '../Store/store'
 import { connect } from 'react-redux'
 
-
-
-
 const useStyles = makeStyles({
   timer: {
     display: 'flex',
