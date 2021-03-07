@@ -19,12 +19,6 @@ const ViewClock = (props) => {
       </Box>
     </Box>
   )
-
-
-  // ViewClock.propTypes = {
-  //   value: ViewClock.progress.isRequired,
-  // };
-
 };
 
 export default ViewClock

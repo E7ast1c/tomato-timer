@@ -9,7 +9,7 @@ const Clock = (props) => {
 
   useEffect(() => {
       const timer = setInterval(() => {
-        prop.setProgress((prevProgress) => (prevProgress >= 100 ? 10 : prevProgress + 1));
+        prop.setProgress((prevProgress) => (prevProgress >= 100 ? 100 : prevProgress + 1));
       }, 800);
       return () => {
         clearInterval(timer);
