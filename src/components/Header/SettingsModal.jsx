@@ -5,6 +5,8 @@ import Backdrop from "@material-ui/core/Backdrop";
 import TextField from "@material-ui/core/TextField";
 // import Fade from '@material-ui/core/Fade';
 
+import Settings from '../settings'
+
 const useStyles = makeStyles((theme) => ({
   modal: {
     display: "flex",
@@ -61,6 +63,9 @@ export default function SettingModal(props) {
           </div>
         </div>
       </Modal>
+      <Settings
+         valueInputTime={valueInputTime}
+      />
     </div>
   );
 }
