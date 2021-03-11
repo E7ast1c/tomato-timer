@@ -1,21 +1,29 @@
 import React, {useState} from "react";
+import SettingModal from "./Header/SettingsModal";
+import Time from "./Time";
+
 
 export default function Setting(props) {
     console.log(props.valueInputTime)
+    let userTime = props.valueInputTime
 
-    let [getSettings, setSettings] = useState()
-    if (localStorage.getItem('setting')){
+    // let [getSettings, isGetSettings] = useState()
+    // let [setSettings, isSetSettings] = useState()
+    const [getSettings, setSettings] = useState(2)
+    if (localStorage.getItem('userTime')){
         getSettings = JSON.parse(localStorage.getItem('setting'));
-    } else {
-        getSettings = props.valueInputTime
-        localStorage.setItem('setting', JSON.stringify(getSettings))
+    } else{
+        localStorage.setItem('userTime', JSON.stringify(setSettings))
     }
     return(
         <div>
-        {console.log(getSettings)}
+        {console.log(setSettings)}
+            <span>test</span>
+            <SettingModal setSettings={setSettings} />
+            <Time />
 
-            <span>hi</span>
         </div>
+    
 
     )
 }

@@ -1,11 +1,8 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import TextField from "@material-ui/core/TextField";
-// import Fade from '@material-ui/core/Fade';
-
-import Settings from '../settings'
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -30,10 +27,11 @@ const useStyles = makeStyles((theme) => ({
 export default function SettingModal(props) {
   const prop = props.prop;
   const classes = useStyles();
-  const [valueInputTime, setvalueInputTime] = useState(1200)
+  const [valueInputTime, setvalueInputTime] = useState(123);
 
   return (
     <div>
+      {console.log(props)}
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -57,15 +55,13 @@ export default function SettingModal(props) {
                 variant="outlined"
                 onChange={(e) => setvalueInputTime(e.target.value)}
                 value={valueInputTime}
+                // onChange={() => props.setSettings(valueInputTime)}
               />
-              {console.log(valueInputTime)}
+              {console.log(props.setSettings)}
             </form>
           </div>
         </div>
       </Modal>
-      <Settings
-         valueInputTime={valueInputTime}
-      />
     </div>
   );
 }

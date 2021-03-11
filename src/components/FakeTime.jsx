@@ -31,7 +31,7 @@ export default function Time(props) {
       ></div>
       <div>
         <p>{"Timer stopped"}</p>
-        {`20:00`}
+        {`01:00`}
       </div>
 
       <Box display="flex" alignItems="center" justifyContent="center">
