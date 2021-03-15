@@ -3,6 +3,9 @@ import { makeStyles } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import TextField from "@material-ui/core/TextField";
+import Button from "@material-ui/core/Button";
+
+import Setting from "../settings";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -27,17 +30,19 @@ const useStyles = makeStyles((theme) => ({
 export default function SettingModal(props) {
   const prop = props.prop;
   const classes = useStyles();
-  const [valueInputTime, setvalueInputTime] = useState(123);
+  const [valueInputTime, setvalueInputTime] = useState(12);
 
   return (
     <div>
-      {console.log(props)}
+      {/* {console.log(props)} */}
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
         className={classes.modal}
         open={true}
-        onClose={() => prop.setSettingsModal(false)}
+        // onClose={() => prop.setSettingsModal(false)}
+        onSubmit={(e) => e.preventDefault()}
+        onClick={(e) => e.preventDefault()}
         closeAfterTransition
         BackdropComponent={Backdrop}
         BackdropProps={{
@@ -57,11 +62,17 @@ export default function SettingModal(props) {
                 value={valueInputTime}
                 // onChange={() => props.setSettings(valueInputTime)}
               />
-              {console.log(props.setSettings)}
+              {/* {console.log(props.setSettings)} */}
             </form>
           </div>
+          <Button variant="contained"
+          onClick={() => prop.setSettingsModal(false)}
+          >
+            Save
+          </Button>
         </div>
       </Modal>
+      <Setting valueInputTime={valueInputTime} />
     </div>
   );
 }
