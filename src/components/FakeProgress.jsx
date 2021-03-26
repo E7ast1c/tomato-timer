@@ -1,8 +1,8 @@
-import React from 'react'
+import React from "react";
 // import PropTypes from 'prop-types';
-import LinearProgress from '@material-ui/core/LinearProgress';
-import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
+import LinearProgress from "@material-ui/core/LinearProgress";
+import Typography from "@material-ui/core/Typography";
+import Box from "@material-ui/core/Box";
 
 const ViewClock = (props) => {
   const prop = props.params;
@@ -13,12 +13,12 @@ const ViewClock = (props) => {
         <LinearProgress variant="determinate" value={prop.progress} />
       </Box>
       <Box minWidth={35}>
-        <Typography variant="body2" >{`${Math.round(
-          prop.progress,
+        <Typography variant="body2">{`${Math.round(
+          prop.progress
         )}%`}</Typography>
       </Box>
     </Box>
-  )
+  );
 };
 
-export default ViewClock
+export default ViewClock;

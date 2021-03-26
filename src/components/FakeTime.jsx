@@ -47,7 +47,9 @@ export default function Time(props) {
           className={classes.btn}
           variant="contained"
           color="primary"
-          onClick={() => {props.setActiveTimerDispatcher(true)} }
+          onClick={() => {
+            props.setActiveTimerDispatcher(true);
+          }}
         >
           Start
         </Button>

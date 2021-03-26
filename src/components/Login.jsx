@@ -1,16 +1,16 @@
 import React from "react";
-import clsx from 'clsx';
-import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import Modal from '@material-ui/core/Modal';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import FormControl from '@material-ui/core/FormControl';
-import TextField from '@material-ui/core/TextField';
-import Visibility from '@material-ui/icons/Visibility';
-import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import IconButton from '@material-ui/core/IconButton';
+import clsx from "clsx";
+import { makeStyles } from "@material-ui/core/styles";
+import Button from "@material-ui/core/Button";
+import Modal from "@material-ui/core/Modal";
+import Input from "@material-ui/core/Input";
+import InputLabel from "@material-ui/core/InputLabel";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import FormControl from "@material-ui/core/FormControl";
+import TextField from "@material-ui/core/TextField";
+import Visibility from "@material-ui/icons/Visibility";
+import VisibilityOff from "@material-ui/icons/VisibilityOff";
+import IconButton from "@material-ui/core/IconButton";
 
 // import api from './api'
 
@@ -31,27 +31,27 @@ function getModalStyle() {
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    '& > *': {
+    "& > *": {
       margin: theme.spacing(1),
     },
   },
   btn: {
-    display: 'flex',
-    justifyContent: 'flex-end',
+    display: "flex",
+    justifyContent: "flex-end",
   },
   paper: {
-    position: 'absolute',
+    position: "absolute",
     width: 310,
     top: 200,
     left: 300,
     backgroundColor: theme.palette.background.paper,
-    border: '2px solid #000',
+    border: "2px solid #000",
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
   },
   wrap: {
-    display: 'flex',
-    flexWrap: 'wrap',
+    display: "flex",
+    flexWrap: "wrap",
   },
   margin: {
     margin: theme.spacing(1),
@@ -60,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(3),
   },
   textField: {
-    width: '25ch',
+    width: "25ch",
   },
 }));
 
@@ -69,9 +69,9 @@ function Login() {
   const classes = useStyles();
   const [modalStyle] = React.useState(getModalStyle);
   const [values, setValues] = React.useState({
-    password: '',
-    weight: '',
-    weightRange: '',
+    password: "",
+    weight: "",
+    weightRange: "",
     showPassword: false,
   });
 
@@ -94,16 +94,16 @@ function Login() {
     setOpen(false);
   };
 
-
   return (
     <div>
       <Button
-        type='button'
+        type="button"
         onClick={handleOpen}
-        variant="outlined" color="primary"
-        >
+        variant="outlined"
+        color="primary"
+      >
         Log In
-        </Button>
+      </Button>
       <Modal
         open={open}
         onClose={handleClose}
@@ -115,20 +115,21 @@ function Login() {
             <TextField
               // label="With normal TextField"
               id="standard-start-adornment"
-              placeholder='exaple@example.com'
+              placeholder="exaple@example.com"
               className={clsx(classes.margin, classes.textField)}
-            // InputProps={{
-            //   endAdornment: <InputAdornment position="end">Login</InputAdornment>,
-            // }}
-
+              // InputProps={{
+              //   endAdornment: <InputAdornment position="end">Login</InputAdornment>,
+              // }}
             />
             <FormControl className={clsx(classes.margin, classes.textField)}>
-              <InputLabel htmlFor="standard-adornment-password">Password</InputLabel>
+              <InputLabel htmlFor="standard-adornment-password">
+                Password
+              </InputLabel>
               <Input
                 id="standard-adornment-password"
-                type={values.showPassword ? 'text' : 'password'}
+                type={values.showPassword ? "text" : "password"}
                 value={values.password}
-                onChange={handleChange('password')}
+                onChange={handleChange("password")}
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
@@ -143,19 +144,13 @@ function Login() {
               />
             </FormControl>
             <div className={classes.btn}>
-              <Button>
-                Ok
-              </Button>
-              <Button
-                onClick={handleClose}
-              >
-                Cancel
-              </Button>
+              <Button>Ok</Button>
+              <Button onClick={handleClose}>Cancel</Button>
             </div>
           </div>
         </div>
       </Modal>
     </div>
-  )
+  );
 }
-export default Login
+export default Login;

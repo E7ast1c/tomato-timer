@@ -26,9 +26,9 @@ export default function Main() {
     <div>
       <Header />
       {activeTimerDispatcher ? (
-        <Time setActiveTimerDispatcher={setActiveTimerDispatcher} />
+        <Time setActiveTimerDispatcher={setActiveTimerDispatcher}/>
       ) : (
-        <FakeTime setActiveTimerDispatcher={setActiveTimerDispatcher} />
+        <FakeTime setActiveTimerDispatcher={setActiveTimerDispatcher}/>
       )}
     </div>
   );

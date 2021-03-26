@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Toolbar from '@material-ui/core/Toolbar';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import GitHubIcon from '@material-ui/icons/GitHub';
+import React, { useState } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import Toolbar from "@material-ui/core/Toolbar";
+import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
+import GitHubIcon from "@material-ui/icons/GitHub";
 import Register from "./RegisterModal";
-import SettingModal from './SettingsModal'
-import LoiginModal from './LoiginModal'
+import SettingModal from "./SettingsModal";
+import LoiginModal from "./LoiginModal";
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
-    borderBottom: `1px solid `
+    borderBottom: `1px solid `,
   },
   toolbarButton: {
     color: "white",
@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
     flex: 1,
   },
   toolbarSecondary: {
-    overflowX: 'auto',
+    overflowX: "auto",
   },
   toolbarLink: {
     flexShrink: 0,
@@ -42,9 +42,9 @@ export default function Header(props) {
     <React.Fragment>
       <Toolbar className={classes.toolbar}>
         <GitHubIcon className={classes.toolbarIcon} />
-        <Button 
-          className={classes.toolbarButton} 
-          variant="outlined" 
+        <Button
+          className={classes.toolbarButton}
+          variant="outlined"
           size="small"
           onClick={() => setSettingsModal(!settingsModal)}
         >
@@ -62,21 +62,30 @@ export default function Header(props) {
           {title}
         </Typography>
 
-
         <Toolbar className={classes.toolbarSecondary}>
-          <Button className={classes.toolbarButton} variant="outlined" size="small"
-            onClick={() => setIsLogIn(!isLogIn)} >
+          <Button
+            className={classes.toolbarButton}
+            variant="outlined"
+            size="small"
+            onClick={() => setIsLogIn(!isLogIn)}
+          >
             Log in
-        </Button>
-          <Button className={classes.toolbarButton} variant="outlined" size="small"
-            onClick={() => setRegisterModal(!registerModal)} >
+          </Button>
+          <Button
+            className={classes.toolbarButton}
+            variant="outlined"
+            size="small"
+            onClick={() => setRegisterModal(!registerModal)}
+          >
             Register
-        </Button>
+          </Button>
         </Toolbar>
       </Toolbar>
       {isLogIn && <LoiginModal prop={{ isLogIn, setIsLogIn }} />}
       {registerModal && <Register prop={{ registerModal, setRegisterModal }} />}
-      {settingsModal && <SettingModal prop={{ settingsModal, setSettingsModal}} />}
+      {settingsModal && (
+        <SettingModal prop={{ settingsModal, setSettingsModal }} />
+      )}
     </React.Fragment>
   );
 }
