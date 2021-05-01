@@ -10,6 +10,8 @@ import { useTimer } from "react-timer-hook";
 import Clock from "./Clock";
 import ViewClock from "./FakeProgress";
 
+import {getLocalStorageKey} from './settings';
+
 const useStyles = makeStyles({
   timer: {
     display: "flex",
@@ -22,12 +24,16 @@ const useStyles = makeStyles({
 });
 
 export default function Time(props) {
-  function getExpiryDate(timestamp = 60) {
+  const timeKey = 'Time'
+  // ---- Convert in minutes ------ 
+  const timeDuaration = getLocalStorageKey(timeKey) * 60
+  // console.log(time)
+
+  function getExpiryDate(timeDuaration) {
     let expiry = new Date();
-    expiry.setSeconds(expiry.getSeconds() + timestamp);
+    expiry.setSeconds(expiry.getSeconds() + timeDuaration);
     return expiry;
   }
-
 
   const classes = useStyles();
 
@@ -46,7 +52,7 @@ export default function Time(props) {
     resume,
     restart,
   } = useTimer({
-    expiryTimestamp: getExpiryDate(),
+    expiryTimestamp: getExpiryDate(timeDuaration),
     onExpire: () => console.warn("onExpire called"),
   });
 
@@ -65,9 +71,9 @@ export default function Time(props) {
         {`${minutes < 10 ? `0${minutes}` : minutes}:${
           seconds < 10 ? `0${seconds}` : seconds
         }`}
-      </div>  
+      </div>
       <Clock params={{ progress, setProgress }} />
-    
+
       <div>
         <Button
           className={classes.btn}

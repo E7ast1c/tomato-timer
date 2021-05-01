@@ -5,7 +5,8 @@ import Backdrop from "@material-ui/core/Backdrop";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 
-import Setting from "../settings";
+import { setLocalStorageKey } from "../settings";
+import { getLocalStorageKey } from "../settings";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -14,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
   },
   paper: {
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: '#f2f3f4',
     border: "2px solid #000",
     boxShadow: theme.shadows[4],
     padding: theme.spacing(2, 4, 3),
@@ -25,16 +26,38 @@ const useStyles = makeStyles((theme) => ({
       width: "25ch",
     },
   },
+  btnGroup: {
+    display: 'flex',
+    justifyContent: 'space-around',
+    marginTop: '1.2em'
+  }
 }));
 
 export default function SettingModal(props) {
-  const prop = props.prop;
+  const { setSettingsModal, setCurrentDuarationTime } = props;
+  console.log(props.prop);
   const classes = useStyles();
-  const [valueInputTime, setvalueInputTime] = useState(12);
+  const timeKey = "Time";
+  const [valueInputTime, setvalueInputTime] = useState(
+    getLocalStorageKey(timeKey)
+  );
+
+  function onSaveHandler() {
+    setLocalStorageKey(timeKey, valueInputTime);
+  }
+
+  function checkBtn(){
+    if (valueInputTime >= 1){
+      return 
+    } else {
+      return disabled
+    }
+  }
+
+  console.log(classes)
 
   return (
     <div>
-      {/* {console.log(props)} */}
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -60,19 +83,36 @@ export default function SettingModal(props) {
                 variant="outlined"
                 onChange={(e) => setvalueInputTime(e.target.value)}
                 value={valueInputTime}
-                // onChange={() => props.setSettings(valueInputTime)}
               />
-              {/* {console.log(props.setSettings)} */}
             </form>
           </div>
-          <Button variant="contained"
-          onClick={() => prop.setSettingsModal(false)}
-          >
-            Save
-          </Button>
+          <div className={classes.btnGroup}>
+            <Button
+              style={{disabled:'disabled'}}
+              color='primary'
+              variant="contained"
+              onClick={() => {
+                
+                onSaveHandler();
+                props.prop.setSettingsModal(false);
+                props.prop.prop.setCurrentDuarationTime(valueInputTime);
+              }}
+            >
+              Save
+            </Button>
+            <Button
+              color='secondary'
+              variant="contained"
+              onClick={() => {
+                props.prop.setSettingsModal(false);
+              }}
+            >
+              Cancel
+            </Button>
+          </div>
         </div>
       </Modal>
-      <Setting valueInputTime={valueInputTime} />
+      {}
     </div>
   );
 }

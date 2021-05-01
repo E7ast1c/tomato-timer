@@ -21,10 +21,11 @@ const useStyles = makeStyles({
 export default function Main() {
   const [activeTimerDispatcher, setActiveTimerDispatcher] = useState(false);
   const classes = useStyles();
+  const [currentDuarationTime,  setCurrentDuarationTime] = useState(1)
 
   return (
     <div>
-      <Header />
+      <Header setCurrentDuarationTime={{setCurrentDuarationTime}} />
       {activeTimerDispatcher ? (
         <Time setActiveTimerDispatcher={setActiveTimerDispatcher}/>
       ) : (

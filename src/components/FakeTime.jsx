@@ -6,6 +6,10 @@ import LinearProgress from "@material-ui/core/LinearProgress";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 
+import {getLocalStorageKey} from "./settings";
+import moment from "moment";
+
+
 const useStyles = makeStyles({
   timer: {
     display: "flex",
@@ -19,6 +23,9 @@ const useStyles = makeStyles({
 
 export default function Time(props) {
   const classes = useStyles();
+  const timeKey = 'Time'
+  // ----- Convert in minutes ------
+  const time = getLocalStorageKey(timeKey) * 60000;
 
   return (
     <div className={classes.timer}>
@@ -31,7 +38,7 @@ export default function Time(props) {
       ></div>
       <div>
         <p>{"Timer stopped"}</p>
-        {`01:00`}
+        {moment(time).format('mm:ss')}
       </div>
 
       <Box display="flex" alignItems="center" justifyContent="center">
