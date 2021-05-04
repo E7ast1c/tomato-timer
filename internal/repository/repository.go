@@ -18,7 +18,7 @@ func PGConnect(dbConfig config.DBConfig) (*gorm.DB, error) {
 
 	db.AutoMigrate(&models.User{})
 
-	log.Infof("PG DB successfully connected \n", db)
+	logrus.Infof("PG DB successfully connected, with args %+v \n", db)
 
 	return db, nil
 }
