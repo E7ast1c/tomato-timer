@@ -1,4 +1,4 @@
-package helpers
+package string
 
 import "strings"
 
@@ -8,9 +8,3 @@ func IsEmptyOrWhitespace(target *string) bool {
 	}
 	return false
 }
-
-const (
-	applicationJson string = "application/json"
-	contentType     string = "Content-Type"
-)
-
