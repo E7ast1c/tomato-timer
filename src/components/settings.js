@@ -1,5 +1,3 @@
-import React, { useState } from "react";
-// import SettingModal from "./Header/SettingsModal";
 
 export function setLocalStorageKey(key, value) {
   if (value) {
@@ -8,7 +6,7 @@ export function setLocalStorageKey(key, value) {
     return
   }
 }
-// setTime(userTime)
+
 export function getLocalStorageKey(key) {
   if (localStorage.getItem(key)) {
     const time = JSON.parse(localStorage.getItem("Time"));

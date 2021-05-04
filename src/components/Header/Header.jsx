@@ -33,8 +33,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Header(props) {
-  const prop = props.setCurrentDuarationTime;
-
+  const setCurrentDuarationTime = props.setCurrentDuarationTime;
   const [registerModal, setRegisterModal] = useState(false);
   const [settingsModal, setSettingsModal] = useState(false);
   const [isLogIn, setIsLogIn] = useState(false);
@@ -86,7 +85,7 @@ export default function Header(props) {
       {isLogIn && <LoiginModal prop={{ isLogIn, setIsLogIn }} />}
       {registerModal && <Register prop={{ registerModal, setRegisterModal }} />}
       {settingsModal && (
-        <SettingModal prop={{setSettingsModal, prop}} />
+        <SettingModal prop={{setSettingsModal, setCurrentDuarationTime}}/>
       )}
     </React.Fragment>
   );

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
@@ -8,6 +8,8 @@ import Button from "@material-ui/core/Button";
 import { setLocalStorageKey } from "../settings";
 import { getLocalStorageKey } from "../settings";
 
+import { useForm } from "react-hook-form";
+
 const useStyles = makeStyles((theme) => ({
   modal: {
     display: "flex",
@@ -15,10 +17,11 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
   },
   paper: {
-    backgroundColor: '#f2f3f4',
+    width: "18em",
+    backgroundColor: "#f2f3f4",
     border: "2px solid #000",
     boxShadow: theme.shadows[4],
-    padding: theme.spacing(2, 4, 3),
+    padding: theme.spacing(2, 5, 3),
   },
   input: {
     "& > *": {
@@ -27,34 +30,41 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   btnGroup: {
-    display: 'flex',
-    justifyContent: 'space-around',
-    marginTop: '1.2em'
-  }
+    display: "flex",
+    justifyContent: "space-around",
+    marginTop: "1.2em",
+  },
+  settingsTime: {
+    display: "flex",
+    justifyContent: "space-between",
+  },
+  input: {
+    width: "5em",
+  },
 }));
 
 export default function SettingModal(props) {
-  const { setSettingsModal, setCurrentDuarationTime } = props;
-  console.log(props.prop);
   const classes = useStyles();
   const timeKey = "Time";
   const [valueInputTime, setvalueInputTime] = useState(
     getLocalStorageKey(timeKey)
   );
+  const [isDisabled, setIsDisabled] = useState(false);
+
+  // const {
+  //   register,
+  //   handleSubmit,
+  //   formState: { errors },
+  // } = useForm();
+  // const onSubmit = (data) => console.log(data);
+
+  useEffect(() => {
+    valueInputTime >= 1 ? setIsDisabled(false) : setIsDisabled(true);
+  }, [valueInputTime]);
 
   function onSaveHandler() {
     setLocalStorageKey(timeKey, valueInputTime);
   }
-
-  function checkBtn(){
-    if (valueInputTime >= 1){
-      return 
-    } else {
-      return disabled
-    }
-  }
-
-  console.log(classes)
 
   return (
     <div>
@@ -63,8 +73,14 @@ export default function SettingModal(props) {
         aria-describedby="transition-modal-description"
         className={classes.modal}
         open={true}
-        // onClose={() => prop.setSettingsModal(false)}
-        onSubmit={(e) => e.preventDefault()}
+        onClose={() => props.prop.setSettingsModal(false)}
+        // onSubmit={(e) => e.preventDefault()}
+
+        onSubmit={() => {
+          onSaveHandler();
+          props.prop.setSettingsModal(false);
+          props.prop.setCurrentDuarationTime(valueInputTime);
+        }}
         onClick={(e) => e.preventDefault()}
         closeAfterTransition
         BackdropComponent={Backdrop}
@@ -73,13 +89,27 @@ export default function SettingModal(props) {
         }}
       >
         <div className={classes.paper}>
-          <h2 id="transition-modal-title">Setting</h2>
-          <div id="transition-modal-description">
-            <form className={classes.root} noValidate autoComplete="off">
+          <h2 id="transition-modal-title">Settings</h2>
+          <div
+            id="transition-modal-description"
+            className={classes.settingsTime}
+          >
+            <h3>Enter pomidoro time</h3>
+            <form
+              // onSubmit={handleSubmit(onSubmit)}
+              className={classes.root}
+              noValidate
+              autoComplete="off"
+            >
+              {/* <input {...register("age", { min: 18, max: 99 })} />
+              {errors.age && (
+                <p>You Must be older then 18 and younger then 99 years old</p>
+              )} */}
               <TextField
-                id="outlined-basic"
                 type="number"
-                label="Enter pomidoro time"
+                className={classes.input}
+                id="outlined-basic"
+                label="Minutes"
                 variant="outlined"
                 onChange={(e) => setvalueInputTime(e.target.value)}
                 value={valueInputTime}
@@ -88,20 +118,19 @@ export default function SettingModal(props) {
           </div>
           <div className={classes.btnGroup}>
             <Button
-              style={{disabled:'disabled'}}
-              color='primary'
+              disabled={isDisabled}
+              color="primary"
               variant="contained"
               onClick={() => {
-                
                 onSaveHandler();
                 props.prop.setSettingsModal(false);
-                props.prop.prop.setCurrentDuarationTime(valueInputTime);
+                props.prop.setCurrentDuarationTime(valueInputTime);
               }}
             >
               Save
             </Button>
             <Button
-              color='secondary'
+              color="secondary"
               variant="contained"
               onClick={() => {
                 props.prop.setSettingsModal(false);

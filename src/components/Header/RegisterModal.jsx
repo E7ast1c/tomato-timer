@@ -3,8 +3,8 @@ import clsx from "clsx";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
-import Modal from "@material-ui/core/Modal";
 import Input from "@material-ui/core/Input";
+import Modal from "@material-ui/core/Modal";
 import InputLabel from "@material-ui/core/InputLabel";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import FormControl from "@material-ui/core/FormControl";
@@ -13,34 +13,31 @@ import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import IconButton from "@material-ui/core/IconButton";
 
-// function rand() {
-//   return Math.round(Math.random() * 20) - 10;
-// }
-
-// function getModalStyle() {
-//   const top = 50 + rand();
-//   const left = 50 + rand();
-
-//   return {
-//     top: `${top}%`,
-//     left: `${left}%`,
-//     transform: `translate(-${top}%, -${left}%)`,
-//   };
-// }
+import {register} from '../RESTApi'
 
 const useStyles = makeStyles((theme) => ({
+  modal: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
   paper: {
     display: "flex",
     flexDirection: "column",
-    top: "25%",
-    left: "25%",
-    position: "absolute",
     width: "25em",
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: '#f2f3f4',
     border: "2px solid #000",
     boxShadow: theme.shadows[5],
-    padding: theme.spacing(2, 4, 3),
+    padding: theme.spacing(4, 5, 4),
   },
+  emailMargin: {
+    marginTop: '0.8em'
+  },
+  btnGroup: {
+    display: "flex",
+    justifyContent: "space-around",
+    marginTop: "1.2em",
+  }
 }));
 
 export default function Register(props) {
@@ -48,6 +45,8 @@ export default function Register(props) {
   const classes = useStyles();
   // const [modalStyle] = React.useState(getModalStyle);
   const [values, setValues] = useState({
+    login: '',
+    email: '',
     password: "",
     weight: "",
     weightRange: "",
@@ -55,7 +54,7 @@ export default function Register(props) {
   });
 
   useEffect(() => {
-    console.log(prop);
+    // console.log(prop);
   });
 
   const handleChange = (prop) => (event) => {
@@ -77,6 +76,7 @@ export default function Register(props) {
   return (
     <div>
       <Modal
+        className={classes.modal}
         open={true}
         onClose={() => prop.setRegisterModal(false)}
         aria-labelledby="simple-modal-title"
@@ -88,11 +88,16 @@ export default function Register(props) {
               id="login"
               placeholder="Login"
               className={clsx(classes.margin, classes.textField)}
+              onChange={handleChange('login')}
+              value={values.login}
+
             />
             <TextField
               id="email"
-              placeholder="exaple@example.com"
-              className={clsx(classes.margin, classes.textField)}
+              placeholder="Email"
+              className={clsx(classes.margin, classes.textField, classes.emailMargin)}
+              onChange={handleChange('email')}
+              value={values.email}
             />
             <FormControl className={clsx(classes.margin, classes.textField)}>
               <InputLabel htmlFor="password">Password</InputLabel>
@@ -114,9 +119,21 @@ export default function Register(props) {
                 }
               />
             </FormControl>
-            <div className={classes.btn}>
-              <Button>Ok</Button>
-              <Button onClick={handleClose}>Cancel</Button>
+            <div className={classes.btnGroup}>
+              <Button
+              color='primary'
+              variant='contained'
+              onClick={() => {
+                register(values.login, values.email, values.password)
+                handleClose()
+              }}
+              >
+                Ok
+                </Button>
+              <Button 
+              color='secondary'
+              variant='contained'
+              onClick={handleClose}>Cancel</Button>
             </div>
           </div>
         </div>

@@ -25,7 +25,7 @@ export default function Main() {
 
   return (
     <div>
-      <Header setCurrentDuarationTime={{setCurrentDuarationTime}} />
+      <Header setCurrentDuarationTime={setCurrentDuarationTime} />
       {activeTimerDispatcher ? (
         <Time setActiveTimerDispatcher={setActiveTimerDispatcher}/>
       ) : (
