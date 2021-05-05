@@ -5,9 +5,9 @@ import Backdrop from "@material-ui/core/Backdrop";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 
-import { setLocalStorageKey } from "../settings";
-import { getLocalStorageKey } from "../settings";
-
+import { setLocalStorageKey } from "../LocalStorageManager";
+import { getLocalStorageKey } from "../LocalStorageManager";
+            
 import { useForm } from "react-hook-form";
 
 const useStyles = makeStyles((theme) => ({

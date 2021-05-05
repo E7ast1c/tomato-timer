@@ -13,40 +13,54 @@ import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import IconButton from "@material-ui/core/IconButton";
 
-import {register} from '../RESTApi'
+import { register } from "../RESTApi";
+
+import { useForm } from "react-hook-form";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center'
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
   },
   paper: {
     display: "flex",
     flexDirection: "column",
     width: "25em",
-    backgroundColor: '#f2f3f4',
+    backgroundColor: "#f2f3f4",
     border: "2px solid #000",
     boxShadow: theme.shadows[5],
     padding: theme.spacing(4, 5, 4),
   },
   emailMargin: {
-    marginTop: '0.8em'
+    marginTop: "0.8em",
   },
   btnGroup: {
     display: "flex",
     justifyContent: "space-around",
     marginTop: "1.2em",
-  }
+  },
 }));
 
 export default function Register(props) {
   const prop = props.prop;
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+  const onSubmit = (data) => {
+    // login(data);
+
+    console.log(data);
+  };
+
   const classes = useStyles();
   // const [modalStyle] = React.useState(getModalStyle);
   const [values, setValues] = useState({
-    login: '',
-    email: '',
+    login: "",
+    email: "",
     password: "",
     weight: "",
     weightRange: "",
@@ -83,59 +97,83 @@ export default function Register(props) {
         aria-describedby="simple-modal-description"
       >
         <div>
-          <div className={classes.paper}>
-            <TextField
-              id="login"
-              placeholder="Login"
-              className={clsx(classes.margin, classes.textField)}
-              onChange={handleChange('login')}
-              value={values.login}
-
-            />
-            <TextField
-              id="email"
-              placeholder="Email"
-              className={clsx(classes.margin, classes.textField, classes.emailMargin)}
-              onChange={handleChange('email')}
-              value={values.email}
-            />
-            <FormControl className={clsx(classes.margin, classes.textField)}>
-              <InputLabel htmlFor="password">Password</InputLabel>
-              <Input
-                id="password"
-                type={values.showPassword ? "text" : "password"}
-                value={values.password}
-                onChange={handleChange("password")}
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword}
-                      onMouseDown={handleMouseDownPassword}
-                    >
-                      {values.showPassword ? <Visibility /> : <VisibilityOff />}
-                    </IconButton>
-                  </InputAdornment>
-                }
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className={classes.paper}>
+              <TextField
+                id="login"
+                placeholder="Login"
+                className={clsx(classes.margin, classes.textField)}
+                onChange={handleChange("login")}
+                value={values.login}
               />
-            </FormControl>
-            <div className={classes.btnGroup}>
-              <Button
-              color='primary'
-              variant='contained'
-              onClick={() => {
-                register(values.login, values.email, values.password)
-                handleClose()
-              }}
-              >
-                Ok
+              <TextField
+                id="email"
+                placeholder="Email"
+                className={clsx(
+                  classes.margin,
+                  classes.textField,
+                  classes.emailMargin
+                )}
+                onChange={handleChange("email")}
+                // value={values.email}
+                {...register("email", {
+                  required: true,
+                  pattern: {
+                    value: /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/,
+                    message: "massage error",
+                  },
+                })}
+              />
+                {errors.email && (
+                <p className={classes.txtError}>
+                  Please enter correct email, example@ya.ru
+                </p>
+              )}
+              <FormControl className={clsx(classes.margin, classes.textField)}>
+                <InputLabel htmlFor="password">Password</InputLabel>
+                <Input
+                  id="password"
+                  type={values.showPassword ? "text" : "password"}
+                  value={values.password}
+                  onChange={handleChange("password")}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                        onMouseDown={handleMouseDownPassword}
+                      >
+                        {values.showPassword ? (
+                          <Visibility />
+                        ) : (
+                          <VisibilityOff />
+                        )}
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                />
+              </FormControl>
+              <div className={classes.btnGroup}>
+                <Button
+                  color="primary"
+                  variant="contained"
+                  onClick={() => {
+                    register(values.login, values.email, values.password);
+                    handleClose();
+                  }}
+                >
+                  Ok
                 </Button>
-              <Button 
-              color='secondary'
-              variant='contained'
-              onClick={handleClose}>Cancel</Button>
+                <Button
+                  color="secondary"
+                  variant="contained"
+                  onClick={handleClose}
+                >
+                  Cancel
+                </Button>
+              </div>
             </div>
-          </div>
+          </form>
         </div>
       </Modal>
     </div>

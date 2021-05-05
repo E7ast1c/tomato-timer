@@ -13,6 +13,7 @@ import TextField from "@material-ui/core/TextField";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import IconButton from "@material-ui/core/IconButton";
+import Header from './Header'
 
 import { login } from "../RESTApi";
 
@@ -52,9 +53,12 @@ export default function LoiginModal(props) {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const onSubmit = (data) => {
-    login(data);
-    console.log(data);
+
+  const onSubmit = async (data) => {
+    login(data).then((data) => {
+      
+      console.log('this response', data); // JSON data parsed by `response.json()` call
+    });
   };
   // console.log(errors);
 
@@ -90,6 +94,12 @@ export default function LoiginModal(props) {
     prop.setIsLogIn(false);
   };
 
+  // const handleLogin = async () => {
+  //   login().then((data) => {
+  //     console.log(data); // JSON data parsed by `response.json()` call
+  //   });
+  // }
+
   return (
     <div>
       <Modal
@@ -114,7 +124,7 @@ export default function LoiginModal(props) {
                 // value={values.email}
                 type="text"
                 placeholder="Email"
-                {...register("Email", {
+                {...register("email", {
                   required: true,
                   pattern: {
                     value: /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/,
@@ -122,7 +132,7 @@ export default function LoiginModal(props) {
                   },
                 })}
               />
-              {errors.Email && (
+              {errors.email && (
                 <p className={classes.txtError}>
                   Please enter correct email, example@ya.ru
                 </p>
@@ -149,15 +159,15 @@ export default function LoiginModal(props) {
                       </IconButton>
                     </InputAdornment>
                   }
-                  {...register("Pass", {
+                  {...register("password", {
                     required: true,
                     pattern: {
-                      value: /(?=.{8,})/,
+                      value: /(?=.{4,})/,
                       message: "error message",
                     },
                   })}
                 />
-                {errors.Pass && (
+                {errors.password && (
                   <p className={classes.txtError}>
                     You must enter more than 8 characters
                   </p>
@@ -175,10 +185,10 @@ export default function LoiginModal(props) {
                 <Button
                   color="primary"
                   variant="contained"
-                  onClick={() => {
-                    login(values.email, values.password);
-                    handleClose();
-                  }}
+                  // onClick={() =>
+                  //   handleLogin()
+                  // handleClose();
+                  // }
                 >
                   Ok
                 </Button>

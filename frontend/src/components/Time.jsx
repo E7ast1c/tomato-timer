@@ -10,7 +10,7 @@ import { useTimer } from "react-timer-hook";
 import Clock from "./Clock";
 import ViewClock from "./FakeProgress";
 
-import {getLocalStorageKey} from './settings';
+import {getLocalStorageKey} from './LocalStorageManager';
 
 const useStyles = makeStyles({
   timer: {

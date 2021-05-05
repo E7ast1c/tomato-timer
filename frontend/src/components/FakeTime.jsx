@@ -6,7 +6,7 @@ import LinearProgress from "@material-ui/core/LinearProgress";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 
-import {getLocalStorageKey} from "./settings";
+import {getLocalStorageKey} from "./LocalStorageManager";
 import moment from "moment";
 
 

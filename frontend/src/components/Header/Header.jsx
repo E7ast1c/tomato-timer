@@ -33,6 +33,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Header(props) {
+
+  console.log(props)
+  
   const setCurrentDuarationTime = props.setCurrentDuarationTime;
   const [registerModal, setRegisterModal] = useState(false);
   const [settingsModal, setSettingsModal] = useState(false);
