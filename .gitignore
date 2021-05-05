@@ -136,6 +136,6 @@ frontend/.pnp.*
 # Other stuff
 *.env
 *.DS_Store
-.idea
+backend/*.idea
 
 *TomatoTimerApi.drawio
