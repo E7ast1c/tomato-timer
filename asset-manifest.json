@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/E7ast1c/tomato-timer/static/css/main.3389c401.chunk.css",
+    "main.js": "/E7ast1c/tomato-timer/static/js/main.6a7203fb.chunk.js",
+    "main.js.map": "/E7ast1c/tomato-timer/static/js/main.6a7203fb.chunk.js.map",
+    "runtime-main.js": "/E7ast1c/tomato-timer/static/js/runtime-main.3a29444e.js",
+    "runtime-main.js.map": "/E7ast1c/tomato-timer/static/js/runtime-main.3a29444e.js.map",
+    "static/js/2.b5b452e3.chunk.js": "/E7ast1c/tomato-timer/static/js/2.b5b452e3.chunk.js",
+    "static/js/2.b5b452e3.chunk.js.map": "/E7ast1c/tomato-timer/static/js/2.b5b452e3.chunk.js.map",
+    "static/js/3.349c5801.chunk.js": "/E7ast1c/tomato-timer/static/js/3.349c5801.chunk.js",
+    "static/js/3.349c5801.chunk.js.map": "/E7ast1c/tomato-timer/static/js/3.349c5801.chunk.js.map",
+    "index.html": "/E7ast1c/tomato-timer/index.html",
+    "static/css/main.3389c401.chunk.css.map": "/E7ast1c/tomato-timer/static/css/main.3389c401.chunk.css.map",
+    "static/js/2.b5b452e3.chunk.js.LICENSE.txt": "/E7ast1c/tomato-timer/static/js/2.b5b452e3.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.3a29444e.js",
+    "static/js/2.b5b452e3.chunk.js",
+    "static/css/main.3389c401.chunk.css",
+    "static/js/main.6a7203fb.chunk.js"
+  ]
+}
