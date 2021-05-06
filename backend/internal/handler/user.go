@@ -137,3 +137,7 @@ func (h Handler) Login() http.HandlerFunc {
 		}
 	}
 }
+
+func errorWrapper() {
+
+}
