@@ -4,10 +4,11 @@ import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
+import PropTypes from "prop-types";
 
 import { setLocalStorageKey } from "../LocalStorageManager";
 import { getLocalStorageKey } from "../LocalStorageManager";
-            
+
 import { useForm } from "react-hook-form";
 
 const useStyles = makeStyles((theme) => ({
@@ -44,6 +45,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SettingModal(props) {
+  const prop = props.prop;
+
   const classes = useStyles();
   const timeKey = "Time";
   const [valueInputTime, setvalueInputTime] = useState(
@@ -123,8 +126,8 @@ export default function SettingModal(props) {
               variant="contained"
               onClick={() => {
                 onSaveHandler();
-                props.prop.setSettingsModal(false);
-                props.prop.setCurrentDuarationTime(valueInputTime);
+                prop.setSettingsModal(false);
+                prop.setCurrentDuarationTime(valueInputTime);
               }}
             >
               Save
@@ -145,3 +148,7 @@ export default function SettingModal(props) {
     </div>
   );
 }
+
+SettingModal.propTypes = {
+  prop: PropTypes.object.isRequired,
+};

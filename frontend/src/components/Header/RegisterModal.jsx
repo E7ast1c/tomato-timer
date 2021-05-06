@@ -12,6 +12,7 @@ import TextField from "@material-ui/core/TextField";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import IconButton from "@material-ui/core/IconButton";
+import PropTypes from "prop-types";
 
 import { register } from "../RESTApi";
 
@@ -124,7 +125,7 @@ export default function Register(props) {
                   },
                 })}
               />
-                {errors.email && (
+              {errors.email && (
                 <p className={classes.txtError}>
                   Please enter correct email, example@ya.ru
                 </p>
@@ -179,3 +180,7 @@ export default function Register(props) {
     </div>
   );
 }
+
+Register.propTypes = {
+  prop: PropTypes.object.isRequired,
+};

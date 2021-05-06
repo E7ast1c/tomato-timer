@@ -8,6 +8,8 @@ import Register from "./RegisterModal";
 import SettingModal from "./SettingsModal";
 import LoiginModal from "./LoiginModal";
 
+import PropTypes from "prop-types";
+
 const useStyles = makeStyles((theme) => ({
   toolbar: {
     borderBottom: `1px solid `,
@@ -33,9 +35,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Header(props) {
-
-  console.log(props)
-  
   const setCurrentDuarationTime = props.setCurrentDuarationTime;
   const [registerModal, setRegisterModal] = useState(false);
   const [settingsModal, setSettingsModal] = useState(false);
@@ -88,8 +87,12 @@ export default function Header(props) {
       {isLogIn && <LoiginModal prop={{ isLogIn, setIsLogIn }} />}
       {registerModal && <Register prop={{ registerModal, setRegisterModal }} />}
       {settingsModal && (
-        <SettingModal prop={{setSettingsModal, setCurrentDuarationTime}}/>
+        <SettingModal prop={{ setSettingsModal, setCurrentDuarationTime }} />
       )}
     </React.Fragment>
   );
 }
+
+Header.propTypes = {
+  setCurrentDuarationTime: PropTypes.func.isRequired,
+};

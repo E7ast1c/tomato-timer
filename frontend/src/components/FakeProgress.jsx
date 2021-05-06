@@ -3,6 +3,7 @@ import React from "react";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
+import PropTypes from "prop-types";
 
 const ViewClock = (props) => {
   const prop = props.params;
@@ -19,6 +20,10 @@ const ViewClock = (props) => {
       </Box>
     </Box>
   );
+};
+
+ViewClock.propTypes = {
+  params: PropTypes.string.isRequired,
 };
 
 export default ViewClock;

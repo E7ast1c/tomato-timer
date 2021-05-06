@@ -13,7 +13,8 @@ import TextField from "@material-ui/core/TextField";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import IconButton from "@material-ui/core/IconButton";
-import Header from './Header'
+import Header from "./Header";
+import PropTypes from "prop-types";
 
 import { login } from "../RESTApi";
 
@@ -56,8 +57,7 @@ export default function LoiginModal(props) {
 
   const onSubmit = async (data) => {
     login(data).then((data) => {
-      
-      console.log('this response', data); // JSON data parsed by `response.json()` call
+      console.log("this response", data); // JSON data parsed by `response.json()` call
     });
   };
   // console.log(errors);
@@ -72,11 +72,9 @@ export default function LoiginModal(props) {
     showPassword: false,
   });
 
-  const empty = "this user logged in";
-
-  useEffect(() => {
-    // console.log(prop);
-  });
+  // useEffect(() => {
+  //   // console.log(prop);
+  // });
 
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
@@ -115,13 +113,10 @@ export default function LoiginModal(props) {
               <InputLabel htmlFor="email">Email</InputLabel>
               <TextField
                 id="email"
-                type={values.showPassword ? "text" : "email"}
+                // type={values.showPassword ? "text" : "email"}
                 // value={values.password}
-                onChange={handleChange("email")}
-                placeholder="Email"
                 className={clsx(classes.margin, classes.textField)}
                 onChange={handleChange("email")}
-                // value={values.email}
                 type="text"
                 placeholder="Email"
                 {...register("email", {
@@ -208,3 +203,7 @@ export default function LoiginModal(props) {
     </div>
   );
 }
+
+LoiginModal.propTypes = {
+  prop: PropTypes.object.isRequired,
+};

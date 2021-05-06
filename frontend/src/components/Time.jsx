@@ -6,11 +6,12 @@ import LinearProgress from "@material-ui/core/LinearProgress";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import { useTimer } from "react-timer-hook";
+import PropTypes from "prop-types";
 
 import Clock from "./Clock";
 import ViewClock from "./FakeProgress";
 
-import {getLocalStorageKey} from './LocalStorageManager';
+import { getLocalStorageKey } from "./LocalStorageManager";
 
 const useStyles = makeStyles({
   timer: {
@@ -24,10 +25,10 @@ const useStyles = makeStyles({
 });
 
 export default function Time(props) {
-  const timeKey = 'Time'
-  // ---- Convert in minutes ------ 
-  const timeDuaration = getLocalStorageKey(timeKey) * 60
-  // console.log(time)
+  const timeKey = "Time";
+
+  // ---- Convert in minutes ------
+  const timeDuaration = getLocalStorageKey(timeKey) * 60;
 
   function getExpiryDate(timeDuaration) {
     let expiry = new Date();
@@ -95,3 +96,7 @@ export default function Time(props) {
     </div>
   );
 }
+
+Time.propTypes = {
+  setActiveTimerDispatcher: PropTypes.func.isRequired,
+};

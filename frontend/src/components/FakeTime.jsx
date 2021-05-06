@@ -6,9 +6,10 @@ import LinearProgress from "@material-ui/core/LinearProgress";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 
-import {getLocalStorageKey} from "./LocalStorageManager";
+import { getLocalStorageKey } from "./LocalStorageManager";
 import moment from "moment";
 
+import PropTypes from "prop-types";
 
 const useStyles = makeStyles({
   timer: {
@@ -23,7 +24,7 @@ const useStyles = makeStyles({
 
 export default function Time(props) {
   const classes = useStyles();
-  const timeKey = 'Time'
+  const timeKey = "Time";
   // ----- Convert in minutes ------
   const time = getLocalStorageKey(timeKey) * 60000;
 
@@ -38,7 +39,7 @@ export default function Time(props) {
       ></div>
       <div>
         <p>{"Timer stopped"}</p>
-        {moment(time).format('mm:ss')}
+        {moment(time).format("mm:ss")}
       </div>
 
       <Box display="flex" alignItems="center" justifyContent="center">
@@ -67,3 +68,7 @@ export default function Time(props) {
     </div>
   );
 }
+
+Time.propTypes = {
+  setActiveTimerDispatcher: PropTypes.func.isRequired,
+};
