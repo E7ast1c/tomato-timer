@@ -62,7 +62,6 @@ export default function LoiginModal(props) {
   //   });
   // };
 
-
   const classes = useStyles();
   // const [modalStyle] = React.useState(getModalStyle);
   const [values, setValues] = useState({
@@ -91,10 +90,9 @@ export default function LoiginModal(props) {
 
   const onSubmit = (data) => {
     const sucssefull = AuthLogin(data);
-    prop.setIsAuthenticated(sucssefull)
+    prop.setIsAuthenticated(sucssefull);
     console.log(sucssefull);
-    handleClose()
-  
+    handleClose();
   };
   const handleClose = () => {
     prop.setIsLoginModal(false);

@@ -31,10 +31,10 @@ export async function login(userData) {
       // redirect: 'follow', // manual, *follow, error
       //  referrerPolicy: 'no-referrer', // no-referrer, *client
       body: JSON.stringify(userData), // body data type must match "Content-Type" header
-    })
-    if(response.status > 299){
+    });
+    if (response.status > 299) {
       console.warn(response.body);
-      throw new Error(response)
+      throw new Error(response);
     }
     return response.json(); // parses JSON response into native JavaScript objects
   } catch (error) {
