@@ -15,7 +15,7 @@ func Handlers(handler *handler.Handler) *mux.Router {
 	r.Use(middleware.LoggingMiddleware(logrus.StandardLogger()))
 
 	r.HandleFunc("/health-check", handler.HealthCheck).Methods("GET")
-	r.HandleFunc("/register", handler.CreateUser()).Methods("POST")
+	r.HandleFunc("/register", handler.RegisterUser()).Methods("POST")
 	r.HandleFunc("/login", handler.Login()).Methods("POST")
 
 	// Auth route

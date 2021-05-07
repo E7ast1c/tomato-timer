@@ -52,9 +52,18 @@ func (up *UserPostgres) SetUserDataByID(user *models.User) error {
 }
 
 func (up *UserPostgres) CreateUser(user *models.User) (*models.User, error) {
-	res := up.DB.Create(user)
-	if res.Error != nil {
-		return nil, res.Error
+	err := up.DB.Where("Email = ?", user.Email).First(user).Error
+	if err == nil {
+		return nil, errors.New("user already exist")
 	}
-	return res.Value.(*models.User), nil
+
+	if errors.Is(err, sql.ErrNoRows) {
+		res := up.DB.Create(user)
+		if res.Error != nil {
+			return nil, res.Error
+		}
+		return res.Value.(*models.User), nil
+	} else {
+		return nil, err
+	}
 }

@@ -2,28 +2,26 @@ package handler
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
-	"github.com/sirupsen/logrus"
 	"golang.org/x/crypto/bcrypt"
 	"net/http"
 	"time"
 	auth "tomato-timer-server/internal/auth"
 	"tomato-timer-server/internal/models"
+	"tomato-timer-server/pkg/exception"
 )
 
+type userPayload map[string]interface{}
 
-type ErrorResponse struct {
-	Err string
+func afterAuthorization(w http.ResponseWriter, up userPayload) {
+	respException := exception.NewResponseException(w)
+	err := json.NewEncoder(w).Encode(up)
+	if err != nil {
+		respException.ErrBadRequest(err, "encode user payload failed")
+		return
+	}
 }
-
-//type error interface {
-//	Error() string
-//}
-//
-//func AfterAuthorization(w http.ResponseWriter, r *http.Request)  {
-//	w.Write([]byte("Not Implemented"))
-//}
-//
 
 func (h Handler) HealthCheck(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(fmt.Sprintf("Ready to fight %v", time.Now())))
@@ -33,111 +31,94 @@ func (h Handler) GetUserSettings() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		auth := auth.NewAuth(h.Repo, h.Config)
 		userToken := auth.JWTExtractData
-		userFromToken := userToken(r)
 
-		user, err := h.Repo.UserOperations.GetUserDataByID(userFromToken.UserID)
+		respException := exception.NewResponseException(w)
+
+		user, err := h.Repo.UserOperations.GetUserDataByID(userToken(r).UserID)
 		if err != nil {
-			w.WriteHeader(http.StatusBadRequest)
-			var resp = map[string]interface{}{"status": false, "message": "Can`t get user data"}
-			json.NewEncoder(w).Encode(resp)
+			respException.ErrBadRequest(err, "can`t get user data")
 			return
 		}
 
-		var resp = map[string]interface{}{"status": false, "message": "logged in"}
-		resp["user"] = user.NewUserResponseData()
-		json.NewEncoder(w).Encode(resp)
+		afterAuthorization(w, map[string]interface{}{"user": user.NewUserResponseData()})
 	}
 }
 
-func (h Handler) CreateUser() http.HandlerFunc {
+func (h Handler) RegisterUser() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-
 		user := &models.User{}
+		respException := exception.NewResponseException(w)
+
 		if r.ContentLength == 0 {
-			w.WriteHeader(http.StatusBadRequest)
-			json.NewEncoder(w).Encode(models.Exception{Message: "empty body"})
+			respException.ErrBadRequest(errors.New("empty body"), "")
 			return
 		}
 
 		err := json.NewDecoder(r.Body).Decode(user)
 		if err != nil {
-			w.WriteHeader(http.StatusBadRequest)
-			json.NewEncoder(w).Encode(models.Exception{Message: "json unmarshall error"})
+			respException.ErrBadRequest(err, "json unmarshall error")
 			return
 		}
 
 		pass, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 		if err != nil {
-			fmt.Println(err)
-			err := ErrorResponse{
-				Err: "Password Encryption  failed",
-			}
-			json.NewEncoder(w).Encode(err)
+			respException.ErrBadRequest(err, "password encryption failed")
+			return
 		}
 
 		user.Password = string(pass)
 
 		createdUser, err := h.Repo.UserOperations.CreateUser(user)
 		if err != nil {
-			w.WriteHeader(http.StatusBadRequest)
-			json.NewEncoder(w).Encode(models.Exception{Message: err.Error()})
+			respException.ErrBadRequest(err, "create user failed")
 			return
 		}
 
-		err = json.NewEncoder(w).Encode(createdUser)
-		if err != nil {
-			logrus.Infof("json Encoding error = %s", err)
+		auth := auth.NewAuth(h.Repo, h.Config)
+		token, tErr := auth.JWTCreate(*createdUser)
+		if tErr != nil {
+			respException.ErrBadRequest(tErr, "jwt create")
+			return
 		}
+
+		afterAuthorization(w, map[string]interface{}{
+			"token": token,
+			"user":  createdUser.NewUserResponseData()})
 	}
 }
 
 func (h Handler) Login() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		user := &models.User{}
+		respException := exception.NewResponseException(w)
+
 		err := json.NewDecoder(r.Body).Decode(user)
 		if err != nil {
-			w.WriteHeader(http.StatusBadRequest)
-			var resp = map[string]interface{}{"status": false, "message": "Invalid request"}
-			json.NewEncoder(w).Encode(resp)
+			respException.ErrBadRequest(err, "decode user")
 			return
 		}
 
 		dbUser, dbErr := h.Repo.UserOperations.GetUserDataByEmail(user.Email)
 		if dbErr != nil {
-			w.WriteHeader(http.StatusBadRequest)
-			resp := map[string]interface{}{"status": false, "message": dbErr}
-			json.NewEncoder(w).Encode(resp)
+			respException.ErrBadRequest(dbErr, "db user")
 			return
 		}
 
-		errf := bcrypt.CompareHashAndPassword([]byte(dbUser.Password),[]byte(user.Password))
+		errf := bcrypt.CompareHashAndPassword([]byte(dbUser.Password), []byte(user.Password))
 		if errf != nil && errf == bcrypt.ErrMismatchedHashAndPassword {
-			w.WriteHeader(http.StatusBadRequest)
-			var resp = map[string]interface{}{"status": false, "message": "Invalid login credentials. Please try again"}
-			json.NewEncoder(w).Encode(resp)
+			respException.ErrBadRequest(errf, "invalid login credentials")
 			return
 		}
 
 		auth := auth.NewAuth(h.Repo, h.Config)
 		token, tErr := auth.JWTCreate(*dbUser)
-		if dbErr != nil {
-			w.WriteHeader(http.StatusBadRequest)
-			resp := map[string]interface{}{"status": false, "message": tErr}
-			json.NewEncoder(w).Encode(resp)
-
+		if tErr != nil {
+			respException.ErrBadRequest(tErr, "jwt create")
 			return
 		}
 
-		var resp = map[string]interface{}{"status": false, "message": "logged in"}
-		resp["token"] = token
-		resp["user"] = user.NewUserResponseData()
-		err = json.NewEncoder(w).Encode(resp)
-		if err != nil {
-			logrus.Infof("json Encoding error = %s", err)
-		}
+		afterAuthorization(w, map[string]interface{}{
+			"token": token,
+			"user":  dbUser.NewUserResponseData()})
 	}
-}
-
-func errorWrapper() {
-
 }

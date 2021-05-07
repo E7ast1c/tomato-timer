@@ -2,11 +2,8 @@ package tomato_timer_server
 
 import (
 	"context"
-	"github.com/gorilla/handlers"
 	"github.com/sirupsen/logrus"
-	"io"
 	"net/http"
-	"net/url"
 	"os"
 	"os/signal"
 	"syscall"
@@ -31,30 +28,26 @@ func (app *App) RunServer(config config.AppConfig, ctx context.Context) error {
 
 	http.Handle("/", r)
 
-	logFormatterParams := handlers.LogFormatterParams{
-		Request:    nil,
-		URL:        url.URL{},
-		TimeStamp:  time.Time{},
-		StatusCode: 0,
-		Size:       0,
+	srv := &http.Server{
+		Handler:      r,
+		Addr:         ":"+config.ApiServer.Port,
+		WriteTimeout: 5 * time.Second,
+		ReadTimeout:  5 * time.Second,
 	}
-	stdLoggerOut := logrus.StandardLogger().Out
-	logFormatter := handlers.LogFormatter(stdLoggerOut, logFormatterParams)
-
-	logReq := handlers.CustomLoggingHandler(logrus.StandardLogger().Out, r, logFormatter )
-
-	err = http.ListenAndServe(":"+config.ApiServer.Port, logReq)
+	err = srv.ListenAndServe()
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
+// GracefulShutdown TODO: finish, not right work now
 func (app *App) GracefulShutdown(cancelFunc context.CancelFunc) {
 	sigs := make(chan os.Signal, 1)
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM, syscall.SIGKILL)
 	<-sigs
-	logrus.Info("received shutdown signal")
-	cancelFunc()
+	go cancelFunc()
+	time.Sleep(3 * time.Second)
+	logrus.Fatal("received shutdown signal")
 }
 

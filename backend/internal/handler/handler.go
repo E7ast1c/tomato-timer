@@ -13,4 +13,3 @@ type Handler struct {
 func NewHandler(Repo dao.PGRepository, apiConfig config.ApiServer) *Handler {
 	return &Handler{Repo: Repo, Config: apiConfig}
 }
-

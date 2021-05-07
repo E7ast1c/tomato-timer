@@ -44,6 +44,3 @@ type UserToken struct {
 	*jwt.StandardClaims
 }
 
-type Exception struct {
-	Message string `json:"message"`
-}

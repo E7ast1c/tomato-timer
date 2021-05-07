@@ -143,3 +143,4 @@ backend/*.idea
 *TomatoTimerApi.drawio
 ..eslintrc.json.icloud
 
+.idea

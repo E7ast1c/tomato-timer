@@ -2,11 +2,11 @@ package middleware
 
 import (
 	"context"
-	"encoding/json"
 	"github.com/dgrijalva/jwt-go"
 	"net/http"
 	"strings"
 	"tomato-timer-server/internal/models"
+	"tomato-timer-server/pkg/exception"
 )
 
 const headerTokenName = "x-access-token"
@@ -15,13 +15,12 @@ func (mw *middleware) JwtVerify(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
 		var header = r.Header.Get(headerTokenName) //Grab the token from the header
-
 		header = strings.TrimSpace(header)
 
+		exp := exception.NewResponseException(w)
+
 		if header == "" {
-			//UserToken is missing, returns with error code 403 Unauthorized
-			w.WriteHeader(http.StatusForbidden)
-			json.NewEncoder(w).Encode(models.Exception{Message: "Missing auth token"})
+			exp.ErrForbidden("Missing auth token, userToken is missing")
 			return
 		}
 
@@ -31,14 +30,12 @@ func (mw *middleware) JwtVerify(next http.Handler) http.Handler {
 		})
 
 		if err != nil {
-			w.WriteHeader(http.StatusForbidden)
-			json.NewEncoder(w).Encode(models.Exception{Message: err.Error()})
+			exp.ErrBadRequest(err, "parse user claims failed")
 			return
 		}
 
 		if !parsedToken.Valid {
-			w.WriteHeader(http.StatusForbidden)
-			json.NewEncoder(w).Encode(models.Exception{Message: "Invalid token"})
+			exp.ErrForbidden("Invalid token")
 			return
 		}
 
