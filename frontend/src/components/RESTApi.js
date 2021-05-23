@@ -20,19 +20,26 @@ export async function login(userData) {
     "Access-Control-Allow-Origin": "*",
     // "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept"
   });
-
-  const response = await fetch(url, {
-    method: "POST", // *GET, POST, PUT, DELETE, etc.
-    // mode: 'cors', // no-cors, *cors, same-origin
-    cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-    // origin: 'http://192.168.31.174:8080',
-    //   credentials: 'include',
-    //  headers: myHeaders,
-    // redirect: 'follow', // manual, *follow, error
-    //  referrerPolicy: 'no-referrer', // no-referrer, *client
-    body: JSON.stringify(userData), // body data type must match "Content-Type" header
-  });
-  return response.json(); // parses JSON response into native JavaScript objects
+  try {
+    const response = await fetch(url, {
+      method: "POST", // *GET, POST, PUT, DELETE, etc.
+      // mode: 'cors', // no-cors, *cors, same-origin
+      cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+      // origin: 'http://192.168.31.174:8080',
+      //   credentials: 'include',
+      //  headers: myHeaders,
+      // redirect: 'follow', // manual, *follow, error
+      //  referrerPolicy: 'no-referrer', // no-referrer, *client
+      body: JSON.stringify(userData), // body data type must match "Content-Type" header
+    });
+    if (response.status > 299) {
+      console.warn(response.body);
+      throw new Error(response);
+    }
+    return response.json(); // parses JSON response into native JavaScript objects
+  } catch (error) {
+    console.error(error.message);
+  }
 }
 
 // export async function register(login, email, password) {

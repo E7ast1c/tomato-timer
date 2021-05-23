@@ -38,9 +38,11 @@ export default function Header(props) {
   const setCurrentDuarationTime = props.setCurrentDuarationTime;
   const [registerModal, setRegisterModal] = useState(false);
   const [settingsModal, setSettingsModal] = useState(false);
-  const [isLogIn, setIsLogIn] = useState(false);
+  const [isLoginModal, setIsLoginModal] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const classes = useStyles();
   const title = "Tomato timer";
+
   return (
     <React.Fragment>
       <Toolbar className={classes.toolbar}>
@@ -70,7 +72,7 @@ export default function Header(props) {
             className={classes.toolbarButton}
             variant="outlined"
             size="small"
-            onClick={() => setIsLogIn(!isLogIn)}
+            onClick={() => setIsLoginModal(!isLoginModal)}
           >
             Log in
           </Button>
@@ -84,7 +86,7 @@ export default function Header(props) {
           </Button>
         </Toolbar>
       </Toolbar>
-      {isLogIn && <LoiginModal prop={{ isLogIn, setIsLogIn }} />}
+      {isLoginModal && <LoiginModal prop={{ isLoginModal, setIsLoginModal, setIsAuthenticated }} />}
       {registerModal && <Register prop={{ registerModal, setRegisterModal }} />}
       {settingsModal && (
         <SettingModal prop={{ setSettingsModal, setCurrentDuarationTime }} />

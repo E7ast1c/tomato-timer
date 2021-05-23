@@ -17,6 +17,7 @@ import Header from "./Header";
 import PropTypes from "prop-types";
 
 import { login } from "../RESTApi";
+import { AuthLogin } from "../AuthManager";
 
 import { useForm } from "react-hook-form";
 
@@ -55,12 +56,11 @@ export default function LoiginModal(props) {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = async (data) => {
-    login(data).then((data) => {
-      console.log("this response", data); // JSON data parsed by `response.json()` call
-    });
-  };
-  // console.log(errors);
+  // const onSubmit = async (data) => {
+  //   login(data).then((data) => {
+  //     console.log("this response", data); // JSON data parsed by `response.json()` call
+  //   });
+  // };
 
   const classes = useStyles();
   // const [modalStyle] = React.useState(getModalStyle);
@@ -88,10 +88,15 @@ export default function LoiginModal(props) {
     event.preventDefault();
   };
 
-  const handleClose = () => {
-    prop.setIsLogIn(false);
+  const onSubmit = (data) => {
+    const sucssefull = AuthLogin(data);
+    prop.setIsAuthenticated(sucssefull);
+    console.log(sucssefull);
+    handleClose();
   };
-
+  const handleClose = () => {
+    prop.setIsLoginModal(false);
+  };
   // const handleLogin = async () => {
   //   login().then((data) => {
   //     console.log(data); // JSON data parsed by `response.json()` call
@@ -103,7 +108,7 @@ export default function LoiginModal(props) {
       <Modal
         className={classes.modal}
         open={true}
-        onClose={() => prop.setIsLogIn(false)}
+        onClose={() => prop.setIsLoginModal(false)}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
       >
