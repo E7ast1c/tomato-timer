@@ -11,10 +11,10 @@ func Handlers(handler *handler.Handler) *mux.Router {
 	r := mux.NewRouter().StrictSlash(true)
 	mw := middleware.NewMiddleware(handler.Config)
 
-	r.Use(middleware.CommonMiddleware)
-	r.Use(middleware.LoggingMiddleware(logrus.StandardLogger()))
+	r.Use(mw.CommonMiddleware)
+	r.Use(mw.LoggingMiddleware(logrus.StandardLogger()))
 
-	r.HandleFunc("/health-check", handler.HealthCheck).Methods("GET")
+	r.HandleFunc("/health-check", handler.HealthCheck()).Methods("GET")
 	r.HandleFunc("/register", handler.RegisterUser()).Methods("POST")
 	r.HandleFunc("/login", handler.Login()).Methods("POST")
 

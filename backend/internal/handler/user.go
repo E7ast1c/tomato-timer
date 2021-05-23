@@ -3,10 +3,8 @@ package handler
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"golang.org/x/crypto/bcrypt"
 	"net/http"
-	"time"
 	auth "tomato-timer-server/internal/auth"
 	"tomato-timer-server/internal/models"
 	"tomato-timer-server/pkg/exception"
@@ -23,10 +21,6 @@ func afterAuthorization(w http.ResponseWriter, up userPayload) {
 	}
 }
 
-func (h Handler) HealthCheck(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte(fmt.Sprintf("Ready to fight %v", time.Now())))
-}
-
 func (h Handler) GetUserSettings() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		auth := auth.NewAuth(h.Repo, h.Config)
@@ -34,7 +28,7 @@ func (h Handler) GetUserSettings() http.HandlerFunc {
 
 		respException := exception.NewResponseException(w)
 
-		user, err := h.Repo.UserOperations.GetUserDataByID(userToken(r).UserID)
+		user, err := h.Repo.UserRepo.GetUserDataByID(userToken(r).UserID)
 		if err != nil {
 			respException.ErrBadRequest(err, "can`t get user data")
 			return
@@ -68,7 +62,7 @@ func (h Handler) RegisterUser() http.HandlerFunc {
 
 		user.Password = string(pass)
 
-		createdUser, err := h.Repo.UserOperations.CreateUser(user)
+		createdUser, err := h.Repo.UserRepo.CreateUser(user)
 		if err != nil {
 			respException.ErrBadRequest(err, "create user failed")
 			return
@@ -98,7 +92,7 @@ func (h Handler) Login() http.HandlerFunc {
 			return
 		}
 
-		dbUser, dbErr := h.Repo.UserOperations.GetUserDataByEmail(user.Email)
+		dbUser, dbErr := h.Repo.UserRepo.GetUserDataByEmail(user.Email)
 		if dbErr != nil {
 			respException.ErrBadRequest(dbErr, "db user")
 			return

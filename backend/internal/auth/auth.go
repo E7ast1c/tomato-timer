@@ -10,10 +10,10 @@ import (
 )
 
 type Auth struct {
-	Repo   dao.PGRepository
+	Repo   dao.Repository
 	Config config.ApiServer
 }
-func NewAuth(Repo dao.PGRepository, apiConfig config.ApiServer) *Auth {
+func NewAuth(Repo dao.Repository, apiConfig config.ApiServer) *Auth {
 	return &Auth{
 		Repo:   Repo,
 		Config: apiConfig,

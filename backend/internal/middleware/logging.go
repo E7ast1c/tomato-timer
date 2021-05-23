@@ -39,7 +39,7 @@ func (rw *responseWriter) WriteHeader(code int) {
 }
 
 // LoggingMiddleware logs the incoming HTTP request & its duration.
-func LoggingMiddleware(logger *logrus.Logger) func(http.Handler) http.Handler {
+func (mw *middleware) LoggingMiddleware(logger *logrus.Logger) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		fn := func(w http.ResponseWriter, r *http.Request) {
 			defer func() {
@@ -54,10 +54,16 @@ func LoggingMiddleware(logger *logrus.Logger) func(http.Handler) http.Handler {
 			// read body for logging and overwrite for further
 			bodyRaw, err := io.ReadAll(r.Body)
 			r.Body = io.NopCloser(bytes.NewReader(bodyRaw))
+			err = r.Body.Close()
+			if err != nil {
+				logrus.Error("Could not close body")
+				return
+			}
 
 			rHeaders, err := json.Marshal(r.Header)
 			if err != nil {
 				logrus.Error("Could not Marshal Req Headers")
+				return
 			}
 
 			start := time.Now()

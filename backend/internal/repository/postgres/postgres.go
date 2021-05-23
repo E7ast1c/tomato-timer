@@ -1,14 +1,19 @@
-package repository
+package postgres
 
 import (
 	"context"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/sirupsen/logrus"
-	log "github.com/sirupsen/logrus"
+	"log"
 	"tomato-timer-server/config"
 	"tomato-timer-server/internal/models"
+	"tomato-timer-server/internal/repository"
 )
+
+func NewPGRepository(DB *gorm.DB) *repository.Repository {
+	return &repository.Repository{UserRepo: &UserPostgres{DB: DB}, ServiceRepo: &Service{DB: DB}}
+}
 
 func PGConnect(dbConfig config.DBConfig) (*gorm.DB, error) {
 	db, err := gorm.Open("postgres", dbConfig.Uri)

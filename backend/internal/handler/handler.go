@@ -6,10 +6,10 @@ import (
 )
 
 type Handler struct {
-	Repo   dao.PGRepository
+	Repo   dao.Repository
 	Config config.ApiServer
 }
 
-func NewHandler(Repo dao.PGRepository, apiConfig config.ApiServer) *Handler {
+func NewHandler(Repo dao.Repository, apiConfig config.ApiServer) *Handler {
 	return &Handler{Repo: Repo, Config: apiConfig}
 }
