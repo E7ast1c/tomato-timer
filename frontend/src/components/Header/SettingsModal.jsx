@@ -144,7 +144,7 @@ export default function SettingModal(props) {
           </div>
         </div>
       </Modal>
-      {}
+  
     </div>
   );
 }
