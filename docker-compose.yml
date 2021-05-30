@@ -1,0 +1,17 @@
+version: "3.9"
+
+services: 
+    backend:
+        environment:
+            - DB_URI=${DB_URI}
+            - PORT=${BACKEND_PORT}
+            - SIGN_SECRET=${SIGN_SECRET}
+        build: backend/
+        ports: 
+            - ${BACKEND_PORT}:${BACKEND_PORT}
+    frontend:
+        build: frontend/
+        ports: 
+            - ${FRONTEND_PORT}:${FRONTEND_PORT}
+        depends_on: 
+            - backend
