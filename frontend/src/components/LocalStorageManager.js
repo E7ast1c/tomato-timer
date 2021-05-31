@@ -17,10 +17,10 @@ export function getLocalStorageKey(key) {
 
 export function setUserData(data) {
   const userData = {
-    user : {
-      name: data.user.Name, 
+    user: {
+      name: data.user.Name,
       email: data.user.Email,
-    }, 
+    },
     token: data.token,
   };
 
@@ -33,6 +33,6 @@ export function setUserData(data) {
   }
 }
 
-export function clearLocalStorage(){
-  localStorage.clear()
+export function clearLocalStorage() {
+  localStorage.clear();
 }
