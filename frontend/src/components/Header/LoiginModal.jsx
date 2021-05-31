@@ -16,7 +16,7 @@ import IconButton from "@material-ui/core/IconButton";
 import Header from "./Header";
 import PropTypes from "prop-types";
 
-import { login } from "../RESTApi";
+// import { login } from "../RESTApi";
 import { AuthLogin } from "../AuthManager";
 
 import { useForm } from "react-hook-form";
@@ -88,8 +88,8 @@ export default function LoiginModal(props) {
     event.preventDefault();
   };
 
-  const onSubmit = (data) => {
-    const sucssefull = AuthLogin(data);
+  const onSubmit = async (data) => {
+    const sucssefull = await AuthLogin(data);
     prop.setIsAuthenticated(sucssefull);
     console.log(sucssefull);
     handleClose();
@@ -182,7 +182,7 @@ export default function LoiginModal(props) {
                   //   handleClose();
                   // }}
                 />
-                <Button
+                {/* <Button
                   color="primary"
                   variant="contained"
                   // onClick={() =>
@@ -191,7 +191,7 @@ export default function LoiginModal(props) {
                   // }
                 >
                   Ok
-                </Button>
+                </Button> */}
                 <Button
                   type="submit"
                   color="secondary"

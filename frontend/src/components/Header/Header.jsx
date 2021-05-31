@@ -4,15 +4,19 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import GitHubIcon from "@material-ui/icons/GitHub";
+import Link from "@material-ui/core/Link";
 import Register from "./RegisterModal";
 import SettingModal from "./SettingsModal";
 import LoiginModal from "./LoiginModal";
+import { clearLocalStorage } from "../LocalStorageManager";
 
 import PropTypes from "prop-types";
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
     borderBottom: `1px solid `,
+    display: "flex",
+    // justifyContent: "space-between",
   },
   toolbarButton: {
     color: "white",
@@ -20,17 +24,32 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: "1em",
   },
   toolbarIcon: {
+    marginLeft: ".1em",
+    marginRight: ".1em",
+  },
+  settingsButton: {
+    margin: "0 auto 0 0 ",
+    color: "white",
+    borderColor: "white",
     marginLeft: "1em",
-    marginRight: "2em",
   },
   toolbarTitle: {
     flex: 1,
+    [theme.breakpoints.down(`sm`)]: {
+      display: "none",
+    },
+    [theme.breakpoints.up(`sm`)]: {
+      display: "block",
+    },
   },
   toolbarSecondary: {
     overflowX: "auto",
   },
   toolbarLink: {
     flexShrink: 0,
+  },
+  authButton: {
+    display: "flex",
   },
 }));
 
@@ -46,9 +65,11 @@ export default function Header(props) {
   return (
     <React.Fragment>
       <Toolbar className={classes.toolbar}>
-        <GitHubIcon className={classes.toolbarIcon} />
+        <Link href="https://github.com/E7ast1c/tomato-timer" color="inherit"  target="_blank" >
+          <GitHubIcon className={classes.toolbarIcon} />
+        </Link>
         <Button
-          className={classes.toolbarButton}
+          className={classes.settingsButton}
           variant="outlined"
           size="small"
           onClick={() => setSettingsModal(!settingsModal)}
@@ -67,26 +88,45 @@ export default function Header(props) {
           {title}
         </Typography>
 
-        <Toolbar className={classes.toolbarSecondary}>
-          <Button
-            className={classes.toolbarButton}
-            variant="outlined"
-            size="small"
-            onClick={() => setIsLoginModal(!isLoginModal)}
-          >
-            Log in
-          </Button>
-          <Button
-            className={classes.toolbarButton}
-            variant="outlined"
-            size="small"
-            onClick={() => setRegisterModal(!registerModal)}
-          >
-            Register
-          </Button>
-        </Toolbar>
+        <div className={classes.authButton}>
+          {isAuthenticated ? (
+            <Button
+              className={classes.toolbarButton}
+              variant="outlined"
+              size="small"
+              onClick={() => {
+                setIsAuthenticated(!isAuthenticated), clearLocalStorage();
+              }}
+            >
+              Sing out
+            </Button>
+          ) : (
+            <div className={classes.authButton}>
+              <Button
+                className={classes.toolbarButton}
+                variant="outlined"
+                size="small"
+                onClick={() => setIsLoginModal(!isLoginModal)}
+              >
+                Log in
+              </Button>
+              <Button
+                className={classes.toolbarButton}
+                variant="outlined"
+                size="small"
+                onClick={() => setRegisterModal(!registerModal)}
+              >
+                Register
+              </Button>
+            </div>
+          )}
+        </div>
       </Toolbar>
-      {isLoginModal && <LoiginModal prop={{ isLoginModal, setIsLoginModal, setIsAuthenticated }} />}
+      {isLoginModal && (
+        <LoiginModal
+          prop={{ isLoginModal, setIsLoginModal, setIsAuthenticated }}
+        />
+      )}
       {registerModal && <Register prop={{ registerModal, setRegisterModal }} />}
       {settingsModal && (
         <SettingModal prop={{ setSettingsModal, setCurrentDuarationTime }} />

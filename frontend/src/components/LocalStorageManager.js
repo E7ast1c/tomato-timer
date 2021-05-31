@@ -32,3 +32,7 @@ export function setUserData(data) {
     return;
   }
 }
+
+export function clearLocalStorage(){
+  localStorage.clear()
+}
