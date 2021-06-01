@@ -36,3 +36,12 @@ export function setUserData(data) {
 export function clearLocalStorage() {
   localStorage.clear();
 }
+
+export function getUserName(user) {
+  if (localStorage.getItem(user)) {
+    const userName = JSON.parse(localStorage.getItem('user'))
+    return userName.name
+  } else {
+    return;
+  }
+}

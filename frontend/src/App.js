@@ -7,6 +7,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
+       {console.log(localStorage.getItem('user'))}
           <Main/>
       </header>
     </div>

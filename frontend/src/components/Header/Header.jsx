@@ -8,7 +8,8 @@ import Link from "@material-ui/core/Link";
 import Register from "./RegisterModal";
 import SettingModal from "./SettingsModal";
 import LoiginModal from "./LoiginModal";
-import { clearLocalStorage } from "../LocalStorageManager";
+import { clearLocalStorage, getUserName } from "../LocalStorageManager";
+// import { getUserData } from '../LocalStorageManager'
 
 import PropTypes from "prop-types";
 
@@ -61,11 +62,14 @@ export default function Header(props) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const classes = useStyles();
   const title = "Tomato timer";
+  const user = 'user';
+
+  const isLocalStorageName = getUserName(user)
 
   return (
     <React.Fragment>
       <Toolbar className={classes.toolbar}>
-        <Link href="https://github.com/E7ast1c/tomato-timer" color="inherit"  target="_blank" >
+        <Link href="https://github.com/E7ast1c/tomato-timer" color="inherit" target="_blank" >
           <GitHubIcon className={classes.toolbarIcon} />
         </Link>
         <Button
@@ -89,37 +93,48 @@ export default function Header(props) {
         </Typography>
 
         <div className={classes.authButton}>
-          {isAuthenticated ? (
-            <Button
-              className={classes.toolbarButton}
-              variant="outlined"
-              size="small"
-              onClick={() => {
-                setIsAuthenticated(!isAuthenticated), clearLocalStorage();
-              }}
-            >
-              Sing out
-            </Button>
-          ) : (
+          {isLocalStorageName != null ? (
             <div className={classes.authButton}>
+              <Typography
+                component="h2"
+                variant="h5"
+                align="center"
+                noWrap
+              >
+                {isLocalStorageName}
+              </Typography>
+
               <Button
                 className={classes.toolbarButton}
                 variant="outlined"
                 size="small"
-                onClick={() => setIsLoginModal(!isLoginModal)}
+                onClick={() => {
+                  setIsAuthenticated(!isAuthenticated), clearLocalStorage();
+                }}
               >
-                Log in
-              </Button>
-              <Button
-                className={classes.toolbarButton}
-                variant="outlined"
-                size="small"
-                onClick={() => setRegisterModal(!registerModal)}
-              >
-                Register
-              </Button>
+                Sing out
+            </Button>
             </div>
-          )}
+          ) : (
+              <div className={classes.authButton}>
+                <Button
+                  className={classes.toolbarButton}
+                  variant="outlined"
+                  size="small"
+                  onClick={() => setIsLoginModal(!isLoginModal)}
+                >
+                  Log in
+              </Button>
+                <Button
+                  className={classes.toolbarButton}
+                  variant="outlined"
+                  size="small"
+                  onClick={() => setRegisterModal(!registerModal)}
+                >
+                  Register
+              </Button>
+              </div>
+            )}
         </div>
       </Toolbar>
       {isLoginModal && (
