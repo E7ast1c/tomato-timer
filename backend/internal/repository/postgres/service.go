@@ -1,13 +1,14 @@
 package postgres
 
-import "github.com/jinzhu/gorm"
+import "gorm.io/gorm"
 
 type Service struct {
 	DB *gorm.DB
 }
 
 func (s *Service) HealthCheck() error {
-	err := s.DB.DB().Ping(); if err != nil {
+	db, err := s.DB.DB()
+	pErr := db.Ping(); if pErr != nil {
 		return err
 	}
 	return nil

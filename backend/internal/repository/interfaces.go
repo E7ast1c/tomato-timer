@@ -8,7 +8,7 @@ type UserRepo interface {
 	GetAllUsers() ([]models.User, error)
 	GetUserDataByEmail(email string) (*models.User,error)
 	GetUserDataByID(id uint) (*models.User, error)
-	SetUserDataByID(user *models.User) error
+	SetUserDataByID(id uint, settings models.UserTimerSettings) error
 	CreateUser(user *models.User) (*models.User, error)
 }
 

@@ -1,7 +1,7 @@
 package tomato_timer_server
 
 import (
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 	"net/http"
 )
 

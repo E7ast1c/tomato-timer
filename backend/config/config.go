@@ -18,13 +18,19 @@ type ApiServer struct {
 	SignSecret string `env:"SIGN_SECRET"`
 }
 
-func GetConfig() AppConfig {
-	port := env.GetEnvString("PORT")
-	signSecret := env.GetEnvString("SIGN_SECRET")
-	uri := env.GetEnvString("DB_URI")
+const (
+	defaultPort       = ":8080"
+	defaultSignSecret = "secret"
+	defaultUri        = "localhost"
+)
+
+func NewApiConfig() AppConfig {
+	port := env.GetEnvString("PORT", defaultPort)
+	signSecret := env.GetEnvString("SIGN_SECRET", defaultSignSecret)
+	uri := env.GetEnvString("DB_URI", defaultUri)
 
 	return AppConfig{
-		DBConfig:  DBConfig{Uri: uri},
+		DBConfig: DBConfig{Uri: uri},
 		ApiServer: ApiServer{
 			Port:       port,
 			SignSecret: signSecret,

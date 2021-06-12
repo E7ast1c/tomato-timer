@@ -2,9 +2,11 @@ package postgres
 
 import (
 	"context"
-	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/sirupsen/logrus"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 	"log"
 	"tomato-timer-server/config"
 	"tomato-timer-server/internal/models"
@@ -16,7 +18,9 @@ func NewPGRepository(DB *gorm.DB) *repository.Repository {
 }
 
 func PGConnect(dbConfig config.DBConfig) (*gorm.DB, error) {
-	db, err := gorm.Open("postgres", dbConfig.Uri)
+	db, err := gorm.Open(postgres.Open(dbConfig.Uri), &gorm.Config{
+		Logger: logger.Default.LogMode(logger.Silent),
+	})
 	if err != nil {
 		return db, err
 	}
@@ -32,7 +36,11 @@ func CloseConn(ctx context.Context, db *gorm.DB) {
 	select {
 	case <-ctx.Done():
 		{
-			err := db.Close()
+			pdb, err := db.DB()
+			if err != nil {
+				logrus.Errorf("error on closing conn, get DB  %s", err)
+			}
+			err = pdb.Close()
 			if err != nil {
 				logrus.Errorf("error on closing conn %s", err)
 			}

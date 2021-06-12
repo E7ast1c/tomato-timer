@@ -9,7 +9,7 @@ import (
 
 func main() {
 	ctx, cancel := context.WithCancel(context.Background())
-	appConfig := config.GetConfig()
+	appConfig := config.NewApiConfig()
 	app := tomato_timer_server.NewApp()
 
 	go app.GracefulShutdown(cancel)

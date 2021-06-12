@@ -26,8 +26,6 @@ func (app *App) RunServer(config config.AppConfig, ctx context.Context) error {
 	handler := handler.NewHandler(*repo, config.ApiServer)
 	r := routes.Handlers(handler)
 
-	http.Handle("/", r)
-
 	srv := &http.Server{
 		Handler:      r,
 		Addr:         ":"+config.ApiServer.Port,

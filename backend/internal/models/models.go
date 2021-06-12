@@ -2,20 +2,20 @@ package models
 
 import (
 	"github.com/dgrijalva/jwt-go"
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 	"time"
 )
 
 type User struct {
 	gorm.Model
-	Name          string
+	Name          string `gorm:"type:varchar(100)"`
 	Email         string `gorm:"type:varchar(100);unique_index"`
 	Password      string `json:"Password"`
 	TimerSettings UserTimerSettings
 }
 
 type UserTimerSettings struct {
-	TimerDuration      time.Duration
+	DefaultDuration      time.Duration
 	LongBreakDuration  time.Duration
 	ShortBreakDuration time.Duration
 	TickTrack          string
