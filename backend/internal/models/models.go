@@ -8,18 +8,18 @@ import (
 
 type User struct {
 	gorm.Model
-	Name          string `gorm:"type:varchar(100)"`
-	Email         string `gorm:"type:varchar(100);unique_index"`
-	Password      string `json:"Password"`
-	TimerSettings UserTimerSettings
+	Name          string            `gorm:"type:varchar(100)"`
+	Email         string            `gorm:"type:varchar(100);unique_index"`
+	Password      string            `json:"Password"`
+	TimerSettings UserTimerSettings `gorm:"embedded"`
 }
 
 type UserTimerSettings struct {
-	DefaultDuration      time.Duration
-	LongBreakDuration  time.Duration
-	ShortBreakDuration time.Duration
-	TickTrack          string
-	AlarmTrack         string
+	DefaultDuration    time.Duration `gorm:"type:bigint"`
+	LongBreakDuration  time.Duration `gorm:"type:bigint"`
+	ShortBreakDuration time.Duration `gorm:"type:bigint"`
+	TickTrack          string        `gorm:"type:text"`
+	AlarmTrack         string        `gorm:"type:text"`
 }
 
 type UserResponseData struct {
@@ -43,4 +43,3 @@ type UserToken struct {
 	Email  string
 	*jwt.StandardClaims
 }
-

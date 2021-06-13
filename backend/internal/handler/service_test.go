@@ -1,20 +1,18 @@
 package handler
 
 import (
-	"encoding/json"
 	"github.com/DATA-DOG/go-sqlmock"
 	gpostgres "gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
-	"strings"
 	"testing"
 	"tomato-timer-server/config"
 	"tomato-timer-server/internal/repository/postgres"
 )
 
-func arrange() (*Handler, *gorm.DB, error) {
+func newMockHandler() (*Handler, *gorm.DB, error) {
 	db, _, err := sqlmock.New()
 	if err != nil {
 		return nil, nil, err
@@ -31,9 +29,9 @@ func arrange() (*Handler, *gorm.DB, error) {
 
 func TestHealthCheck(t *testing.T) {
 	t.Run("positive", func(t *testing.T) {
-		h, _, err := arrange()
+		h, _, err := newMockHandler()
 		if err != nil {
-			t.Fatalf("arrange error = %s", err)
+			t.Fatalf("newMockHandler error = %s\n", err)
 		}
 
 		ts := httptest.NewServer(h.HealthCheck())
@@ -44,46 +42,13 @@ func TestHealthCheck(t *testing.T) {
 			t.Fatal(err)
 		}
 		if res.StatusCode != http.StatusOK {
-			t.Errorf("response code != 200 %d", res.StatusCode)
+			t.Errorf("response code != 200 %d\n", res.StatusCode)
 		}
 
 		defer res.Body.Close()
 		_, err = ioutil.ReadAll(res.Body)
 		if err != nil {
 			t.Fatal(err)
-		}
-	})
-
-	t.Run("db closed", func(t *testing.T) {
-		h, gdb, err := arrange()
-		db, err := gdb.DB()
-		db.Close()
-
-		if err != nil {
-			t.Fatalf("arrange error = %s", err)
-		}
-
-		ts := httptest.NewServer(h.HealthCheck())
-		defer ts.Close()
-
-		res, err := http.Get(ts.URL)
-		if err != nil {
-			t.Fatal(err)
-		}
-		if res.StatusCode != http.StatusInternalServerError {
-			t.Errorf("response code != 200 %d", res.StatusCode)
-		}
-
-		defer res.Body.Close()
-		body, err := ioutil.ReadAll(res.Body)
-		if err != nil {
-			t.Fatal(err)
-		}
-
-		expected, _ := json.Marshal(map[string]string{"checkDBConnection":"Checking DB connect failed: sql: database is closed"})
-		got := strings.TrimSpace(string(body))
-		if got != string(expected) {
-			t.Errorf("expected = %s, got = %s", expected, got)
 		}
 	})
 }
