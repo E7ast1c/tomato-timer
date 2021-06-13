@@ -3,8 +3,9 @@ package postgres
 import (
 	"database/sql"
 	"errors"
-	"gorm.io/gorm"
 	models "tomato-timer-server/internal/models"
+
+	"gorm.io/gorm"
 )
 
 type UserPostgres struct {
@@ -19,7 +20,7 @@ func (up *UserPostgres) GetAllUsers() ([]models.User, error) {
 	if result.Error != nil {
 		return *users, result.Error
 	}
-	if errors.Is(result.Error, gorm.ErrRecordNotFound ){
+	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		return *users, sql.ErrNoRows
 	}
 	return *users, nil
@@ -27,8 +28,7 @@ func (up *UserPostgres) GetAllUsers() ([]models.User, error) {
 
 func (up *UserPostgres) GetUserDataByEmail(email string) (*models.User, error) {
 	user := &models.User{}
-	if err := up.DB.Where("Email = ?", email).First(user).Error;
-		errors.Is(err, sql.ErrNoRows) {
+	if err := up.DB.Where("Email = ?", email).First(user).Error; errors.Is(err, sql.ErrNoRows) {
 		return nil, errors.New("email address not found")
 	} else if err != nil {
 		return nil, err
@@ -39,8 +39,7 @@ func (up *UserPostgres) GetUserDataByEmail(email string) (*models.User, error) {
 
 func (up *UserPostgres) GetUserDataByID(userID uint) (*models.User, error) {
 	user := &models.User{}
-	if err := up.DB.Where("ID = ?", userID).First(user).Error;
-		errors.Is(err, sql.ErrNoRows) {
+	if err := up.DB.Where("ID = ?", userID).First(user).Error; errors.Is(err, sql.ErrNoRows) {
 		return nil, errors.New("email address not found")
 	} else if err != nil {
 		return nil, err
@@ -50,8 +49,6 @@ func (up *UserPostgres) GetUserDataByID(userID uint) (*models.User, error) {
 }
 
 func (up *UserPostgres) SetUserDataByID(userID uint, settings models.UserTimerSettings) error {
-	//	user := &models.User{}
-	// settingMap := make(map[string]string, 10)
 	if err := up.DB.Table(TableUsers).Where("ID = ?", userID).
 		Updates(models.UserTimerSettings{
 			DefaultDuration:    settings.DefaultDuration,

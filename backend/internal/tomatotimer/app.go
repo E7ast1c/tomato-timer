@@ -1,8 +1,9 @@
-package tomato_timer_server
+package tomatotimer
 
 import (
-	"gorm.io/gorm"
 	"net/http"
+
+	"gorm.io/gorm"
 )
 
 type App struct {
@@ -10,8 +11,8 @@ type App struct {
 	DB         *gorm.DB
 }
 
-func NewApp() *App  {
-	return &App {
+func NewApp() *App {
+	return &App{
 		httpServer: nil,
 		DB:         nil,
 	}

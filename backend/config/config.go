@@ -6,14 +6,14 @@ import (
 
 type AppConfig struct {
 	DBConfig  DBConfig
-	ApiServer ApiServer
+	APIServer APIServer
 }
 
 type DBConfig struct {
-	Uri string `env:"DB_URI"`
+	URI string `env:"DB_URI"`
 }
 
-type ApiServer struct {
+type APIServer struct {
 	Port       string `env:"PORT"`
 	SignSecret string `env:"SIGN_SECRET"`
 }
@@ -21,17 +21,17 @@ type ApiServer struct {
 const (
 	defaultPort       = ":8080"
 	defaultSignSecret = "secret"
-	defaultUri        = "localhost"
+	defaultURI        = "localhost"
 )
 
-func NewApiConfig() AppConfig {
+func NewAPIConfig() AppConfig {
 	port := env.GetEnvString("PORT", defaultPort)
 	signSecret := env.GetEnvString("SIGN_SECRET", defaultSignSecret)
-	uri := env.GetEnvString("DB_URI", defaultUri)
+	uri := env.GetEnvString("DB_URI", defaultURI)
 
 	return AppConfig{
-		DBConfig: DBConfig{Uri: uri},
-		ApiServer: ApiServer{
+		DBConfig: DBConfig{URI: uri},
+		APIServer: APIServer{
 			Port:       port,
 			SignSecret: signSecret,
 		},

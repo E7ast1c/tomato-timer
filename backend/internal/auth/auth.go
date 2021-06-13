@@ -1,34 +1,38 @@
 package auth
 
 import (
-	"github.com/dgrijalva/jwt-go"
 	"net/http"
 	"time"
 	"tomato-timer-server/config"
+	"tomato-timer-server/internal/middleware"
 	"tomato-timer-server/internal/models"
 	dao "tomato-timer-server/internal/repository"
+
+	"github.com/dgrijalva/jwt-go"
 )
 
 type Auth struct {
 	Repo   dao.Repository
-	Config config.ApiServer
+	Config config.APIServer
 }
 
-func NewAuth(Repo dao.Repository, apiConfig config.ApiServer) *Auth {
+func NewAuth(repo dao.Repository, apiConfig config.APIServer) *Auth {
 	return &Auth{
-		Repo:   Repo,
+		Repo:   repo,
 		Config: apiConfig,
 	}
 }
 
+const OneHour = time.Minute * 60
+
 func (a *Auth) JWTExtractData(r *http.Request) *models.UserToken {
-	ctxUserValue := r.Context().Value("user")
+	ctxUserValue := r.Context().Value(middleware.UserClaimName)
 	userToken := ctxUserValue.(*models.UserToken)
 	return userToken
 }
 
-func (a *Auth) JWTCreate(user models.User) (string, error) {
-	expiresAt := time.Now().Add(time.Minute * 10000).Unix()
+func (a *Auth) JWTCreate(user *models.User) (string, error) {
+	expiresAt := time.Now().Add(OneHour).Unix()
 	tk := &models.UserToken{
 		UserID: user.Model.ID,
 		Name:   user.Name,

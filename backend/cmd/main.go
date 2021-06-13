@@ -2,15 +2,16 @@ package main
 
 import (
 	"context"
-	"github.com/sirupsen/logrus"
 	"tomato-timer-server/config"
-	tomato_timer_server "tomato-timer-server/internal/tomato-timer-server"
+	tomatoTimerServer "tomato-timer-server/internal/tomatotimer"
+
+	"github.com/sirupsen/logrus"
 )
 
 func main() {
 	ctx, cancel := context.WithCancel(context.Background())
-	appConfig := config.NewApiConfig()
-	app := tomato_timer_server.NewApp()
+	appConfig := config.NewAPIConfig()
+	app := tomatoTimerServer.NewApp()
 
 	go app.GracefulShutdown(cancel)
 
@@ -18,5 +19,3 @@ func main() {
 		logrus.Fatalf("start server error = %s", err.Error())
 	}
 }
-
-

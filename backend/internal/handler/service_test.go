@@ -17,14 +17,18 @@ func newMockHandler() (*Handler, *gorm.DB, error) {
 	if err != nil {
 		return nil, nil, err
 	}
-	
-	gdb, err := gorm.Open(gpostgres.New(gpostgres.Config{
-		Conn:                 db,
-	}), &gorm.Config{})
-	repo := postgres.NewPGRepository(gdb)
-	apiConfig := config.NewApiConfig()
 
-	return NewHandler(*repo, apiConfig.ApiServer), gdb, nil
+	gdb, gErr := gorm.Open(gpostgres.New(gpostgres.Config{
+		Conn: db,
+	}), &gorm.Config{})
+	if gErr != nil {
+		return nil, nil, err
+	}
+
+	repo := postgres.NewPGRepository(gdb)
+	apiConfig := config.NewAPIConfig()
+
+	return NewHandler(*repo, apiConfig.APIServer), gdb, nil
 }
 
 func TestHealthCheck(t *testing.T) {

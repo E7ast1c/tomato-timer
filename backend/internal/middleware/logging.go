@@ -3,11 +3,12 @@ package middleware
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/sirupsen/logrus"
 	"io"
 	"net/http"
 	"runtime/debug"
 	"time"
+
+	"github.com/sirupsen/logrus"
 )
 
 // responseWriter is a minimal wrapper for http.ResponseWriter that allows the
@@ -34,8 +35,6 @@ func (rw *responseWriter) WriteHeader(code int) {
 	rw.status = code
 	rw.ResponseWriter.WriteHeader(code)
 	rw.wroteHeader = true
-
-	return
 }
 
 // LoggingMiddleware logs the incoming HTTP request & its duration.
@@ -45,7 +44,7 @@ func (mw *middleware) LoggingMiddleware(logger *logrus.Logger) func(http.Handler
 			defer func() {
 				if err := recover(); err != nil {
 					w.WriteHeader(http.StatusInternalServerError)
-					logger.Infof("Error level = %s, message = %s, debug stack = %+v",
+					logger.Errorf("Error level = %s, message = %s, debug stack = %s",
 						logrus.ErrorLevel, err, debug.Stack(),
 					)
 				}
@@ -53,6 +52,10 @@ func (mw *middleware) LoggingMiddleware(logger *logrus.Logger) func(http.Handler
 
 			// read body for logging and overwrite for further
 			bodyRaw, err := io.ReadAll(r.Body)
+			if err != nil {
+				logrus.Error("read body failed")
+				return
+			}
 			r.Body = io.NopCloser(bytes.NewReader(bodyRaw))
 			err = r.Body.Close()
 			if err != nil {

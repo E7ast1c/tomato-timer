@@ -16,3 +16,6 @@ local: $(DOCKER_CMD)
 
 
 local: $(DOCKER_CMD)
+
+lint:
+	golangci-lint run -v -c=.golangci.yml --tests=false

@@ -3,10 +3,13 @@ package middleware
 import "tomato-timer-server/config"
 
 type middleware struct {
-	config config.ApiServer
+	config config.APIServer
 }
 
-func NewMiddleware(config config.ApiServer) *middleware {
-	return &middleware{config: config}
+func NewMiddleware(argConfig config.APIServer) *middleware {
+	return &middleware{config: argConfig}
 }
 
+type userClaim string
+
+var UserClaimName userClaim = "user"

@@ -3,11 +3,12 @@ package handler
 import (
 	"encoding/json"
 	"errors"
-	"golang.org/x/crypto/bcrypt"
 	"net/http"
 	auth "tomato-timer-server/internal/auth"
 	"tomato-timer-server/internal/models"
 	"tomato-timer-server/pkg/exception"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 type userPayload map[string]interface{}
@@ -24,8 +25,8 @@ func afterAuthorization(w http.ResponseWriter, up userPayload) {
 
 func (h Handler) GetUserSettings() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		auth := auth.NewAuth(h.Repo, h.Config)
-		userToken := auth.JWTExtractData
+		newAuth := auth.NewAuth(h.Repo, h.Config)
+		userToken := newAuth.JWTExtractData
 
 		user, err := h.Repo.UserRepo.GetUserDataByID(userToken(r).UserID)
 		if err != nil {
@@ -39,8 +40,8 @@ func (h Handler) GetUserSettings() http.HandlerFunc {
 
 func (h Handler) SetUserSetting() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		auth := auth.NewAuth(h.Repo, h.Config)
-		userToken := auth.JWTExtractData
+		newAuth := auth.NewAuth(h.Repo, h.Config)
+		userToken := newAuth.JWTExtractData
 
 		userSettings := &models.UserTimerSettings{}
 		err := json.NewDecoder(r.Body).Decode(userSettings)
@@ -88,8 +89,8 @@ func (h Handler) RegisterUser() http.HandlerFunc {
 			return
 		}
 
-		auth := auth.NewAuth(h.Repo, h.Config)
-		token, tErr := auth.JWTCreate(*createdUser)
+		newAuth := auth.NewAuth(h.Repo, h.Config)
+		token, tErr := newAuth.JWTCreate(createdUser)
 		if tErr != nil {
 			h.Exception(w).ErrBadRequest(tErr, "jwt create")
 			return
@@ -117,14 +118,14 @@ func (h Handler) Login() http.HandlerFunc {
 			return
 		}
 
-		errf := bcrypt.CompareHashAndPassword([]byte(dbUser.Password), []byte(user.Password))
-		if errf != nil && errf == bcrypt.ErrMismatchedHashAndPassword {
-			h.Exception(w).ErrBadRequest(errf, "invalid login credentials")
+		cryptErr := bcrypt.CompareHashAndPassword([]byte(dbUser.Password), []byte(user.Password))
+		if cryptErr != nil && cryptErr == bcrypt.ErrMismatchedHashAndPassword {
+			h.Exception(w).ErrBadRequest(cryptErr, "invalid login credentials")
 			return
 		}
 
-		auth := auth.NewAuth(h.Repo, h.Config)
-		token, tErr := auth.JWTCreate(*dbUser)
+		newAuth := auth.NewAuth(h.Repo, h.Config)
+		token, tErr := newAuth.JWTCreate(dbUser)
 		if tErr != nil {
 			h.Exception(w).ErrBadRequest(tErr, "jwt create")
 			return

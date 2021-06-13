@@ -8,11 +8,11 @@ import (
 )
 
 type Handler struct {
-	Repo   dao.Repository
-	Config config.ApiServer
+	Repo      dao.Repository
+	Config    config.APIServer
 	Exception func(writer http.ResponseWriter) *exception.ResponseException
 }
 
-func NewHandler(Repo dao.Repository, apiConfig config.ApiServer) *Handler {
-	return &Handler{Repo: Repo, Config: apiConfig}
+func NewHandler(repo dao.Repository, apiConfig config.APIServer) *Handler {
+	return &Handler{Repo: repo, Config: apiConfig}
 }

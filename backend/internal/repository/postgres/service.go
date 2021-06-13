@@ -8,7 +8,8 @@ type Service struct {
 
 func (s *Service) HealthCheck() error {
 	db, err := s.DB.DB()
-	pErr := db.Ping(); if pErr != nil {
+	pErr := db.Ping()
+	if pErr != nil {
 		return err
 	}
 	return nil

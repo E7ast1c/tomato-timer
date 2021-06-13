@@ -2,19 +2,20 @@ package middleware
 
 import (
 	"context"
-	"github.com/dgrijalva/jwt-go"
 	"net/http"
 	"strings"
 	"tomato-timer-server/internal/models"
 	"tomato-timer-server/pkg/exception"
+
+	"github.com/dgrijalva/jwt-go"
 )
 
 const headerTokenName = "x-access-token"
 
 func (mw *middleware) JwtVerify(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-
-		var header = r.Header.Get(headerTokenName) //Grab the token from the header
+		// Grab the token from the header
+		var header = r.Header.Get(headerTokenName)
 		header = strings.TrimSpace(header)
 
 		exp := exception.NewResponseException(w)
@@ -39,7 +40,7 @@ func (mw *middleware) JwtVerify(next http.Handler) http.Handler {
 			return
 		}
 
-		ctx := context.WithValue(r.Context(), "user", userToken)
+		ctx := context.WithValue(r.Context(), UserClaimName, userToken)
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }

@@ -1,9 +1,10 @@
 package models
 
 import (
+	"time"
+
 	"github.com/dgrijalva/jwt-go"
 	"gorm.io/gorm"
-	"time"
 )
 
 type User struct {
@@ -29,11 +30,11 @@ type UserResponseData struct {
 }
 
 // NewUserResponseData cleaning user sensitive data as password and etc
-func (User *User) NewUserResponseData() *UserResponseData {
+func (user *User) NewUserResponseData() *UserResponseData {
 	return &UserResponseData{
-		Name:          User.Name,
-		Email:         User.Email,
-		TimerSettings: User.TimerSettings,
+		Name:          user.Name,
+		Email:         user.Email,
+		TimerSettings: user.TimerSettings,
 	}
 }
 
