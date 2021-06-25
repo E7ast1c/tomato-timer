@@ -17,7 +17,7 @@ func NewHealthErrors() *HealthReport {
 	return &HealthReport{errors: map[string]string{}}
 }
 
-func (h Handler) HealthCheck() http.HandlerFunc {
+func (h *Handler) HealthCheck() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		serviceErrors := NewHealthErrors()
 		checkDBConnection(serviceErrors, h)
@@ -36,10 +36,13 @@ func (h Handler) HealthCheck() http.HandlerFunc {
 	}
 }
 
-func checkDBConnection(hs *HealthReport, h Handler) {
-	sr := h.Repo.ServiceRepo
-	err := sr.HealthCheck()
+func checkDBConnection(hs *HealthReport, h *Handler) {
+	db, err := h.DB.DB()
 	if err != nil {
-		hs.errors["checkDBConnection"] = fmt.Sprintf("Checking DB connect failed: %s", err)
+		hs.errors["checkDBConnection"] = fmt.Sprintf("Get DB connect failed: %s", err)
+	}
+	err = db.Ping()
+	if err != nil {
+		hs.errors["checkDBConnection"] = fmt.Sprintf("Checking DB ping failed: %s", err)
 	}
 }

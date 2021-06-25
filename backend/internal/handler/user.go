@@ -23,7 +23,7 @@ func afterAuthorization(w http.ResponseWriter, up userPayload) {
 	}
 }
 
-func (h Handler) GetUserSettings() http.HandlerFunc {
+func (h *Handler) GetUserSettings() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		newAuth := auth.NewAuth(h.Repo, h.Config)
 		userToken := newAuth.JWTExtractData
@@ -38,7 +38,7 @@ func (h Handler) GetUserSettings() http.HandlerFunc {
 	}
 }
 
-func (h Handler) SetUserSetting() http.HandlerFunc {
+func (h *Handler) SetUserSetting() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		newAuth := auth.NewAuth(h.Repo, h.Config)
 		userToken := newAuth.JWTExtractData
@@ -60,7 +60,7 @@ func (h Handler) SetUserSetting() http.HandlerFunc {
 	}
 }
 
-func (h Handler) RegisterUser() http.HandlerFunc {
+func (h *Handler) RegisterUser() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		user := &models.User{}
 
@@ -102,7 +102,7 @@ func (h Handler) RegisterUser() http.HandlerFunc {
 	}
 }
 
-func (h Handler) Login() http.HandlerFunc {
+func (h *Handler) Login() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		user := &models.User{}
 

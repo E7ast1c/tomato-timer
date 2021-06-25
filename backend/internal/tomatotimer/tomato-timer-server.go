@@ -23,7 +23,7 @@ func (app *App) RunServer(conf config.AppConfig, ctx context.Context) error {
 
 	go postgres.CloseConn(ctx, db)
 	repo := postgres.NewPGRepository(db)
-	handle := handler.NewHandler(*repo, conf.APIServer)
+	handle := handler.NewHandler(*repo, db, conf.APIServer)
 	r := routes.Handlers(handle)
 
 	srv := &http.Server{
