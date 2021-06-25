@@ -63,18 +63,18 @@ func (up *UserPostgres) SetUserDataByID(userID uint, settings models.UserTimerSe
 }
 
 func (up *UserPostgres) CreateUser(user *models.User) (*models.User, error) {
-	err := up.DB.Where("Email = ?", user.Email).First(user).Error
-	if err == nil {
+	tx := up.DB.Where("Email = ?", user.Email).First(user)
+	if tx.RowsAffected > 0 {
 		return nil, errors.New("user already exist")
 	}
 
-	if errors.Is(err, sql.ErrNoRows) {
+	if errors.Is(tx.Error, sql.ErrNoRows) {
 		res := up.DB.Create(user)
 		if res.Error != nil {
 			return nil, res.Error
 		}
 		return user, nil
 	} else {
-		return nil, err
+		return nil, tx.Error
 	}
 }

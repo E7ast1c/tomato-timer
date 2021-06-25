@@ -15,10 +15,9 @@ type userPayload map[string]interface{}
 
 // afterAuthorization response wrapper
 func afterAuthorization(w http.ResponseWriter, up userPayload) {
-	respException := exception.NewResponseException(w)
 	err := json.NewEncoder(w).Encode(up)
 	if err != nil {
-		respException.ErrBadRequest(err, "encode user payload failed")
+		exception.ErrBadRequest(w, err, "encode user payload failed")
 		return
 	}
 }
@@ -30,7 +29,7 @@ func (h *Handler) GetUserSettings() http.HandlerFunc {
 
 		user, err := h.Repo.UserRepo.GetUserDataByID(userToken(r).UserID)
 		if err != nil {
-			h.Exception(w).ErrBadRequest(err, "get user data failed")
+			exception.ErrBadRequest(w, err, "get user data failed")
 			return
 		}
 
@@ -46,13 +45,13 @@ func (h *Handler) SetUserSetting() http.HandlerFunc {
 		userSettings := &models.UserTimerSettings{}
 		err := json.NewDecoder(r.Body).Decode(userSettings)
 		if err != nil {
-			h.Exception(w).ErrBadRequest(err, "decode user")
+			exception.ErrBadRequest(w, err, "decode user")
 			return
 		}
 
 		err = h.Repo.UserRepo.SetUserDataByID(userToken(r).UserID, *userSettings)
 		if err != nil {
-			h.Exception(w).ErrBadRequest(err, "set user data failed")
+			exception.ErrBadRequest(w, err, "set user data failed")
 			return
 		}
 
@@ -65,19 +64,19 @@ func (h *Handler) RegisterUser() http.HandlerFunc {
 		user := &models.User{}
 
 		if r.ContentLength == 0 {
-			h.Exception(w).ErrBadRequest(errors.New("empty body"), "")
+			exception.ErrBadRequest(w,errors.New("empty body"), "")
 			return
 		}
 
 		err := json.NewDecoder(r.Body).Decode(user)
 		if err != nil {
-			h.Exception(w).ErrBadRequest(err, "json unmarshall error")
+			exception.ErrBadRequest(w, err, "json unmarshall error")
 			return
 		}
 
 		pass, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 		if err != nil {
-			h.Exception(w).ErrBadRequest(err, "password encryption failed")
+			exception.ErrBadRequest(w,err, "password encryption failed")
 			return
 		}
 
@@ -85,14 +84,14 @@ func (h *Handler) RegisterUser() http.HandlerFunc {
 
 		createdUser, err := h.Repo.UserRepo.CreateUser(user)
 		if err != nil {
-			h.Exception(w).ErrBadRequest(err, "create user failed")
+			exception.ErrBadRequest(w,err, "create user failed")
 			return
 		}
 
 		newAuth := auth.NewAuth(h.Repo, h.Config)
 		token, tErr := newAuth.JWTCreate(createdUser)
 		if tErr != nil {
-			h.Exception(w).ErrBadRequest(tErr, "jwt create")
+			exception.ErrBadRequest(w,tErr, "jwt create")
 			return
 		}
 
@@ -108,26 +107,26 @@ func (h *Handler) Login() http.HandlerFunc {
 
 		err := json.NewDecoder(r.Body).Decode(user)
 		if err != nil {
-			h.Exception(w).ErrBadRequest(err, "decode user")
+			exception.ErrBadRequest(w,err, "decode user")
 			return
 		}
 
 		dbUser, dbErr := h.Repo.UserRepo.GetUserDataByEmail(user.Email)
 		if dbErr != nil {
-			h.Exception(w).ErrBadRequest(dbErr, "db user")
+			exception.ErrBadRequest(w,dbErr, "db user")
 			return
 		}
 
 		cryptErr := bcrypt.CompareHashAndPassword([]byte(dbUser.Password), []byte(user.Password))
 		if cryptErr != nil && cryptErr == bcrypt.ErrMismatchedHashAndPassword {
-			h.Exception(w).ErrBadRequest(cryptErr, "invalid login credentials")
+			exception.ErrBadRequest(w,cryptErr, "invalid login credentials")
 			return
 		}
 
 		newAuth := auth.NewAuth(h.Repo, h.Config)
 		token, tErr := newAuth.JWTCreate(dbUser)
 		if tErr != nil {
-			h.Exception(w).ErrBadRequest(tErr, "jwt create")
+			exception.ErrBadRequest(w,tErr, "jwt create")
 			return
 		}
 

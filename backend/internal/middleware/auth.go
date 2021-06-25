@@ -18,10 +18,8 @@ func (mw *middleware) JwtVerify(next http.Handler) http.Handler {
 		var header = r.Header.Get(headerTokenName)
 		header = strings.TrimSpace(header)
 
-		exp := exception.NewResponseException(w)
-
 		if header == "" {
-			exp.ErrForbidden("Missing auth token, userToken is missing")
+			exception.ErrForbidden(w, "Missing auth token, userToken is missing")
 			return
 		}
 
@@ -31,12 +29,12 @@ func (mw *middleware) JwtVerify(next http.Handler) http.Handler {
 		})
 
 		if err != nil {
-			exp.ErrBadRequest(err, "parse user claims failed")
+			exception.ErrBadRequest(w, err, "parse user claims failed")
 			return
 		}
 
 		if !parsedToken.Valid {
-			exp.ErrForbidden("Invalid token")
+			exception.ErrForbidden(w, "Invalid token")
 			return
 		}
 
