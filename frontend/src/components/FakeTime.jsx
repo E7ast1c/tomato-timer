@@ -24,9 +24,13 @@ const useStyles = makeStyles({
 
 export default function Time(props) {
   const classes = useStyles();
-  const timeKey = "Time";
+  const timeKey = "defDuaration";
   // ----- Convert in minutes ------
   const time = getLocalStorageKey(timeKey) * 60000;
+
+  useEffect(() => {
+    time
+  },[time])
 
   return (
     <div className={classes.timer}>

@@ -48,7 +48,7 @@ export default function SettingModal(props) {
   const prop = props.prop;
 
   const classes = useStyles();
-  const timeKey = "Time";
+  const timeKey = "defDuaration";
   const [valueInputTime, setvalueInputTime] = useState(
     getLocalStorageKey(timeKey)
   );

@@ -6,9 +6,24 @@ export function setLocalStorageKey(key, value) {
   }
 }
 
+export function setLoginTimerSettings(data) {
+  const currentTime = data.user.TimerSettings
+  const timerSettingsData = [
+    { name: 'defDuaration',  value: currentTime.DefaultDuration / 60},
+    { name: 'longBreakDuaration', value: currentTime.LongBreakDuration / 60 },
+    { name: 'shortBreakDuration', value: currentTime.ShortBreakDuration / 60 },
+    { name: 'tickTrack', value: currentTime.TickTrack },
+    { name: 'alarmTrack', value: currentTime.AlarmTrack },
+  ]
+
+  for (let i = 0; i < timerSettingsData.length; i++){
+    localStorage.setItem(timerSettingsData[i].name, JSON.stringify(timerSettingsData[i].value))
+  }
+}
+
 export function getLocalStorageKey(key) {
   if (localStorage.getItem(key)) {
-    const time = JSON.parse(localStorage.getItem("Time"));
+    const time = JSON.parse(localStorage.getItem("defDuaration"));
     return time;
   } else {
     return 1;

@@ -18,6 +18,8 @@ import { register } from "../RESTApi";
 
 import { useForm } from "react-hook-form";
 
+import { AuthRegister } from '../AuthManager'
+
 const useStyles = makeStyles((theme) => ({
   modal: {
     display: "flex",
@@ -27,11 +29,16 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     display: "flex",
     flexDirection: "column",
-    width: "25em",
     backgroundColor: "#f2f3f4",
     border: "2px solid #000",
     boxShadow: theme.shadows[5],
     padding: theme.spacing(4, 5, 4),
+    [theme.breakpoints.down(`sm`)]:{
+      width: '14em',
+    },
+    [theme.breakpoints.up(`sm`)]: {
+      width: "25em"
+    },
   },
   emailMargin: {
     marginTop: "0.8em",
@@ -51,11 +58,6 @@ export default function Register(props) {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const onSubmit = (data) => {
-    // login(data);
-
-    console.log(data);
-  };
 
   const classes = useStyles();
   // const [modalStyle] = React.useState(getModalStyle);
@@ -88,6 +90,12 @@ export default function Register(props) {
     prop.setRegisterModal(false);
   };
 
+  const onSubmit = async (data) => {
+    console.log(data);
+    const secsseful = await AuthRegister(data);
+    handleClose()
+  }
+
   return (
     <div>
       <Modal
@@ -100,23 +108,38 @@ export default function Register(props) {
         <div>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className={classes.paper}>
-              <TextField
+            <FormControl className={clsx(classes.margin, classes.textField)}>
+            <InputLabel htmlFor="login">Login</InputLabel>
+              <Input
                 id="login"
                 placeholder="Login"
-                className={clsx(classes.margin, classes.textField)}
+                // className={clsx(classes.margin, classes.textField)}
                 onChange={handleChange("login")}
-                value={values.login}
+                {...register("login", {
+                  pattern: {
+                    value: /[0-9a-zA-Z]{3,}/,
+                    message: "massage error",
+                  },
+                })}
               />
-              <TextField
+              {errors.login && (
+                <p className={classes.txtError}>
+                  Please enter more than 3 letters or numbers
+                </p>
+              )}
+              </FormControl>
+
+            <FormControl className={clsx(classes.margin, classes.textField)}>
+            <InputLabel htmlFor="email">Email</InputLabel>
+              <Input
                 id="email"
                 placeholder="Email"
                 className={clsx(
-                  classes.margin,
-                  classes.textField,
+                  // classes.margin,
+                  // classes.textField,
                   classes.emailMargin
                 )}
                 onChange={handleChange("email")}
-                // value={values.email}
                 {...register("email", {
                   required: true,
                   pattern: {
@@ -130,12 +153,13 @@ export default function Register(props) {
                   Please enter correct email, example@ya.ru
                 </p>
               )}
+              </FormControl>
               <FormControl className={clsx(classes.margin, classes.textField)}>
                 <InputLabel htmlFor="password">Password</InputLabel>
                 <Input
                   id="password"
                   type={values.showPassword ? "text" : "password"}
-                  value={values.password}
+                  // value={values.password}
                   onChange={handleChange("password")}
                   endAdornment={
                     <InputAdornment position="end">
@@ -152,16 +176,25 @@ export default function Register(props) {
                       </IconButton>
                     </InputAdornment>
                   }
+                  {...register("password", {
+                    required: true,
+                    pattern: {
+                      value: /(?=.{4,})/,
+                      message: "error message",
+                    },
+                  })}
                 />
+                {errors.password && (
+                  <p className={classes.txtError}>
+                    You must enter more than 8 characters
+                  </p>
+                )}
               </FormControl>
               <div className={classes.btnGroup}>
                 <Button
+                  type="submit"
                   color="primary"
                   variant="contained"
-                  onClick={() => {
-                    register(values.login, values.email, values.password);
-                    handleClose();
-                  }}
                 >
                   Ok
                 </Button>

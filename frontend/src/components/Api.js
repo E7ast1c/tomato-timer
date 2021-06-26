@@ -11,3 +11,10 @@ export async function login(userData) {
   console.log(response);
   return response;
 }
+
+export async function register() {
+  const response = await axios.post(
+    `${baseAdress}/register`,
+    JSON.stringify()
+  )
+}

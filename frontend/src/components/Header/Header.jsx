@@ -52,6 +52,10 @@ const useStyles = makeStyles((theme) => ({
   authButton: {
     display: "flex",
   },
+  userName: {
+    fontSize: '1em',
+    alignSelf: 'center',
+  },
 }));
 
 export default function Header(props) {
@@ -96,6 +100,7 @@ export default function Header(props) {
           {isLocalStorageName != null ? (
             <div className={classes.authButton}>
               <Typography
+              className={classes.userName}
                 component="h2"
                 variant="h5"
                 align="center"

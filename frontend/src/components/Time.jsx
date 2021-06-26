@@ -25,7 +25,7 @@ const useStyles = makeStyles({
 });
 
 export default function Time(props) {
-  const timeKey = "Time";
+  const timeKey = "defDuaration";
 
   // ---- Convert in minutes ------
   const timeDuaration = getLocalStorageKey(timeKey) * 60;

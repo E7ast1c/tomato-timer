@@ -30,11 +30,16 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     display: "flex",
     flexDirection: "column",
-    width: "25em",
     backgroundColor: "#f2f3f4",
     border: "2px solid #000",
     boxShadow: theme.shadows[5],
     padding: theme.spacing(5, 5, 5),
+    [theme.breakpoints.down(`sm`)]:{
+      width: '14em',
+    },
+    [theme.breakpoints.up(`sm`)]: {
+      width: '25em'
+    }
   },
   btnGroup: {
     display: "flex",
@@ -115,11 +120,10 @@ export default function LoiginModal(props) {
         <div>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className={classes.paper}>
+            <FormControl className={clsx(classes.margin, classes.textField)}>
               <InputLabel htmlFor="email">Email</InputLabel>
-              <TextField
+              <Input
                 id="email"
-                // type={values.showPassword ? "text" : "email"}
-                // value={values.password}
                 className={clsx(classes.margin, classes.textField)}
                 onChange={handleChange("email")}
                 type="text"
@@ -137,12 +141,12 @@ export default function LoiginModal(props) {
                   Please enter correct email, example@ya.ru
                 </p>
               )}
+              </FormControl>
               <FormControl className={clsx(classes.margin, classes.textField)}>
                 <InputLabel htmlFor="password">Password</InputLabel>
                 <Input
                   id="password"
                   type={values.showPassword ? "text" : "password"}
-                  // value={values.password}
                   onChange={handleChange("password")}
                   endAdornment={
                     <InputAdornment position="end">
@@ -174,24 +178,13 @@ export default function LoiginModal(props) {
                 )}
               </FormControl>
               <div className={classes.btnGroup}>
-                <input
+                <Button
                   type="submit"
-                  value="Ok"
-                  // onClick={() => {
-                  //   login(values.email, values.password);
-                  //   handleClose();
-                  // }}
-                />
-                {/* <Button
                   color="primary"
                   variant="contained"
-                  // onClick={() =>
-                  //   handleLogin()
-                  // handleClose();
-                  // }
                 >
                   Ok
-                </Button> */}
+                </Button>
                 <Button
                   type="submit"
                   color="secondary"
