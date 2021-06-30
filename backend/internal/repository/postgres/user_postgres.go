@@ -68,7 +68,7 @@ func (up *UserPostgres) CreateUser(user *models.User) (*models.User, error) {
 		return nil, errors.New("user already exist")
 	}
 
-	if errors.Is(tx.Error, sql.ErrNoRows) {
+	if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
 		res := up.DB.Create(user)
 		if res.Error != nil {
 			return nil, res.Error
