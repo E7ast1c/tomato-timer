@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/sirupsen/logrus"
+	"github.com/gofiber/fiber/v2"
 )
 
 type HealthReport struct {
@@ -17,23 +17,28 @@ func NewHealthErrors() *HealthReport {
 	return &HealthReport{errors: map[string]string{}}
 }
 
-func (h *Handler) HealthCheck() http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		serviceErrors := NewHealthErrors()
-		checkDBConnection(serviceErrors, h)
+// HealthCheck godoc
+// @Summary show a service health
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} HealthReport
+// @Failure 400,404 {object} HealthReport
+// @Failure 500 {object} HealthReport
+// @Failure default {object} string
+// @Router /health-check [get]
+func (h *Handler) HealthCheck(fCtx *fiber.Ctx) error {
+	serviceErrors := NewHealthErrors()
+	checkDBConnection(serviceErrors, h)
 
-		if len(serviceErrors.errors) != 0 {
-			serviceErrors.status = http.StatusInternalServerError
-		} else {
-			serviceErrors.status = http.StatusOK
-		}
-
-		w.WriteHeader(serviceErrors.status)
-		err := json.NewEncoder(w).Encode(serviceErrors.errors)
+	if len(serviceErrors.errors) != 0 {
+		se, err := json.Marshal(serviceErrors.errors)
 		if err != nil {
-			logrus.Error(err)
+			return err
 		}
+		return fiber.NewError(http.StatusInternalServerError, string(se))
 	}
+
+	return fCtx.JSON(serviceErrors.errors)
 }
 
 func checkDBConnection(hs *HealthReport, h *Handler) {

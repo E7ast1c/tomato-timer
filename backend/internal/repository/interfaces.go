@@ -1,7 +1,7 @@
 package repository
 
 import (
-	models "tomato-timer-server/internal/models"
+	"tomato-timer/backend/internal/models"
 )
 
 type UserRepo interface {

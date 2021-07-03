@@ -2,16 +2,16 @@ package tomatotimer
 
 import (
 	"context"
-	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
-	config "tomato-timer-server/config"
-	handler "tomato-timer-server/internal/handler"
-	"tomato-timer-server/internal/repository/postgres"
-	"tomato-timer-server/internal/routes"
+	"tomato-timer/backend/config"
+	"tomato-timer/backend/internal/handler"
+	"tomato-timer/backend/internal/repository/postgres"
+	"tomato-timer/backend/internal/routes"
 
+	"github.com/gofiber/fiber/v2"
 	"github.com/sirupsen/logrus"
 )
 
@@ -23,16 +23,26 @@ func (app *App) RunServer(conf config.AppConfig, ctx context.Context) error {
 
 	go postgres.CloseConn(ctx, db)
 	repo := postgres.NewPGRepository(db)
-	handle := handler.NewHandler(*repo, db, conf.APIServer)
-	r := routes.Handlers(handle)
 
-	srv := &http.Server{
-		Handler:      r,
-		Addr:         ":" + conf.APIServer.Port,
-		WriteTimeout: 5 * time.Second,
-		ReadTimeout:  5 * time.Second,
-	}
-	err = srv.ListenAndServe()
+	fApp := fiber.New(fiber.Config{
+		Prefork:                   false,
+		ServerHeader:              "Tomato-timer backend",
+		StrictRouting:             true,
+		ReadTimeout:               5 * time.Second,
+		WriteTimeout:              5 * time.Second,
+	})
+
+	handle := handler.NewHandler(*repo, db, conf.APIServer)
+	routes.Handlers(handle, fApp)
+
+	fApp.Listen(":" + handle.Config.Port)
+	//srv := &http.Server{
+	//	Handler:      fr.,
+	//	Addr:         ":" + conf.APIServer.Port,
+	//	WriteTimeout: 5 * time.Second,
+	//	ReadTimeout:  5 * time.Second,
+	//}
+
 	if err != nil {
 		return err
 	}

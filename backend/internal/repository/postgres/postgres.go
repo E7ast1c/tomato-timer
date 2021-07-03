@@ -3,9 +3,9 @@ package postgres
 import (
 	"context"
 	"log"
-	"tomato-timer-server/config"
-	"tomato-timer-server/internal/models"
-	"tomato-timer-server/internal/repository"
+	"tomato-timer/backend/config"
+	"tomato-timer/backend/internal/models"
+	"tomato-timer/backend/internal/repository"
 
 	"github.com/sirupsen/logrus"
 	"gorm.io/driver/postgres"

@@ -15,6 +15,11 @@ type User struct {
 	TimerSettings UserTimerSettings `gorm:"embedded"`
 }
 
+type UserMin struct {
+	Email    string `json:"Email" minLength:"10" maxLength:"320"`
+	Password string `json:"Password" minLength:"6" maxLength:"50"`
+}
+
 type UserTimerSettings struct {
 	DefaultDuration    time.Duration `gorm:"type:bigint"`
 	LongBreakDuration  time.Duration `gorm:"type:bigint"`

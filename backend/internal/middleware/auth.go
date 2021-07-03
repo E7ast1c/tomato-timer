@@ -4,8 +4,8 @@ import (
 	"context"
 	"net/http"
 	"strings"
-	"tomato-timer-server/internal/models"
-	"tomato-timer-server/pkg/exception"
+	"tomato-timer/backend/internal/models"
+	"tomato-timer/backend/pkg/exception"
 
 	"github.com/dgrijalva/jwt-go"
 )

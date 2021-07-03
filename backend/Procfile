@@ -1,1 +1,1 @@
-web: bin/tomato-timer-server
+web: bin/tomato-timer/backend

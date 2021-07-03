@@ -1,6 +1,6 @@
 package middleware
 
-import "tomato-timer-server/config"
+import "tomato-timer/backend/config"
 
 type middleware struct {
 	config config.APIServer

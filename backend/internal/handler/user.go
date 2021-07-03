@@ -2,12 +2,12 @@ package handler
 
 import (
 	"encoding/json"
-	"errors"
 	"net/http"
-	auth "tomato-timer-server/internal/auth"
-	"tomato-timer-server/internal/models"
-	"tomato-timer-server/pkg/exception"
+	"tomato-timer/backend/internal/auth"
+	"tomato-timer/backend/internal/models"
+	"tomato-timer/backend/pkg/exception"
 
+	"github.com/gofiber/fiber/v2"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -59,79 +59,90 @@ func (h *Handler) SetUserSetting() http.HandlerFunc {
 	}
 }
 
-func (h *Handler) RegisterUser() http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		user := &models.User{}
+// RegisterUser godoc
+// @Summary register new user
+// @Accept  json
+// @Produce  json
+// max email length (rfc3696) 320 characters"
+// @Param Email body models.UserMin true "User credentials"
+// @Success 200 {object} ResponseTemplate
+// @Failure 400,404 {object} ResponseTemplate
+// @Failure 500 {object} ResponseTemplate
+// @Failure default {object} string
+// @Router /register [post]
+func (h *Handler) RegisterUser(fCtx *fiber.Ctx) error {
+	user := &models.User{}
 
-		if r.ContentLength == 0 {
-			exception.ErrBadRequest(w,errors.New("empty body"), "")
-			return
-		}
-
-		err := json.NewDecoder(r.Body).Decode(user)
-		if err != nil {
-			exception.ErrBadRequest(w, err, "json unmarshall error")
-			return
-		}
-
-		pass, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
-		if err != nil {
-			exception.ErrBadRequest(w,err, "password encryption failed")
-			return
-		}
-
-		user.Password = string(pass)
-
-		createdUser, err := h.Repo.UserRepo.CreateUser(user)
-		if err != nil {
-			exception.ErrBadRequest(w,err, "create user failed")
-			return
-		}
-
-		newAuth := auth.NewAuth(h.Repo, h.Config)
-		token, tErr := newAuth.JWTCreate(createdUser)
-		if tErr != nil {
-			exception.ErrBadRequest(w,tErr, "jwt create")
-			return
-		}
-
-		afterAuthorization(w, map[string]interface{}{
-			"token": token,
-			"user":  createdUser.NewUserResponseData()})
+	if err := fCtx.BodyParser(user); err != nil {
+		return fCtx.Status(fiber.StatusBadRequest).
+			JSON(Response("error on login request", err.Error()))
 	}
+
+	pass, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return fCtx.Status(fiber.StatusInternalServerError).
+			JSON(Response("password encryption failed", err.Error()))
+	}
+
+	user.Password = string(pass)
+
+	createdUser, err := h.Repo.UserRepo.CreateUser(user)
+	if err != nil {
+		return fCtx.Status(fiber.StatusInternalServerError).
+			JSON(Response("create user db record failed", err.Error()))
+	}
+
+	newAuth := auth.NewAuth(h.Repo, h.Config)
+	token, tErr := newAuth.JWTCreate(createdUser)
+	if tErr != nil {
+		return fCtx.Status(fiber.StatusInternalServerError).
+			JSON(Response("create user token failed", tErr.Error()))
+	}
+
+	return fCtx.JSON(Response("register successful", map[string]interface{}{
+		"token": token,
+		"user":  createdUser.NewUserResponseData()}))
 }
 
-func (h *Handler) Login() http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		user := &models.User{}
+// Login godoc
+// @Summary user login
+// @Accept  json
+// @Produce  json
+// max email length (rfc3696) 320 characters"
+// @Param Email body models.UserMin true "User credentials"
+// @Success 200 {object} ResponseTemplate
+// @Failure 400,404 {object} ResponseTemplate
+// @Failure 500 {object} ResponseTemplate
+// @Failure default {object} string
+// @Router /login [post]
+func (h *Handler) Login(fCtx *fiber.Ctx) error {
+	user := &models.User{}
 
-		err := json.NewDecoder(r.Body).Decode(user)
-		if err != nil {
-			exception.ErrBadRequest(w,err, "decode user")
-			return
-		}
-
-		dbUser, dbErr := h.Repo.UserRepo.GetUserDataByEmail(user.Email)
-		if dbErr != nil {
-			exception.ErrBadRequest(w,dbErr, "db user")
-			return
-		}
-
-		cryptErr := bcrypt.CompareHashAndPassword([]byte(dbUser.Password), []byte(user.Password))
-		if cryptErr != nil && cryptErr == bcrypt.ErrMismatchedHashAndPassword {
-			exception.ErrBadRequest(w,cryptErr, "invalid login credentials")
-			return
-		}
-
-		newAuth := auth.NewAuth(h.Repo, h.Config)
-		token, tErr := newAuth.JWTCreate(dbUser)
-		if tErr != nil {
-			exception.ErrBadRequest(w,tErr, "jwt create")
-			return
-		}
-
-		afterAuthorization(w, map[string]interface{}{
-			"token": token,
-			"user":  dbUser.NewUserResponseData()})
+	if err := fCtx.BodyParser(user); err != nil {
+		return fCtx.Status(fiber.StatusBadRequest).
+			JSON(Response("decode user failed", err.Error()))
 	}
+
+	dbUser, dbErr := h.Repo.UserRepo.GetUserDataByEmail(user.Email)
+	if dbErr != nil {
+		return fCtx.Status(fiber.StatusBadRequest).
+			JSON(Response("db user get failed", dbErr.Error()))
+	}
+
+	cryptErr := bcrypt.CompareHashAndPassword([]byte(dbUser.Password), []byte(user.Password))
+	if cryptErr != nil && cryptErr == bcrypt.ErrMismatchedHashAndPassword {
+		return fCtx.Status(fiber.StatusBadRequest).
+			JSON(Response("invalid login credentials", dbErr))
+	}
+
+	newAuth := auth.NewAuth(h.Repo, h.Config)
+	token, tErr := newAuth.JWTCreate(dbUser)
+	if tErr != nil {
+		return fCtx.Status(fiber.StatusInternalServerError).
+			JSON(Response("jwt create failed", dbErr))
+	}
+
+	return fCtx.JSON(Response("login successful", map[string]interface{}{
+		"token": token,
+		"user":  dbUser.NewUserResponseData()}))
 }

@@ -1,4 +1,4 @@
-# tomato-timer-server
+# tomato-timer-backend
 Server side for tomato timer
 
-[Tomato timer client](tomato-timer-server).
+[Tomato timer client](tomato-timer-backend).

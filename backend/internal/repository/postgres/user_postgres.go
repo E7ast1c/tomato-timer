@@ -3,7 +3,7 @@ package postgres
 import (
 	"database/sql"
 	"errors"
-	models "tomato-timer-server/internal/models"
+	"tomato-timer/backend/internal/models"
 
 	"gorm.io/gorm"
 )

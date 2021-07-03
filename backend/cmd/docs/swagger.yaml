@@ -1,0 +1,128 @@
+basePath: /
+definitions:
+  handler.HealthReport:
+    type: object
+  handler.ResponseTemplate:
+    properties:
+      data:
+        type: object
+      message:
+        type: string
+    type: object
+  models.UserMin:
+    properties:
+      Email:
+        maxLength: 320
+        minLength: 10
+        type: string
+      Password:
+        maxLength: 50
+        minLength: 6
+        type: string
+    type: object
+host: localhost:8081
+info:
+  contact: {}
+  description: API Server for Tomato-timer
+  title: Tomato-timer backend
+  version: "1.0"
+paths:
+  /health-check:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.HealthReport'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.HealthReport'
+        "404":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.HealthReport'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.HealthReport'
+        default:
+          description: ""
+          schema:
+            type: string
+      summary: show a service health
+  /login:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: User credentials
+        in: body
+        name: Email
+        required: true
+        schema:
+          $ref: '#/definitions/models.UserMin'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.ResponseTemplate'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ResponseTemplate'
+        "404":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ResponseTemplate'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.ResponseTemplate'
+        default:
+          description: ""
+          schema:
+            type: string
+      summary: user login
+  /register:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: User credentials
+        in: body
+        name: Email
+        required: true
+        schema:
+          $ref: '#/definitions/models.UserMin'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.ResponseTemplate'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ResponseTemplate'
+        "404":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ResponseTemplate'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.ResponseTemplate'
+        default:
+          description: ""
+          schema:
+            type: string
+      summary: register new user
+swagger: "2.0"

@@ -3,10 +3,10 @@ package auth
 import (
 	"net/http"
 	"time"
-	"tomato-timer-server/config"
-	"tomato-timer-server/internal/middleware"
-	"tomato-timer-server/internal/models"
-	dao "tomato-timer-server/internal/repository"
+	"tomato-timer/backend/config"
+	"tomato-timer/backend/internal/middleware"
+	"tomato-timer/backend/internal/models"
+	dao "tomato-timer/backend/internal/repository"
 
 	"github.com/dgrijalva/jwt-go"
 )

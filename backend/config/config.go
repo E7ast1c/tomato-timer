@@ -1,8 +1,6 @@
 package config
 
-import (
-	env "tomato-timer-server/pkg/env"
-)
+import "tomato-timer/backend/pkg/env"
 
 type AppConfig struct {
 	DBConfig  DBConfig
