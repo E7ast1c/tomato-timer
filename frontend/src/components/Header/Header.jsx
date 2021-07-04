@@ -10,8 +10,13 @@ import SettingModal from "./SettingsModal";
 import LoiginModal from "./LoiginModal";
 import { clearLocalStorage, getUserName } from "../LocalStorageManager";
 // import { getUserData } from '../LocalStorageManager'
+import { useDispatch } from "react-redux";
+import { currentTimeAction } from '../../Store/Actions/CurrentTimeReduser'
+
 
 import PropTypes from "prop-types";
+import { clearTimeSettingsAction } from "../../Store/Actions/TimeSettingsReduser";
+
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
@@ -59,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Header(props) {
-  const setCurrentDuarationTime = props.setCurrentDuarationTime;
+  // const setCurrentDuarationTime = props.setCurrentDuarationTime;
   const [registerModal, setRegisterModal] = useState(false);
   const [settingsModal, setSettingsModal] = useState(false);
   const [isLoginModal, setIsLoginModal] = useState(false);
@@ -67,8 +72,20 @@ export default function Header(props) {
   const classes = useStyles();
   const title = "Tomato timer";
   const user = 'user';
+  const clearTimeSettings = {}
+
+
 
   const isLocalStorageName = getUserName(user)
+
+  const dispatch = useDispatch();
+  const changeCurrentTime = () => {
+    dispatch(currentTimeAction(1))
+  }
+
+  const updateTimeSettings = () => {
+    dispatch(clearTimeSettingsAction(clearTimeSettings))
+  }
 
   return (
     <React.Fragment>
@@ -100,7 +117,7 @@ export default function Header(props) {
           {isLocalStorageName != null ? (
             <div className={classes.authButton}>
               <Typography
-              className={classes.userName}
+                className={classes.userName}
                 component="h2"
                 variant="h5"
                 align="center"
@@ -114,32 +131,37 @@ export default function Header(props) {
                 variant="outlined"
                 size="small"
                 onClick={() => {
-                  setIsAuthenticated(!isAuthenticated), clearLocalStorage();
+                  setIsAuthenticated(!isAuthenticated),
+                    clearLocalStorage(),
+                    changeCurrentTime();
+
+                  updateTimeSettings()
+
                 }}
               >
                 Sing out
-            </Button>
+              </Button>
             </div>
           ) : (
-              <div className={classes.authButton}>
-                <Button
-                  className={classes.toolbarButton}
-                  variant="outlined"
-                  size="small"
-                  onClick={() => setIsLoginModal(!isLoginModal)}
-                >
-                  Log in
+            <div className={classes.authButton}>
+              <Button
+                className={classes.toolbarButton}
+                variant="outlined"
+                size="small"
+                onClick={() => setIsLoginModal(!isLoginModal)}
+              >
+                Log in
               </Button>
-                <Button
-                  className={classes.toolbarButton}
-                  variant="outlined"
-                  size="small"
-                  onClick={() => setRegisterModal(!registerModal)}
-                >
-                  Register
+              <Button
+                className={classes.toolbarButton}
+                variant="outlined"
+                size="small"
+                onClick={() => setRegisterModal(!registerModal)}
+              >
+                Register
               </Button>
-              </div>
-            )}
+            </div>
+          )}
         </div>
       </Toolbar>
       {isLoginModal && (
@@ -149,7 +171,7 @@ export default function Header(props) {
       )}
       {registerModal && <Register prop={{ registerModal, setRegisterModal }} />}
       {settingsModal && (
-        <SettingModal prop={{ setSettingsModal, setCurrentDuarationTime }} />
+        <SettingModal prop={{ setSettingsModal }} />
       )}
     </React.Fragment>
   );

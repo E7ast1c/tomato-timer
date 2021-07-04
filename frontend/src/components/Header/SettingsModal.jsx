@@ -10,6 +10,8 @@ import { setLocalStorageKey } from "../LocalStorageManager";
 import { getLocalStorageKey } from "../LocalStorageManager";
 
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
+import { currentTimeAction } from "../../Store/Actions/CurrentTimeReduser";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -46,6 +48,12 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SettingModal(props) {
   const prop = props.prop;
+  const dispatch = useDispatch();
+
+  const changeCurrentTime = () => {
+    dispatch(currentTimeAction(1))
+  }
+
 
   const classes = useStyles();
   const timeKey = "defDuaration";
@@ -77,8 +85,6 @@ export default function SettingModal(props) {
         className={classes.modal}
         open={true}
         onClose={() => props.prop.setSettingsModal(false)}
-        // onSubmit={(e) => e.preventDefault()}
-
         onSubmit={() => {
           onSaveHandler();
           props.prop.setSettingsModal(false);
@@ -127,7 +133,9 @@ export default function SettingModal(props) {
               onClick={() => {
                 onSaveHandler();
                 prop.setSettingsModal(false);
-                prop.setCurrentDuarationTime(valueInputTime);
+                changeCurrentTime()
+                // prop.setCurrentDuarationTime(valueInputTime);
+
               }}
             >
               Save

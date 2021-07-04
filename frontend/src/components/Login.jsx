@@ -12,8 +12,6 @@ import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import IconButton from "@material-ui/core/IconButton";
 
-// import api from './api'
-
 function rand() {
   return Math.round(Math.random() * 20) - 10;
 }
@@ -113,13 +111,9 @@ function Login() {
         <div style={modalStyle} className={classes.paper}>
           <div>
             <TextField
-              // label="With normal TextField"
               id="standard-start-adornment"
               placeholder="exaple@example.com"
               className={clsx(classes.margin, classes.textField)}
-              // InputProps={{
-              //   endAdornment: <InputAdornment position="end">Login</InputAdornment>,
-              // }}
             />
             <FormControl className={clsx(classes.margin, classes.textField)}>
               <InputLabel htmlFor="standard-adornment-password">

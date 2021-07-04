@@ -12,6 +12,8 @@ import Clock from "./Clock";
 import ViewClock from "./FakeProgress";
 
 import { getLocalStorageKey } from "./LocalStorageManager";
+import { useDispatch } from "react-redux";
+import { startStopTimerAction } from '../Store/Actions/StartStopTimerReducer';
 
 const useStyles = makeStyles({
   timer: {
@@ -26,6 +28,11 @@ const useStyles = makeStyles({
 
 export default function Time(props) {
   const timeKey = "defDuaration";
+  const dispatch = useDispatch();
+
+  const stopTimer = () => {
+    dispatch(startStopTimerAction(false))
+  }
 
   // ---- Convert in minutes ------
   const timeDuaration = getLocalStorageKey(timeKey) * 60;
@@ -69,9 +76,8 @@ export default function Time(props) {
 
       <div>
         <p>{isRunning ? "Timer running" : "Timer stopped"}</p>
-        {`${minutes < 10 ? `0${minutes}` : minutes}:${
-          seconds < 10 ? `0${seconds}` : seconds
-        }`}
+        {`${minutes < 10 ? `0${minutes}` : minutes}:${seconds < 10 ? `0${seconds}` : seconds
+          }`}
       </div>
       <Clock params={{ progress, setProgress }} />
 
@@ -88,7 +94,7 @@ export default function Time(props) {
           className={classes.btn}
           variant="contained"
           color="secondary"
-          onClick={() => props.setActiveTimerDispatcher(false)}
+          onClick={() => stopTimer()}
         >
           Stop
         </Button>
@@ -96,7 +102,3 @@ export default function Time(props) {
     </div>
   );
 }
-
-Time.propTypes = {
-  setActiveTimerDispatcher: PropTypes.func.isRequired,
-};

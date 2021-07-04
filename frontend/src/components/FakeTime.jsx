@@ -10,6 +10,8 @@ import { getLocalStorageKey } from "./LocalStorageManager";
 import moment from "moment";
 
 import PropTypes from "prop-types";
+import { useDispatch } from "react-redux";
+import { startStopTimerAction } from '../Store/Actions/StartStopTimerReducer'
 
 const useStyles = makeStyles({
   timer: {
@@ -25,12 +27,17 @@ const useStyles = makeStyles({
 export default function Time(props) {
   const classes = useStyles();
   const timeKey = "defDuaration";
+  const dispatch = useDispatch()
+  const startTimer = () => {
+    dispatch(startStopTimerAction(true))
+  }
+
   // ----- Convert in minutes ------
   const time = getLocalStorageKey(timeKey) * 60000;
 
-  useEffect(() => {
-    time
-  },[time])
+  // useEffect(() => {
+  //   time
+  // },[time])
 
   return (
     <div className={classes.timer}>
@@ -59,9 +66,7 @@ export default function Time(props) {
           className={classes.btn}
           variant="contained"
           color="primary"
-          onClick={() => {
-            props.setActiveTimerDispatcher(true);
-          }}
+          onClick={() => startTimer()}
         >
           Start
         </Button>
@@ -73,6 +78,4 @@ export default function Time(props) {
   );
 }
 
-Time.propTypes = {
-  setActiveTimerDispatcher: PropTypes.func.isRequired,
-};
+
