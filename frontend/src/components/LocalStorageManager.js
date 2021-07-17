@@ -24,7 +24,7 @@ export function setLoginTimerSettings(data) {
 export function getLocalStorageKey(key) {
   if (localStorage.getItem(key)) {
     const time = JSON.parse(localStorage.getItem("defDuaration"));
-    return time;
+    return time; 
   } else {
     return 1;
   }

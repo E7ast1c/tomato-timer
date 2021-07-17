@@ -22,6 +22,7 @@ Name | Description
 Name | Description
 ------------ | -------------
 [React](https://reactjs.org) | A JavaScript library for building user interfaces
+[Redux](https://redux.js.org) | A Predictable State Container for JS Apps
 [Material ui](material-ui.com) | React components for web development.
 [Moment js](https://momentjs.com) | Moment js is a great library for time manipulation in js
 [Form validation](https://react-hook-form.com) | Library for form validation in js

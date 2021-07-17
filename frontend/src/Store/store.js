@@ -1,10 +1,15 @@
-import { createStore, applyMiddleware } from "redux";
-import logger from "redux-logger";
-import { rootReducer } from "./rootReducer";
+import { applyMiddleware, combineReducers, createStore } from "redux";
+import { composeWithDevTools } from 'redux-devtools-extension';
+import { startStopTimerReducer } from "./Actions/StartStopTimerReducer";
+import { currentTimeResucer } from './Actions/CurrentTimeReduser'
+import { timeSettingsReduser } from "./Actions/TimeSettingsReduser";
 
-const store = createStore(
-  rootReducer,
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-);
+import thunk from 'redux-thunk'
 
-export default store;
+const rootReducer = combineReducers({
+  startStopTimer: startStopTimerReducer,
+  currentTime: currentTimeResucer,
+  timeSettings: timeSettingsReduser,
+})
+
+export const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk)))

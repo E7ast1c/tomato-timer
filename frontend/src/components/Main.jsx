@@ -4,6 +4,9 @@ import Header from "./Header/Header";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import FakeTime from "./FakeTime";
+import { useSelector } from "react-redux";
+import { store } from "../Store/Store";
+
 
 const useStyles = makeStyles({
   timer: {
@@ -17,18 +20,23 @@ const useStyles = makeStyles({
 });
 
 export default function Main() {
-  const [activeTimerDispatcher, setActiveTimerDispatcher] = useState(false);
+  const statusTimer = useSelector(state => state.startStopTimer.status)
+  const changeCurrentTime = useSelector(state => state.currentTime.time )
+  
+  // Test state time settings 
+  const timeSettings = useSelector(state => state.timeSettings.settings )
+  console.log(timeSettings);
+
   const classes = useStyles();
-  const [currentDuarationTime, setCurrentDuarationTime] = useState(1);
   
 
   return (
     <div>
-      <Header setCurrentDuarationTime={setCurrentDuarationTime} />
-      {activeTimerDispatcher ? (
-        <Time setActiveTimerDispatcher={setActiveTimerDispatcher} />
+      {changeCurrentTime && <Header />}
+      {statusTimer ? (
+        <Time  />
       ) : (
-        <FakeTime setActiveTimerDispatcher={setActiveTimerDispatcher} />
+        <FakeTime />
       )}
     </div>
   );

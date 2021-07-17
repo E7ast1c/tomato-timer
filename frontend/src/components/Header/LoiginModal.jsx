@@ -16,10 +16,12 @@ import IconButton from "@material-ui/core/IconButton";
 import Header from "./Header";
 import PropTypes from "prop-types";
 
-// import { login } from "../RESTApi";
-import { AuthLogin } from "../AuthManager";
+import { AuthLogin, setTimeSettingsRedux } from "../AuthManager";
 
 import { useForm } from "react-hook-form";
+
+import { useDispatch } from "react-redux";
+import { currentTimeAction } from "../../Store/Actions/CurrentTimeReduser"
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -55,20 +57,14 @@ const useStyles = makeStyles((theme) => ({
 export default function LoiginModal(props) {
   const prop = props.prop;
 
+  
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  // const onSubmit = async (data) => {
-  //   login(data).then((data) => {
-  //     console.log("this response", data); // JSON data parsed by `response.json()` call
-  //   });
-  // };
-
   const classes = useStyles();
-  // const [modalStyle] = React.useState(getModalStyle);
   const [values, setValues] = useState({
     email: "",
     password: "",
@@ -77,9 +73,14 @@ export default function LoiginModal(props) {
     showPassword: false,
   });
 
-  // useEffect(() => {
-  //   // console.log(prop);
-  // });
+  const dispatch = useDispatch();
+  const changeCurrentTime = () => {
+    dispatch(currentTimeAction(1))
+  }
+
+  const updateTimeSettingsRedux = data => {
+    dispatch(setTimeSettingsRedux(data))
+  }
 
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
@@ -95,18 +96,15 @@ export default function LoiginModal(props) {
 
   const onSubmit = async (data) => {
     const sucssefull = await AuthLogin(data);
+    updateTimeSettingsRedux(data)
     prop.setIsAuthenticated(sucssefull);
     console.log(sucssefull);
+    changeCurrentTime()
     handleClose();
   };
   const handleClose = () => {
     prop.setIsLoginModal(false);
   };
-  // const handleLogin = async () => {
-  //   login().then((data) => {
-  //     console.log(data); // JSON data parsed by `response.json()` call
-  //   });
-  // }
 
   return (
     <div>
