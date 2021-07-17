@@ -1,6 +1,9 @@
 package config
 
-import "tomato-timer/backend/pkg/env"
+import (
+	"tomato-timer/backend/pkg/env"
+	"tomato-timer/backend/pkg/http"
+)
 
 type AppConfig struct {
 	DBConfig  DBConfig
@@ -16,22 +19,12 @@ type APIServer struct {
 	SignSecret string `env:"SIGN_SECRET"`
 }
 
-const (
-	defaultPort       = ":8080"
-	defaultSignSecret = "secret"
-	defaultURI        = "localhost"
-)
-
-func NewAPIConfig() AppConfig {
-	port := env.GetEnvString("PORT", defaultPort)
-	signSecret := env.GetEnvString("SIGN_SECRET", defaultSignSecret)
-	uri := env.GetEnvString("DB_URI", defaultURI)
-
+func NewAppConfig() AppConfig {
 	return AppConfig{
-		DBConfig: DBConfig{URI: uri},
+		DBConfig: DBConfig{URI: env.MustEnvString("DB_URI")},
 		APIServer: APIServer{
-			Port:       port,
-			SignSecret: signSecret,
+			Port:       http.PortCombiner(env.MustEnvString("PORT")),
+			SignSecret: env.MustEnvString("SIGN_SECRET"),
 		},
 	}
 }

@@ -32,20 +32,14 @@ func (app *App) RunServer(conf config.AppConfig, ctx context.Context) error {
 		WriteTimeout:              5 * time.Second,
 	})
 
-	handle := handler.NewHandler(*repo, db, conf.APIServer)
+	handle := handler.NewHandler(*repo, db, conf.APIServer, nil)
 	routes.Handlers(handle, fApp)
 
-	fApp.Listen(":" + handle.Config.Port)
-	//srv := &http.Server{
-	//	Handler:      fr.,
-	//	Addr:         ":" + conf.APIServer.Port,
-	//	WriteTimeout: 5 * time.Second,
-	//	ReadTimeout:  5 * time.Second,
-	//}
-
+	err = fApp.Listen(handle.Config.Port)
 	if err != nil {
 		return err
 	}
+
 	return nil
 }
 

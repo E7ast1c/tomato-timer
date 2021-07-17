@@ -1,10 +1,8 @@
 package auth
 
 import (
-	"net/http"
 	"time"
 	"tomato-timer/backend/config"
-	"tomato-timer/backend/internal/middleware"
 	"tomato-timer/backend/internal/models"
 	dao "tomato-timer/backend/internal/repository"
 
@@ -16,7 +14,7 @@ type Auth struct {
 	Config config.APIServer
 }
 
-func NewAuth(repo dao.Repository, apiConfig config.APIServer) *Auth {
+func New(repo dao.Repository, apiConfig config.APIServer) *Auth {
 	return &Auth{
 		Repo:   repo,
 		Config: apiConfig,
@@ -25,23 +23,16 @@ func NewAuth(repo dao.Repository, apiConfig config.APIServer) *Auth {
 
 const OneHour = time.Minute * 60
 
-func (a *Auth) JWTExtractData(r *http.Request) *models.UserToken {
-	ctxUserValue := r.Context().Value(middleware.UserClaimName)
-	userToken := ctxUserValue.(*models.UserToken)
-	return userToken
-}
-
 func (a *Auth) JWTCreate(user *models.User) (string, error) {
-	expiresAt := time.Now().Add(OneHour).Unix()
 	tk := &models.UserToken{
 		UserID: user.Model.ID,
 		Name:   user.Name,
 		Email:  user.Email,
 		StandardClaims: &jwt.StandardClaims{
-			ExpiresAt: expiresAt,
+			ExpiresAt:  time.Now().Add(OneHour).Unix(),
 		},
 	}
 
-	token := jwt.NewWithClaims(jwt.GetSigningMethod("HS256"), tk)
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, tk)
 	return token.SignedString([]byte(a.Config.SignSecret))
 }

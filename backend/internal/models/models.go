@@ -34,8 +34,8 @@ type UserResponseData struct {
 	TimerSettings UserTimerSettings
 }
 
-// NewUserResponseData cleaning user sensitive data as password and etc
-func (user *User) NewUserResponseData() *UserResponseData {
+// SanitizeUserData cleaning user sensitive data as password and etc
+func (user *User) SanitizeUserData() *UserResponseData {
 	return &UserResponseData{
 		Name:          user.Name,
 		Email:         user.Email,

@@ -1,44 +1,40 @@
 package middleware
 
 import (
-	"context"
-	"net/http"
-	"strings"
 	"tomato-timer/backend/internal/models"
-	"tomato-timer/backend/pkg/exception"
 
 	"github.com/dgrijalva/jwt-go"
+	"github.com/gofiber/fiber/v2"
+	"github.com/sirupsen/logrus"
 )
 
-const headerTokenName = "x-access-token"
+// AccessToken access header token key
+const AccessToken = "x-access-token"
 
-func (mw *middleware) JwtVerify(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		// Grab the token from the header
-		var header = r.Header.Get(headerTokenName)
-		header = strings.TrimSpace(header)
+func (mw *middleware) New() fiber.Handler {
+	return func(fc *fiber.Ctx) error {
+		// Don't execute middleware if Next returns true
+		auth := fc.Get(AccessToken)
 
-		if header == "" {
-			exception.ErrForbidden(w, "Missing auth token, userToken is missing")
-			return
+		// Check if the header contains a min length.
+		if len(auth) <= 25 {
+			return Unauthorized(fc)
 		}
 
-		userToken := &models.UserToken{}
-		parsedToken, err := jwt.ParseWithClaims(header, userToken, func(token *jwt.Token) (interface{}, error) {
-			return []byte(mw.config.SignSecret), nil
+		userTk := &models.UserToken{}
+		claims, err := jwt.ParseWithClaims(auth, userTk, func(token *jwt.Token) (interface{}, error) {
+			return []byte(mw.Config.SignSecret), nil
 		})
-
 		if err != nil {
-			exception.ErrBadRequest(w, err, "parse user claims failed")
-			return
+			return Unauthorized(fc)
 		}
 
-		if !parsedToken.Valid {
-			exception.ErrForbidden(w, "Invalid token")
-			return
-		}
+		logrus.Info(claims.Claims.(*models.UserToken))
+		fc.Locals(mw.ContextUser, claims.Claims.(*models.UserToken))
+		return fc.Next()
+	}
+}
 
-		ctx := context.WithValue(r.Context(), UserClaimName, userToken)
-		next.ServeHTTP(w, r.WithContext(ctx))
-	})
+var Unauthorized = func(c *fiber.Ctx) error {
+	return c.SendStatus(fiber.StatusUnauthorized)
 }

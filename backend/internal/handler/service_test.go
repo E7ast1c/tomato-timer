@@ -102,7 +102,7 @@ func newMockHandler() (*Handler, *gorm.DB, error) {
 	}
 
 	repo := postgres.NewPGRepository(gdb)
-	apiConfig := config.NewAPIConfig()
+	apiConfig := config.NewAppConfig()
 
 	return NewHandler(*repo, gdb, apiConfig.APIServer), gdb, nil
 }

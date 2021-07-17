@@ -1,15 +1,13 @@
 package middleware
 
-import "tomato-timer/backend/config"
+import (
+	"tomato-timer/backend/internal/handler"
+)
 
 type middleware struct {
-	config config.APIServer
+	handler.Handler
 }
 
-func NewMiddleware(argConfig config.APIServer) *middleware {
-	return &middleware{config: argConfig}
+func New(h *handler.Handler) *middleware {
+	return &middleware{*h}
 }
-
-type userClaim string
-
-var UserClaimName userClaim = "user"

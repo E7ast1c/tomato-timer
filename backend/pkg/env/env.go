@@ -1,11 +1,14 @@
 package env
 
-import "os"
+import (
+	"log"
+	"os"
+)
 
-func GetEnvString(key, fallback string) string {
-	if value := os.Getenv(key); value != "" {
-		return value
+func MustEnvString(key string) string {
+	value := os.Getenv(key)
+	if value == "" {
+		log.Fatalf("getenv %s failed \n", key)
 	}
-
-	return fallback
+	return value
 }

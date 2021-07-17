@@ -11,10 +11,21 @@ type Handler struct {
 	Repo   dao.Repository
 	DB     *gorm.DB
 	Config config.APIServer
+	Options
 }
 
-func NewHandler(repo dao.Repository, db *gorm.DB, apiConfig config.APIServer) *Handler {
-	return &Handler{Repo: repo, DB: db, Config: apiConfig}
+func NewHandler(repo dao.Repository, db *gorm.DB,
+	apiConfig config.APIServer, opt *Options) *Handler {
+
+	if opt == nil {
+		opt = new(Options)
+		opt.ContextUser = "user-context"
+	}
+	return &Handler{Repo: repo, DB: db, Config: apiConfig,Options: *opt}
+}
+
+type Options struct {
+	ContextUser string
 }
 
 type ResponseTemplate struct {

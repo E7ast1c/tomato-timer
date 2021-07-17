@@ -1,62 +1,44 @@
 package handler
 
 import (
-	"encoding/json"
-	"net/http"
 	"tomato-timer/backend/internal/auth"
 	"tomato-timer/backend/internal/models"
-	"tomato-timer/backend/pkg/exception"
 
 	"github.com/gofiber/fiber/v2"
 	"golang.org/x/crypto/bcrypt"
 )
 
-type userPayload map[string]interface{}
+func (h *Handler) GetUserSettings(fCtx *fiber.Ctx) error {
+	userTk := fCtx.Locals(h.ContextUser).(*models.UserToken)
 
-// afterAuthorization response wrapper
-func afterAuthorization(w http.ResponseWriter, up userPayload) {
-	err := json.NewEncoder(w).Encode(up)
+	uSettings, err := h.Repo.UserRepo.GetUserDataByID(userTk.UserID)
 	if err != nil {
-		exception.ErrBadRequest(w, err, "encode user payload failed")
-		return
+		return fCtx.Status(fiber.StatusInternalServerError).
+			JSON(Response("get user from db failed", err.Error()))
 	}
+
+	return fCtx.JSON(Response("user settings", map[string]interface{}{
+		"settings": uSettings.TimerSettings,
+	}))
 }
 
-func (h *Handler) GetUserSettings() http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		newAuth := auth.NewAuth(h.Repo, h.Config)
-		userToken := newAuth.JWTExtractData
-
-		user, err := h.Repo.UserRepo.GetUserDataByID(userToken(r).UserID)
-		if err != nil {
-			exception.ErrBadRequest(w, err, "get user data failed")
-			return
+func (h *Handler) SetUserSetting(fCtx *fiber.Ctx) error {
+		userTk := fCtx.Locals(h.ContextUser).(*models.UserToken)
+		uSettings := models.UserTimerSettings{}
+		if err := fCtx.BodyParser(&uSettings); err != nil {
+			return fCtx.Status(fiber.StatusBadRequest).
+				JSON(Response("error on login request", err.Error()))
 		}
 
-		afterAuthorization(w, map[string]interface{}{"ok": user.NewUserResponseData()})
-	}
-}
-
-func (h *Handler) SetUserSetting() http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		newAuth := auth.NewAuth(h.Repo, h.Config)
-		userToken := newAuth.JWTExtractData
-
-		userSettings := &models.UserTimerSettings{}
-		err := json.NewDecoder(r.Body).Decode(userSettings)
+		err := h.Repo.UserRepo.SetUserDataByID(userTk.UserID, uSettings)
 		if err != nil {
-			exception.ErrBadRequest(w, err, "decode user")
-			return
+			return fCtx.Status(fiber.StatusInternalServerError).
+				JSON(Response("set user settings db failed", err.Error()))
 		}
 
-		err = h.Repo.UserRepo.SetUserDataByID(userToken(r).UserID, *userSettings)
-		if err != nil {
-			exception.ErrBadRequest(w, err, "set user data failed")
-			return
-		}
-
-		afterAuthorization(w, map[string]interface{}{"ok": "set"})
-	}
+		return fCtx.JSON(Response("user settings", map[string]interface{}{
+			"settings": "successful updated",
+		}))
 }
 
 // RegisterUser godoc
@@ -72,7 +54,6 @@ func (h *Handler) SetUserSetting() http.HandlerFunc {
 // @Router /register [post]
 func (h *Handler) RegisterUser(fCtx *fiber.Ctx) error {
 	user := &models.User{}
-
 	if err := fCtx.BodyParser(user); err != nil {
 		return fCtx.Status(fiber.StatusBadRequest).
 			JSON(Response("error on login request", err.Error()))
@@ -92,7 +73,7 @@ func (h *Handler) RegisterUser(fCtx *fiber.Ctx) error {
 			JSON(Response("create user db record failed", err.Error()))
 	}
 
-	newAuth := auth.NewAuth(h.Repo, h.Config)
+	newAuth := auth.New(h.Repo, h.Config)
 	token, tErr := newAuth.JWTCreate(createdUser)
 	if tErr != nil {
 		return fCtx.Status(fiber.StatusInternalServerError).
@@ -101,7 +82,7 @@ func (h *Handler) RegisterUser(fCtx *fiber.Ctx) error {
 
 	return fCtx.JSON(Response("register successful", map[string]interface{}{
 		"token": token,
-		"user":  createdUser.NewUserResponseData()}))
+		"user":  createdUser.SanitizeUserData()}))
 }
 
 // Login godoc
@@ -135,7 +116,7 @@ func (h *Handler) Login(fCtx *fiber.Ctx) error {
 			JSON(Response("invalid login credentials", dbErr))
 	}
 
-	newAuth := auth.NewAuth(h.Repo, h.Config)
+	newAuth := auth.New(h.Repo, h.Config)
 	token, tErr := newAuth.JWTCreate(dbUser)
 	if tErr != nil {
 		return fCtx.Status(fiber.StatusInternalServerError).
@@ -144,5 +125,5 @@ func (h *Handler) Login(fCtx *fiber.Ctx) error {
 
 	return fCtx.JSON(Response("login successful", map[string]interface{}{
 		"token": token,
-		"user":  dbUser.NewUserResponseData()}))
+		"user":  dbUser.SanitizeUserData()}))
 }
