@@ -8,6 +8,7 @@ import (
 	"time"
 	"tomato-timer/backend/config"
 	"tomato-timer/backend/internal/handler"
+	"tomato-timer/backend/internal/models"
 	"tomato-timer/backend/internal/repository/postgres"
 	"tomato-timer/backend/internal/routes"
 
@@ -22,6 +23,12 @@ func (app *App) RunServer(conf config.AppConfig, ctx context.Context) error {
 	}
 
 	go postgres.CloseConn(ctx, db)
+
+	err = db.AutoMigrate(&models.User{})
+	if err != nil {
+		return err
+	}
+
 	repo := postgres.NewPGRepository(db)
 
 	fApp := fiber.New(fiber.Config{

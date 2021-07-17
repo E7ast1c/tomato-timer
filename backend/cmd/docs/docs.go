@@ -199,6 +199,11 @@ var doc = `{
                     "maxLength": 320,
                     "minLength": 10
                 },
+                "Name": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "minLength": 5
+                },
                 "Password": {
                     "type": "string",
                     "maxLength": 50,
@@ -220,7 +225,7 @@ type swaggerInfo struct {
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = swaggerInfo{
-	Version:     "1.0",
+	Version:     "1.1",
 	Host:        "localhost:8081",
 	BasePath:    "/",
 	Schemes:     []string{},

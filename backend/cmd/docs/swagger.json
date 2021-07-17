@@ -4,7 +4,7 @@
         "description": "API Server for Tomato-timer",
         "title": "Tomato-timer backend",
         "contact": {},
-        "version": "1.0"
+        "version": "1.1"
     },
     "host": "localhost:8081",
     "basePath": "/",
@@ -183,6 +183,11 @@
                     "type": "string",
                     "maxLength": 320,
                     "minLength": 10
+                },
+                "Name": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "minLength": 5
                 },
                 "Password": {
                     "type": "string",

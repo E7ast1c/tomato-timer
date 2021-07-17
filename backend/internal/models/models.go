@@ -1,31 +1,30 @@
 package models
 
 import (
-	"time"
-
 	"github.com/dgrijalva/jwt-go"
 	"gorm.io/gorm"
 )
 
 type User struct {
 	gorm.Model
-	Name          string            `gorm:"type:varchar(100)"`
-	Email         string            `gorm:"type:varchar(100);unique_index"`
+	Name          string            `gorm:"type:varchar(50)"`
+	Email         string            `gorm:"type:varchar(320);unique_index"`
 	Password      string            `json:"Password"`
 	TimerSettings UserTimerSettings `gorm:"embedded"`
 }
 
-type UserMin struct {
-	Email    string `json:"Email" minLength:"10" maxLength:"320"`
-	Password string `json:"Password" minLength:"6" maxLength:"50"`
+type UserTimerSettings struct {
+	DefaultDuration    int16  `gorm:"type:smallint;default:25"`
+	LongBreakDuration  int16  `gorm:"type:smallint;default:15"`
+	ShortBreakDuration int16  `gorm:"type:smallint;default:5"`
+	TickTrack          string `gorm:"type:varchar(50)"`
+	AlarmTrack         string `gorm:"type:varchar(50)"`
 }
 
-type UserTimerSettings struct {
-	DefaultDuration    time.Duration `gorm:"type:bigint"`
-	LongBreakDuration  time.Duration `gorm:"type:bigint"`
-	ShortBreakDuration time.Duration `gorm:"type:bigint"`
-	TickTrack          string        `gorm:"type:text"`
-	AlarmTrack         string        `gorm:"type:text"`
+type UserMin struct {
+	Name     string `json:"Name" minLength:"5" maxLength:"50"`
+	Email    string `json:"Email" minLength:"10" maxLength:"320"`
+	Password string `json:"Password" minLength:"6" maxLength:"50"`
 }
 
 type UserResponseData struct {

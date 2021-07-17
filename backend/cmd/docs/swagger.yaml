@@ -15,6 +15,10 @@ definitions:
         maxLength: 320
         minLength: 10
         type: string
+      Name:
+        maxLength: 50
+        minLength: 5
+        type: string
       Password:
         maxLength: 50
         minLength: 6
@@ -25,7 +29,7 @@ info:
   contact: {}
   description: API Server for Tomato-timer
   title: Tomato-timer backend
-  version: "1.0"
+  version: "1.1"
 paths:
   /health-check:
     get:
