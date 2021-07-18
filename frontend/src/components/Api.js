@@ -2,7 +2,7 @@ import axios from "axios";
 
 const baseAdress = process.env.REACT_APP_API_URL;
 console.log(baseAdress);
-const currentURL = 'http://192.168.0.100:8081'
+const currentURL = 'http://localhost:8081'
 
 export async function login(userData) {
   console.warn(currentURL);

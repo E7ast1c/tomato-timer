@@ -6,8 +6,6 @@ import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import FakeTime from "./FakeTime";
 import { useSelector } from "react-redux";
-import { store } from "../Store/Store";
-
 
 const useStyles = makeStyles({
   timer: {
