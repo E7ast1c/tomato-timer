@@ -10,7 +10,7 @@ import { getLocalStorageKey } from "./LocalStorageManager";
 import moment from "moment";
 
 import PropTypes from "prop-types";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { startStopTimerAction } from '../Store/Actions/StartStopTimerReducer'
 
 const useStyles = makeStyles({
@@ -32,15 +32,16 @@ export default function Time(props) {
     dispatch(startStopTimerAction(true))
   }
 
-  // ----- Convert in minutes ------
-  const time = getLocalStorageKey(timeKey) * 60000;
+  const timeDefultDuration = useSelector(state => state.timeSettings.settings.user.TimerSettings.DefaultDuration)
 
-  // useEffect(() => {
-  //   time
-  // },[time])
+
+  // ----- Convert in minutes ------
+  // const time = getLocalStorageKey(timeKey) * 60000;
+  const time = timeDefultDuration * 60000
 
   return (
-    <div className={classes.timer}>
+    <div className={classes.timer}
+    >
       <div
         style={{
           display: "flex",

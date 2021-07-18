@@ -1,11 +1,13 @@
 import axios from "axios";
 
 const baseAdress = process.env.REACT_APP_API_URL;
+console.log(baseAdress);
+const currentURL = 'http://192.168.0.100:8081'
 
 export async function login(userData) {
-  console.warn(baseAdress);
+  console.warn(currentURL);
   const response = await axios.post(
-    `${baseAdress}/login`,
+    `${currentURL}/login`,
     JSON.stringify(userData)
   );
   console.log(response);
@@ -14,7 +16,7 @@ export async function login(userData) {
 
 export async function register() {
   const response = await axios.post(
-    `${baseAdress}/register`,
+    `${currentURL}/register`,
     JSON.stringify()
   )
 }

@@ -10,8 +10,8 @@ import { setLocalStorageKey } from "../LocalStorageManager";
 import { getLocalStorageKey } from "../LocalStorageManager";
 
 import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
-import { currentTimeAction } from "../../Store/Actions/CurrentTimeReduser";
+import { useDispatch, useSelector } from "react-redux";
+import { changeDefaultTimeAction } from "../../Store/Actions/TimeSettingsReduser";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -50,16 +50,22 @@ export default function SettingModal(props) {
   const prop = props.prop;
   const dispatch = useDispatch();
 
-  const changeCurrentTime = () => {
-    dispatch(currentTimeAction(1))
-  }
 
+  const timeDefultDuration = useSelector(state => state.timeSettings.settings.user.TimerSettings.DefaultDuration)
+  console.log('settings', timeDefultDuration);
+
+
+  const changeDefultTime = (currentTime) => {
+    dispatch(changeDefaultTimeAction(currentTime))
+  }
 
   const classes = useStyles();
   const timeKey = "defDuaration";
+
   const [valueInputTime, setvalueInputTime] = useState(
-    getLocalStorageKey(timeKey)
+    timeDefultDuration
   );
+
   const [isDisabled, setIsDisabled] = useState(false);
 
   // const {
@@ -73,10 +79,6 @@ export default function SettingModal(props) {
     valueInputTime >= 1 ? setIsDisabled(false) : setIsDisabled(true);
   }, [valueInputTime]);
 
-  function onSaveHandler() {
-    setLocalStorageKey(timeKey, valueInputTime);
-  }
-
   return (
     <div>
       <Modal
@@ -86,9 +88,8 @@ export default function SettingModal(props) {
         open={true}
         onClose={() => props.prop.setSettingsModal(false)}
         onSubmit={() => {
-          onSaveHandler();
           props.prop.setSettingsModal(false);
-          props.prop.setCurrentDuarationTime(valueInputTime);
+          changeDefultTime(valueInputTime)
         }}
         onClick={(e) => e.preventDefault()}
         closeAfterTransition
@@ -131,11 +132,8 @@ export default function SettingModal(props) {
               color="primary"
               variant="contained"
               onClick={() => {
-                onSaveHandler();
                 prop.setSettingsModal(false);
-                changeCurrentTime()
-                // prop.setCurrentDuarationTime(valueInputTime);
-
+                changeDefultTime(valueInputTime)
               }}
             >
               Save
@@ -152,7 +150,7 @@ export default function SettingModal(props) {
           </div>
         </div>
       </Modal>
-  
+
     </div>
   );
 }

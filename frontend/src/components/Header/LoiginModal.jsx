@@ -21,7 +21,6 @@ import { AuthLogin, setTimeSettingsRedux } from "../AuthManager";
 import { useForm } from "react-hook-form";
 
 import { useDispatch } from "react-redux";
-import { currentTimeAction } from "../../Store/Actions/CurrentTimeReduser"
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -36,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
     border: "2px solid #000",
     boxShadow: theme.shadows[5],
     padding: theme.spacing(5, 5, 5),
-    [theme.breakpoints.down(`sm`)]:{
+    [theme.breakpoints.down(`sm`)]: {
       width: '14em',
     },
     [theme.breakpoints.up(`sm`)]: {
@@ -57,7 +56,7 @@ const useStyles = makeStyles((theme) => ({
 export default function LoiginModal(props) {
   const prop = props.prop;
 
-  
+
   const {
     register,
     handleSubmit,
@@ -74,9 +73,9 @@ export default function LoiginModal(props) {
   });
 
   const dispatch = useDispatch();
-  const changeCurrentTime = () => {
-    dispatch(currentTimeAction(1))
-  }
+  // const changeCurrentTime = () => {
+  //   dispatch(currentTimeAction(1))
+  // }
 
   const updateTimeSettingsRedux = data => {
     dispatch(setTimeSettingsRedux(data))
@@ -99,7 +98,7 @@ export default function LoiginModal(props) {
     updateTimeSettingsRedux(data)
     prop.setIsAuthenticated(sucssefull);
     console.log(sucssefull);
-    changeCurrentTime()
+    // changeCurrentTime()
     handleClose();
   };
   const handleClose = () => {
@@ -118,27 +117,27 @@ export default function LoiginModal(props) {
         <div>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className={classes.paper}>
-            <FormControl className={clsx(classes.margin, classes.textField)}>
-              <InputLabel htmlFor="email">Email</InputLabel>
-              <Input
-                id="email"
-                className={clsx(classes.margin, classes.textField)}
-                onChange={handleChange("email")}
-                type="text"
-                placeholder="Email"
-                {...register("email", {
-                  required: true,
-                  pattern: {
-                    value: /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/,
-                    message: "massage error",
-                  },
-                })}
-              />
-              {errors.email && (
-                <p className={classes.txtError}>
-                  Please enter correct email, example@ya.ru
-                </p>
-              )}
+              <FormControl className={clsx(classes.margin, classes.textField)}>
+                <InputLabel htmlFor="email">Email</InputLabel>
+                <Input
+                  id="email"
+                  className={clsx(classes.margin, classes.textField)}
+                  onChange={handleChange("email")}
+                  type="text"
+                  placeholder="Email"
+                  {...register("email", {
+                    required: true,
+                    pattern: {
+                      value: /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/,
+                      message: "massage error",
+                    },
+                  })}
+                />
+                {errors.email && (
+                  <p className={classes.txtError}>
+                    Please enter correct email, example@ya.ru
+                  </p>
+                )}
               </FormControl>
               <FormControl className={clsx(classes.margin, classes.textField)}>
                 <InputLabel htmlFor="password">Password</InputLabel>

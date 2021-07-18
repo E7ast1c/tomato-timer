@@ -11,11 +11,10 @@ import LoiginModal from "./LoiginModal";
 import { clearLocalStorage, getUserName } from "../LocalStorageManager";
 // import { getUserData } from '../LocalStorageManager'
 import { useDispatch } from "react-redux";
-import { currentTimeAction } from '../../Store/Actions/CurrentTimeReduser'
 
 
 import PropTypes from "prop-types";
-import { clearTimeSettingsAction } from "../../Store/Actions/TimeSettingsReduser";
+import { changeDefaultTimeAction, clearUsersSettingsAction } from "../../Store/Actions/TimeSettingsReduser";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -72,19 +71,30 @@ export default function Header(props) {
   const classes = useStyles();
   const title = "Tomato timer";
   const user = 'user';
-  const clearTimeSettings = {}
+  // const clearSettings = {}
+  const clearSettings = {
+    user: {
+      TimerSettings: {
+        DefaultDuration: 1
+      }
+    }
+  }
+
 
 
 
   const isLocalStorageName = getUserName(user)
 
   const dispatch = useDispatch();
-  const changeCurrentTime = () => {
-    dispatch(currentTimeAction(1))
-  }
+  // const changeCurrentTime = () => {
+  //   dispatch(currentTimeAction(1))
+  // }
 
-  const updateTimeSettings = () => {
-    dispatch(clearTimeSettingsAction(clearTimeSettings))
+  const clearUsersSettings = () => {
+    dispatch(clearUsersSettingsAction(clearSettings))
+  }
+  const setDefaultTime = () => {
+    dispatch(changeDefaultTimeAction(1))
   }
 
   return (
@@ -105,7 +115,6 @@ export default function Header(props) {
         <Typography
           component="h2"
           variant="h5"
-          // color="inherit"
           align="center"
           noWrap
           className={classes.toolbarTitle}
@@ -133,10 +142,8 @@ export default function Header(props) {
                 onClick={() => {
                   setIsAuthenticated(!isAuthenticated),
                     clearLocalStorage(),
-                    changeCurrentTime();
-
-                  updateTimeSettings()
-
+                    clearUsersSettings(),
+                    setDefaultTime()
                 }}
               >
                 Sing out

@@ -12,8 +12,10 @@ import Clock from "./Clock";
 import ViewClock from "./FakeProgress";
 
 import { getLocalStorageKey } from "./LocalStorageManager";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { startStopTimerAction } from '../Store/Actions/StartStopTimerReducer';
+
+
 
 const useStyles = makeStyles({
   timer: {
@@ -30,16 +32,23 @@ export default function Time(props) {
   const timeKey = "defDuaration";
   const dispatch = useDispatch();
 
+  const timeDefultDuration = useSelector(state => state.timeSettings.settings.user.TimerSettings.DefaultDuration)
+
   const stopTimer = () => {
     dispatch(startStopTimerAction(false))
+
+
   }
 
-  // ---- Convert in minutes ------
-  const timeDuaration = getLocalStorageKey(timeKey) * 60;
 
-  function getExpiryDate(timeDuaration) {
+
+  // ---- Convert in minutes ------
+  // const timeDefultDuration = getLocalStorageKey(timeKey) * 60;
+  // const timeDefultDuration = timeDefultDuration
+
+  function getExpiryDate(timeDefultDuration) {
     let expiry = new Date();
-    expiry.setSeconds(expiry.getSeconds() + timeDuaration);
+    expiry.setSeconds(expiry.getSeconds() + timeDefultDuration * 60);
     return expiry;
   }
 
@@ -60,7 +69,7 @@ export default function Time(props) {
     resume,
     restart,
   } = useTimer({
-    expiryTimestamp: getExpiryDate(timeDuaration),
+    expiryTimestamp: getExpiryDate(timeDefultDuration),
     onExpire: () => console.warn("onExpire called"),
   });
 
