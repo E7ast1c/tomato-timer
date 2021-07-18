@@ -7,15 +7,25 @@ import (
 
 	swagger "github.com/arsmn/fiber-swagger/v2"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v2/middleware/logger"
 )
 
 func Handlers(handle *handler.Handler, fApp *fiber.App) {
 	mw := middleware.New(handle)
 
+	fApp.Use(cors.New(cors.Config{
+		AllowOrigins: "*",
+		AllowMethods: "GET,POST",
+		AllowHeaders: "Origin, Content-Type, Accept",
+	}))
+
+	fApp.Use(logger.New())
+
 	fApp.Get("/swagger/*", swagger.Handler) // default
 
 	fApp.Get("/swagger/*", swagger.New(swagger.Config{ // custom
-		URL: "http://localhost" + handle.Config.Port + "/swagger/doc.json",
+		URL:         "http://localhost" + handle.Config.Port + "/swagger/doc.json",
 		DeepLinking: false,
 	}))
 
