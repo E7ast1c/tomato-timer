@@ -24,13 +24,95 @@ definitions:
         minLength: 6
         type: string
     type: object
+  models.UserTimerSettings:
+    properties:
+      alarmTrack:
+        type: string
+      defaultDuration:
+        type: integer
+      longBreakDuration:
+        type: integer
+      shortBreakDuration:
+        type: integer
+      tickTrack:
+        type: string
+    type: object
 host: localhost:8081
 info:
-  contact: {}
+  contact:
+    name: Tomato timer
+    url: https://github.com/E7ast1c/tomato-timer
   description: API Server for Tomato-timer
   title: Tomato-timer backend
   version: "1.1"
 paths:
+  /auth/get-user-settings:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.ResponseTemplate'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ResponseTemplate'
+        "404":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ResponseTemplate'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.ResponseTemplate'
+        default:
+          description: ""
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: get user settings
+  /auth/set-user-settings:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: User settings
+        in: body
+        name: DefaultDuration
+        required: true
+        schema:
+          $ref: '#/definitions/models.UserTimerSettings'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.ResponseTemplate'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ResponseTemplate'
+        "404":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ResponseTemplate'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.ResponseTemplate'
+        default:
+          description: ""
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: set custom user settings
   /health-check:
     get:
       consumes:
@@ -129,4 +211,9 @@ paths:
           schema:
             type: string
       summary: register new user
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: x-access-token
+    type: apiKey
 swagger: "2.0"

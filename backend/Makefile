@@ -10,3 +10,6 @@ docker_run:
 
 lint:
 	golangci-lint run -v -c=.golangci.yml --tests=false
+
+swagger:
+	sudo swag init -d ./cmd --parseDependency --parseInternal

@@ -8,6 +8,16 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+// GetUserSettings godoc
+// @Summary get user settings
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} ResponseTemplate
+// @Failure 400,404 {object} ResponseTemplate
+// @Failure 500 {object} ResponseTemplate
+// @Failure default {object} string
+// @Router /auth/get-user-settings [get]
+// @Security ApiKeyAuth
 func (h *Handler) GetUserSettings(fCtx *fiber.Ctx) error {
 	userTk := fCtx.Locals(h.ContextUser).(*models.UserToken)
 
@@ -22,6 +32,17 @@ func (h *Handler) GetUserSettings(fCtx *fiber.Ctx) error {
 	}))
 }
 
+// SetUserSetting godoc
+// @Summary set custom user settings
+// @Accept  json
+// @Produce  json
+// @Param DefaultDuration body models.UserTimerSettings true "User settings"
+// @Success 200 {object} ResponseTemplate
+// @Failure 400,404 {object} ResponseTemplate
+// @Failure 500 {object} ResponseTemplate
+// @Failure default {object} string
+// @Router /auth/set-user-settings [post]
+// @Security ApiKeyAuth
 func (h *Handler) SetUserSetting(fCtx *fiber.Ctx) error {
 		userTk := fCtx.Locals(h.ContextUser).(*models.UserToken)
 		uSettings := models.UserTimerSettings{}
