@@ -56,7 +56,7 @@ export default function Time(props) {
 
   const [clockEnabled, setClockEnabled] = useState(false);
   const [pauseClock, setPauseClock] = useState(false);
-  const [progress, setProgress] = useState(1);
+  // const [progress, setProgress] = useState(0);
 
   const {
     seconds,
@@ -88,7 +88,7 @@ export default function Time(props) {
         {`${minutes < 10 ? `0${minutes}` : minutes}:${seconds < 10 ? `0${seconds}` : seconds
           }`}
       </div>
-      <Clock params={{ progress, setProgress }} />
+      <Clock  />
 
       <div>
         <Button

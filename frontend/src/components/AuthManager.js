@@ -8,14 +8,14 @@ import { getTimeSettingsAction } from "../Store/Actions/TimeSettingsReduser"
 export const setTimeSettingsRedux = (data) => {
   return async function(dispactch){
     const currentUser = await login(data)
-    dispactch(getTimeSettingsAction(currentUser.data))
+    dispactch(getTimeSettingsAction(currentUser.data.data))
     console.log('REDUX', currentUser.data);
   }
 }
 
 export async function AuthLogin(data) {
   const currentUser = await login(data);
-  setUserData(currentUser.data);
+  setUserData(currentUser.data.data);
   setLoginTimerSettings(currentUser.data)
   
   // const dispatch = useDispatch()

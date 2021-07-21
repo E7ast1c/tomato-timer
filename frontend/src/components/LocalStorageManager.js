@@ -7,11 +7,11 @@ export function setLocalStorageKey(key, value) {
 }
 
 export function setLoginTimerSettings(data) {
-  const currentTime = data.user.TimerSettings
+  const currentTime = data.data.user.TimerSettings
   const timerSettingsData = [
-    { name: 'defDuaration',  value: currentTime.DefaultDuration / 60},
-    { name: 'longBreakDuaration', value: currentTime.LongBreakDuration / 60 },
-    { name: 'shortBreakDuration', value: currentTime.ShortBreakDuration / 60 },
+    { name: 'defDuaration',  value: currentTime.DefaultDuration },
+    { name: 'longBreakDuaration', value: currentTime.LongBreakDuration},
+    { name: 'shortBreakDuration', value: currentTime.ShortBreakDuration},
     { name: 'tickTrack', value: currentTime.TickTrack },
     { name: 'alarmTrack', value: currentTime.AlarmTrack },
   ]

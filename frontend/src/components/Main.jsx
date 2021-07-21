@@ -28,16 +28,17 @@ export default function Main() {
 
   const classes = useStyles();
 
-
   return (
     <div>
       {changeCurrentTime && <Header />}
-      <TimerButton/>
-      {statusTimer ? (
-        <Time />
-      ) : (
-        <FakeTime />
-      )}
+      <div>
+        <TimerButton />
+        {statusTimer ? (
+          <Time />
+        ) : (
+          <FakeTime />
+        )}
+      </div>
     </div>
   );
 }

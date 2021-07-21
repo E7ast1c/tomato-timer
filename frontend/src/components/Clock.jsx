@@ -1,18 +1,31 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import PropTypes from "prop-types";
+import { useSelector } from "react-redux";
+
+
 
 const Clock = (props) => {
-  const prop = props.params;
+  const [progress, setProgress] = useState(0);
 
+  const DefaultDuration = useSelector(state => state.timeSettings.settings.user.TimerSettings.DefaultDuration)
+  
+  const prop = props.params;
+  const MIN = 0
+
+  // change to second
+  const MAX = DefaultDuration * 60
+
+
+  const normalise = value => (value - MIN) * 100 / (MAX - MIN)
   useEffect(() => {
     const timer = setInterval(() => {
-      prop.setProgress((prevProgress) =>
-        prevProgress >= 100 ? 100 : prevProgress + 1
+      setProgress((prevProgress) =>
+        prevProgress >= MAX ? MAX : prevProgress + 1
       );
-    }, 800);
+    }, 900);
     return () => {
       clearInterval(timer);
     };
@@ -21,11 +34,11 @@ const Clock = (props) => {
   return (
     <Box display="flex" alignItems="center" justifyContent="center">
       <Box width="60%" mr={1}>
-        <LinearProgress variant="determinate" value={prop.progress} />
+        <LinearProgress variant="determinate" value={normalise(progress)}/>
       </Box>
       <Box minWidth={35}>
         <Typography variant="body2">{`${Math.round(
-          prop.progress
+          normalise(progress)
         )}%`}</Typography>
       </Box>
     </Box>

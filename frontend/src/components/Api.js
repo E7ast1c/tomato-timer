@@ -2,13 +2,18 @@ import axios from "axios";
 
 const baseAdress = process.env.REACT_APP_API_URL;
 console.log(baseAdress);
-const currentURL = 'http://localhost:8081'
+// const currentURL = 'http://localhost:8081'
+const headers = {
+  "Content-Type": "application/json"
+}
 
 export async function login(userData) {
-  console.warn(currentURL);
+  console.warn(baseAdress);
+  console.log(userData);
   const response = await axios.post(
-    `${currentURL}/login`,
-    JSON.stringify(userData)
+    `${baseAdress}/login`,
+    JSON.stringify(userData),
+    { headers:  headers}
   );
   console.log(response);
   return response;
@@ -16,7 +21,7 @@ export async function login(userData) {
 
 export async function register() {
   const response = await axios.post(
-    `${currentURL}/register`,
+    `${baseAdress}/register`,
     JSON.stringify()
   )
 }
