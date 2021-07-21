@@ -11,4 +11,4 @@ const rootReducer = combineReducers({
   vueCurrentTimer: vueCurrentTimerReduser,
 });
 
-export const Store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk)));
+export const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk)));
