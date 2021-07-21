@@ -104,7 +104,59 @@ export default function SettingModal(props) {
             id="transition-modal-description"
             className={classes.settingsTime}
           >
-            <h3>Enter pomidoro time</h3>
+            <h3>Enter pomodoro time</h3>
+            <form
+              // onSubmit={handleSubmit(onSubmit)}
+              className={classes.root}
+              noValidate
+              autoComplete="off"
+            >
+              {/* <input {...register("age", { min: 18, max: 99 })} />
+              {errors.age && (
+                <p>You Must be older then 18 and younger then 99 years old</p>
+              )} */}
+              <TextField
+                type="number"
+                className={classes.input}
+                id="outlined-basic"
+                label="Minutes"
+                variant="outlined"
+                onChange={(e) => setvalueInputTime(e.target.value)}
+                value={valueInputTime}
+              />
+            </form>
+          </div>
+          <div
+            id="transition-modal-description"
+            className={classes.settingsTime}
+          >
+            <h3>Enter Short Break</h3>
+            <form
+              // onSubmit={handleSubmit(onSubmit)}
+              className={classes.root}
+              noValidate
+              autoComplete="off"
+            >
+              {/* <input {...register("age", { min: 18, max: 99 })} />
+              {errors.age && (
+                <p>You Must be older then 18 and younger then 99 years old</p>
+              )} */}
+              <TextField
+                type="number"
+                className={classes.input}
+                id="outlined-basic"
+                label="Minutes"
+                variant="outlined"
+                onChange={(e) => setvalueInputTime(e.target.value)}
+                value={valueInputTime}
+              />
+            </form>
+          </div>
+          <div
+            id="transition-modal-description"
+            className={classes.settingsTime}
+          >
+            <h3>Enter Long Break</h3>
             <form
               // onSubmit={handleSubmit(onSubmit)}
               className={classes.root}

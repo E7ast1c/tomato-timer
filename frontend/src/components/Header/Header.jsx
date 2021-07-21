@@ -86,9 +86,6 @@ export default function Header(props) {
   const isLocalStorageName = getUserName(user)
 
   const dispatch = useDispatch();
-  // const changeCurrentTime = () => {
-  //   dispatch(currentTimeAction(1))
-  // }
 
   const clearUsersSettings = () => {
     dispatch(clearUsersSettingsAction(clearSettings))

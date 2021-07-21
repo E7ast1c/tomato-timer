@@ -10,7 +10,7 @@ import { useSelector } from "react-redux";
 const Clock = (props) => {
   const [progress, setProgress] = useState(0);
 
-  const DefaultDuration = useSelector(state => state.timeSettings.settings.user.TimerSettings.DefaultDuration)
+  const DefaultDuration = useSelector(state => state.timeSettings.settings.user.TimerSettings.DefaultDuration);
   
   const prop = props.params;
   const MIN = 0
