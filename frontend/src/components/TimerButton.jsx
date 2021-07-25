@@ -7,14 +7,19 @@ import { vuePomodoroTimerAction, vueShortBreakTimerAction, vueLongBreakTimerActi
 
 
 const useStyles = makeStyles((theme) => ({
-  btn: {
-    color: '#fff'
-  },
   btngroup: {
     marginTop: '1em'
   },
+  btn: {
+    color: '#fff',
+    // '&:checked': {
+    //   background: 'tomato'
+    // },
+  },
+  activeBtn: {
+    background: 'tomato'
+  }
 }));
-
 
 export default function TimerButton() {
   const classes = useStyles();
@@ -24,10 +29,13 @@ export default function TimerButton() {
     <div>
       <ButtonGroup variant="text" className={classes.btngroup}>
         <Button
-         className={classes.btn}
-         onClick={() => dispatch(vuePomodoroTimerAction(true))}
-         >
-           Pomodoro
+          className={classes.btn}
+          onClick={
+            () =>
+              dispatch(vuePomodoroTimerAction(true))
+          }
+        >
+          Pomodoro
         </Button>
         <Button
           className={classes.btn}
@@ -35,10 +43,10 @@ export default function TimerButton() {
         >
           Short break
         </Button>
-        <Button 
+        <Button
           className={classes.btn}
           onClick={() => dispatch(vueLongBreakTimerAction(true))}
-          >Long break</Button>
+        >Long break</Button>
       </ButtonGroup>
     </div>
   )

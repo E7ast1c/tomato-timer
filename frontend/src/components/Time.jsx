@@ -33,12 +33,22 @@ export default function Time(props) {
   const dispatch = useDispatch();
 
   const timeDefultDuration = useSelector(state => state.timeSettings.settings.user.TimerSettings.DefaultDuration)
+  const longBreakDuration = useSelector(state => state.timeSettings.settings.user.TimerSettings.LongBreakDuration)
+  const shortBreakDuration = useSelector(state => state.timeSettings.settings.user.TimerSettings.ShortBreakDuration)
+  const vueCurrentTimer = useSelector(state => state.vueCurrentTimer)
 
   const stopTimer = () => {
     dispatch(startStopTimerAction(false))
-
-
   }
+  let time;
+  if(vueCurrentTimer.pomodoro){
+    time = timeDefultDuration 
+  } else if(vueCurrentTimer.shortBreak){
+    time = shortBreakDuration
+  } else if(vueCurrentTimer.longBreak){
+    time = longBreakDuration
+  }
+
 
 
 
@@ -46,9 +56,9 @@ export default function Time(props) {
   // const timeDefultDuration = getLocalStorageKey(timeKey) * 60;
   // const timeDefultDuration = timeDefultDuration
 
-  function getExpiryDate(timeDefultDuration) {
+  function getExpiryDate(time) {
     let expiry = new Date();
-    expiry.setSeconds(expiry.getSeconds() + timeDefultDuration * 60);
+    expiry.setSeconds(expiry.getSeconds() + time * 60);
     return expiry;
   }
 
@@ -69,7 +79,7 @@ export default function Time(props) {
     resume,
     restart,
   } = useTimer({
-    expiryTimestamp: getExpiryDate(timeDefultDuration),
+    expiryTimestamp: getExpiryDate(time),
     onExpire: () => console.warn("onExpire called"),
   });
 

@@ -75,7 +75,9 @@ export default function Header(props) {
   const clearSettings = {
     user: {
       TimerSettings: {
-        DefaultDuration: 1
+        DefaultDuration: 25,
+        LongBreakDuration: 15, 
+        ShortBreakDuration: 5,
       }
     }
   }
@@ -89,9 +91,6 @@ export default function Header(props) {
 
   const clearUsersSettings = () => {
     dispatch(clearUsersSettingsAction(clearSettings))
-  }
-  const setDefaultTime = () => {
-    dispatch(changeDefaultTimeAction(1))
   }
 
   return (
@@ -139,8 +138,7 @@ export default function Header(props) {
                 onClick={() => {
                   setIsAuthenticated(!isAuthenticated),
                     clearLocalStorage(),
-                    clearUsersSettings(),
-                    setDefaultTime()
+                    clearUsersSettings()
                 }}
               >
                 Sing out
@@ -181,6 +179,6 @@ export default function Header(props) {
   );
 }
 
-Header.propTypes = {
-  setCurrentDuarationTime: PropTypes.func.isRequired,
-};
+// Header.propTypes = {
+//   setCurrentDuarationTime: PropTypes.func.isRequired,
+// };

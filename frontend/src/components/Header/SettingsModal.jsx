@@ -11,7 +11,7 @@ import { getLocalStorageKey } from "../LocalStorageManager";
 
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { changeDefaultTimeAction } from "../../Store/Actions/TimeSettingsReduser";
+import { changeDefaultTimeAction, changeLongBreakAction, changeShortBreakAction } from "../../Store/Actions/TimeSettingsReduser";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -52,18 +52,34 @@ export default function SettingModal(props) {
 
 
   const timeDefultDuration = useSelector(state => state.timeSettings.settings.user.TimerSettings.DefaultDuration)
-  console.log('settings', timeDefultDuration);
+  const longBreakDuration = useSelector(state => state.timeSettings.settings.user.TimerSettings.LongBreakDuration)
+  const shortBreakDuration = useSelector(state => state.timeSettings.settings.user.TimerSettings.ShortBreakDuration)
 
 
   const changeDefultTime = (currentTime) => {
-    dispatch(changeDefaultTimeAction(currentTime))
+    dispatch(changeDefaultTimeAction(+currentTime))
   }
+
+  const changeLongBreak = (currentTime) => {
+    dispatch(changeLongBreakAction(+currentTime))
+  }
+
+  const changeShortBreak = (currentTime) => {
+    dispatch(changeShortBreakAction(+currentTime))
+  }
+
 
   const classes = useStyles();
   const timeKey = "defDuaration";
 
-  const [valueInputTime, setvalueInputTime] = useState(
+  const [valueDefultTime, setValueDefultTime] = useState(
     timeDefultDuration
+  );
+  const [valueShortBreak, setValueShortBreak] = useState(
+    shortBreakDuration
+  );
+  const [valueLongBreak, setValueLongBreak] = useState(
+    longBreakDuration
   );
 
   const [isDisabled, setIsDisabled] = useState(false);
@@ -76,8 +92,14 @@ export default function SettingModal(props) {
   // const onSubmit = (data) => console.log(data);
 
   useEffect(() => {
-    valueInputTime >= 1 ? setIsDisabled(false) : setIsDisabled(true);
-  }, [valueInputTime]);
+    valueDefultTime >= 1 ? setIsDisabled(false) : setIsDisabled(true);
+  }, [valueDefultTime]);
+  useEffect(() => {
+    valueShortBreak >= 1 ? setIsDisabled(false) : setIsDisabled(true);
+  }, [valueShortBreak]);
+  useEffect(() => {
+    valueLongBreak >= 1 ? setIsDisabled(false) : setIsDisabled(true);
+  }, [valueLongBreak]);
 
   return (
     <div>
@@ -89,7 +111,10 @@ export default function SettingModal(props) {
         onClose={() => props.prop.setSettingsModal(false)}
         onSubmit={() => {
           props.prop.setSettingsModal(false);
-          changeDefultTime(valueInputTime)
+          changeDefultTime(valueDefultTime)
+          changeLongBreak(valueLongBreak)
+          changeShortBreak(valueShortBreak)
+
         }}
         onClick={(e) => e.preventDefault()}
         closeAfterTransition
@@ -121,8 +146,8 @@ export default function SettingModal(props) {
                 id="outlined-basic"
                 label="Minutes"
                 variant="outlined"
-                onChange={(e) => setvalueInputTime(e.target.value)}
-                value={valueInputTime}
+                onChange={(e) => setValueDefultTime(e.target.value)}
+                value={valueDefultTime}
               />
             </form>
           </div>
@@ -147,8 +172,8 @@ export default function SettingModal(props) {
                 id="outlined-basic"
                 label="Minutes"
                 variant="outlined"
-                onChange={(e) => setvalueInputTime(e.target.value)}
-                value={valueInputTime}
+                onChange={(e) => setValueShortBreak(e.target.value)}
+                value={valueShortBreak}
               />
             </form>
           </div>
@@ -173,8 +198,8 @@ export default function SettingModal(props) {
                 id="outlined-basic"
                 label="Minutes"
                 variant="outlined"
-                onChange={(e) => setvalueInputTime(e.target.value)}
-                value={valueInputTime}
+                onChange={(e) => setValueLongBreak(e.target.value)}
+                value={valueLongBreak}
               />
             </form>
           </div>
@@ -185,7 +210,9 @@ export default function SettingModal(props) {
               variant="contained"
               onClick={() => {
                 prop.setSettingsModal(false);
-                changeDefultTime(valueInputTime)
+                changeDefultTime(valueDefultTime)
+                changeShortBreak(valueShortBreak)
+                changeLongBreak(valueLongBreak)
               }}
             >
               Save

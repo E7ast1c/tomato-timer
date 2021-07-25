@@ -33,15 +33,15 @@ export default function Main() {
   console.log(vueCurrentTimer);
 
 
-  let currentTimeComponent;
+  // let currentTimeComponent;
 
-  if(vueCurrentTimer.pomodoro){
-    currentTimeComponent = statusTimer ? (<Time />):(<FakeTime />)
-  } else if(vueCurrentTimer.shortBreak){
-    currentTimeComponent = <ShortClock/>
-  } else if(vueCurrentTimer.longBreak){
-    currentTimeComponent = <LongClock/>
-  }
+  // if(vueCurrentTimer.pomodoro){
+  //   currentTimeComponent = statusTimer ? (<Time />):(<FakeTime />)
+  // } else if(vueCurrentTimer.shortBreak){
+  //   currentTimeComponent = statusTimer ? (<Time />):(<FakeTime />)
+  // } else if(vueCurrentTimer.longBreak){
+  //   currentTimeComponent = statusTimer ? (<Time />):(<FakeTime />)
+  // }
 
   return (
     <div>
@@ -49,7 +49,8 @@ export default function Main() {
       <div>
         <TimerButton />
       <div>
-          {currentTimeComponent}
+          {/* {currentTimeComponent} */}
+         { statusTimer ? (<Time />):(<FakeTime />)}
       </div>
        
 
