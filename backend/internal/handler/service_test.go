@@ -18,14 +18,14 @@ import (
 )
 
 func TestHealthCheck(t *testing.T) {
-	t.Run("Ok", func(t *testing.T) {
+	t.Run("Positive scenario - response 200 (OK)", func(t *testing.T) {
 		// Arrange
-		assert := assert.New(t)
+		assertions := assert.New(t)
 		testStruct := test.NewHandlerStruct("", "","/health-check",
 			false, http.StatusOK, "{}")
 		mockHandler, _, err := newMockHandler()
 		if err != nil {
-			assert.Fail("newMockHandler error = %s\n", err)
+			assertions.Fail("newMockHandler error = %s\n", err)
 		}
 		fiberGet := newFiberGet(testStruct.Route, mockHandler.HealthCheck)
 
@@ -40,30 +40,30 @@ func TestHealthCheck(t *testing.T) {
 		defer func(Body io.ReadCloser) {
 			err = Body.Close()
 			if err != nil {
-				assert.Fail("error body resp close", err)
+				assertions.Fail("error body resp close", err)
 			}
 		}(resp.Body)
 
 		// ASSERT
-		assert.Equal(testStruct.ExpectedBody, string(body))
-		assert.Equal(testStruct.ExpectedCode, resp.StatusCode)
-		assert.Nil(err)
+		assertions.Equal(testStruct.ExpectedBody, string(body))
+		assertions.Equal(testStruct.ExpectedCode, resp.StatusCode)
+		assertions.Nil(err)
 	})
-	t.Run("DB Closed Server error", func(t *testing.T) {
+	t.Run("Negative scenario - DB Closed Server error", func(t *testing.T) {
 		// Arrange
-		assert := assert.New(t)
+		assertions := assert.New(t)
 		testStruct := test.NewHandlerStruct("", "","/health-check",
 			false, http.StatusInternalServerError, "{\"checkDBConnection\":\"Checking DB ping failed: sql: database is closed\"}")
 		mockHandler, _, err := newMockHandler()
 		if err != nil {
-			assert.Fail("newMockHandler error = %s\n", err)
+			assertions.Fail("newMockHandler error = %s\n", err)
 		}
 		fiberGet := newFiberGet(testStruct.Route, mockHandler.HealthCheck)
 
 		// ACT
 		db, err := mockHandler.DB.DB()
 		if err != nil {
-			assert.Fail("mock db fail", err)
+			assertions.Fail("mock db fail", err)
 		}
 		_ = db.Close()
 
@@ -77,14 +77,14 @@ func TestHealthCheck(t *testing.T) {
 		defer func(Body io.ReadCloser) {
 			err = Body.Close()
 			if err != nil {
-				assert.Fail("error body resp close", err)
+				assertions.Fail("error body resp close", err)
 			}
 		}(resp.Body)
 
 		// ASSERT
-		assert.Equal(testStruct.ExpectedBody, string(body))
-		assert.Equal(testStruct.ExpectedCode, resp.StatusCode)
-		assert.Nil(err)
+		assertions.Equal(testStruct.ExpectedBody, string(body))
+		assertions.Equal(testStruct.ExpectedCode, resp.StatusCode)
+		assertions.Nil(err)
 	})
 }
 
@@ -102,9 +102,15 @@ func newMockHandler() (*Handler, *gorm.DB, error) {
 	}
 
 	repo := postgres.NewPGRepository(gdb)
-	apiConfig := config.NewAppConfig()
+	apiConfig := config.AppConfig{
+		DBConfig:  config.DBConfig{URI: ""},
+		APIServer: config.APIServer{
+			Port:       "1234",
+			SignSecret: "qwerty12345",
+		},
+	}
 
-	return NewHandler(*repo, gdb, apiConfig.APIServer), gdb, nil
+	return NewHandler(*repo, gdb, apiConfig.APIServer, nil), gdb, nil
 }
 
 func newFiberGet(path string, handler fiber.Handler) *fiber.App {
