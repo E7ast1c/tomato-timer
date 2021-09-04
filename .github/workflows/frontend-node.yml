@@ -1,4 +1,4 @@
-name: Node.js CI
+name: Frontend node CI
 
 on:
   push:
@@ -25,6 +25,6 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: npm ci
-      - run: npm run build --if-present
+      - run: npm run build
       - run: npm install -g surge
       - run: surge ./build ${{ secrets.SURGE_DOMAIN }} --token ${{ secrets.SURGE_TOKEN }}
