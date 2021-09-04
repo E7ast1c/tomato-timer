@@ -1,6 +1,6 @@
-GO_BUILD_ENV := CGO_ENABLED=0 GOOS=linux GOARCH=amd64
-DOCKER_BUILD=$(shell pwd)/server/cmd/.docker_build
-DOCKER_CMD=$(DOCKER_BUILD)/tomato-timer
+#GO_BUILD_ENV := CGO_ENABLED=0 GOOS=linux GOARCH=amd64
+#DOCKER_BUILD=$(shell pwd)/server/cmd/.docker_build
+#DOCKER_CMD=$(DOCKER_BUILD)/tomato-timer
 
 docker_build:
 	docker build -t tomato-timer:latest .
