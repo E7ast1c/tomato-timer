@@ -1,26 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React, {useState} from "react";
 import clsx from "clsx";
 
-import { makeStyles } from "@material-ui/core/styles";
+import {makeStyles} from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Modal from "@material-ui/core/Modal";
-import Backdrop from "@material-ui/core/Backdrop";
 import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import FormControl from "@material-ui/core/FormControl";
-import TextField from "@material-ui/core/TextField";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import IconButton from "@material-ui/core/IconButton";
-import Header from "./Header";
 import PropTypes from "prop-types";
 
-import { AuthLogin, setTimeSettingsRedux } from "../AuthManager";
+import {AuthLogin, setTimeSettingsRedux} from "../AuthManager";
 
-import { useForm } from "react-hook-form";
+import {useForm} from "react-hook-form";
 
-import { useDispatch } from "react-redux";
+import {useDispatch} from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
