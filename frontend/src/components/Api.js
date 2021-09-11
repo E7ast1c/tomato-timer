@@ -1,10 +1,12 @@
 import axios from "axios";
+import config from "../configuration.json";
 
-const baseAdress = process.env.REACT_APP_API_URL;
+const baseAdress = config.TOMATO_API_URL;
 console.log(baseAdress);
-// const currentURL = 'http://localhost:8081'
+
 const headers = {
-  "Content-Type": "application/json"
+  "Content-Type": "application/json",
+
 }
 
 export async function login(userData) {

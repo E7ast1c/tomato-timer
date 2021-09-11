@@ -5,7 +5,7 @@ services:
         build:
             context: frontend/
         ports:
-            - ${FRONTEND_PORT}:80
+            - ${FRONTEND_PORT}:${FRONTEND_PORT}
         depends_on:
             - backend
 
@@ -16,5 +16,5 @@ services:
             - SIGN_SECRET=${SIGN_SECRET}
         build:
             context: backend/
-        ports: 
+        ports:
             - ${BACKEND_PORT}:${BACKEND_PORT}
