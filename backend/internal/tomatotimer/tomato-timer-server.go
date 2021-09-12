@@ -2,31 +2,33 @@ package tomatotimer
 
 import (
 	"context"
-	"os"
-	"os/signal"
-	"syscall"
+	"net/http"
 	"time"
 	"tomato-timer/backend/config"
 	"tomato-timer/backend/internal/handler"
 	"tomato-timer/backend/internal/models"
 	"tomato-timer/backend/internal/repository/postgres"
 	"tomato-timer/backend/internal/routes"
+	graceful_shutdown "tomato-timer/backend/pkg/graceful-shutdown"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/sirupsen/logrus"
 )
 
-func (app *App) RunServer(conf config.AppConfig, ctx context.Context) error {
+func (app *App) RunServer(conf config.AppConfig, ctx context.Context) (*fiber.App, error) {
+	closer := graceful_shutdown.New()
+
 	db, err := postgres.PGConnect(conf.DBConfig)
 	if err != nil {
-		return err
+		return nil, err
 	}
-
-	go postgres.CloseConn(ctx, db)
+	closer.Subscribe("postgres", func() error {
+		pdb, _ := db.DB()
+		return pdb.Close()
+	})
 
 	err = db.AutoMigrate(&models.User{})
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	repo := postgres.NewPGRepository(db)
@@ -42,20 +44,13 @@ func (app *App) RunServer(conf config.AppConfig, ctx context.Context) error {
 	handle := handler.NewHandler(*repo, db, conf.APIServer, nil)
 	routes.Handlers(handle, fApp)
 
-	err = fApp.Listen(handle.Config.Port)
-	if err != nil {
-		return err
+	closer.Subscribe("httpServer", func() error {
+		return fApp.Shutdown()
+	})
+
+	if err := fApp.Listen(handle.Config.Port); err != nil && err != http.ErrServerClosed {
+		return nil, err
 	}
 
-	return nil
-}
-
-// GracefulShutdown TODO: finish, not right work now
-func (app *App) GracefulShutdown(cancelFunc context.CancelFunc) {
-	sigs := make(chan os.Signal, 1)
-	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
-	<-sigs
-	logrus.Warn("received shutdown signal")
-	cancelFunc()
-	logrus.Warn("shutting down!")
+	return fApp, nil
 }

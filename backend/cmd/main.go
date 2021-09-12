@@ -22,13 +22,13 @@ import (
 // @in header
 // @name x-access-token
 func main() {
-	ctx, cancel := context.WithCancel(context.Background())
+	ctx := context.Background()
+
 	appConfig := config.NewAppConfig()
 	app := tomatotimer.NewApp()
 
-	go app.GracefulShutdown(cancel)
-
-	if err := app.RunServer(appConfig, ctx); err != nil {
+	 _, err := app.RunServer(appConfig, ctx);
+	if err != nil {
 		logrus.Fatalf("start server error = %s", err.Error())
 	}
 }

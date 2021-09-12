@@ -1,8 +1,6 @@
 package postgres
 
 import (
-	"context"
-	"log"
 	"tomato-timer/backend/config"
 	"tomato-timer/backend/internal/models"
 	"tomato-timer/backend/internal/repository"
@@ -32,19 +30,4 @@ func PGConnect(dbConfig config.DBConfig) (*gorm.DB, error) {
 	logrus.Infof("PG DB successfully connected, with args %+v \n", db)
 
 	return db, nil
-}
-
-func CloseConn(ctx context.Context, db *gorm.DB) {
-	for range ctx.Done() {
-		logrus.Warn("received done")
-		pdb, err := db.DB()
-		if err != nil {
-			logrus.Errorf("error on closing conn, get DB  %s", err)
-		}
-		err = pdb.Close()
-		if err != nil {
-			logrus.Errorf("error on closing conn %s", err)
-		}
-		log.Printf("Connection to DB closed")
-	}
 }
