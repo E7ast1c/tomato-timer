@@ -1,24 +1,24 @@
-import React, { useState, useEffect } from "react";
+import React, {useEffect, useState} from "react";
 import clsx from "clsx";
 
-import { makeStyles } from "@material-ui/core/styles";
+import {makeStyles} from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Input from "@material-ui/core/Input";
 import Modal from "@material-ui/core/Modal";
 import InputLabel from "@material-ui/core/InputLabel";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import FormControl from "@material-ui/core/FormControl";
-import TextField from "@material-ui/core/TextField";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import IconButton from "@material-ui/core/IconButton";
 import PropTypes from "prop-types";
+import config from "../../configuration.json";
 
-import { register } from "../RESTApi";
 
-import { useForm } from "react-hook-form";
+import {useForm} from "react-hook-form";
 
-import { AuthRegister } from '../AuthManager'
+import {AuthRegisterManager } from '../AuthManager'
+import {useDispatch} from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -52,6 +52,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Register(props) {
   const prop = props.prop;
+  const dispatch = useDispatch()
 
   const {
     register,
@@ -91,8 +92,7 @@ export default function Register(props) {
   };
 
   const onSubmit = async (data) => {
-    console.log(data);
-    const secsseful = await AuthRegister(data);
+    dispatch(AuthRegisterManager(data))
     handleClose()
   }
 
@@ -114,15 +114,16 @@ export default function Register(props) {
                 id="login"
                 placeholder="Login"
                 // className={clsx(classes.margin, classes.textField)}
-                onChange={handleChange("login")}
-                {...register("login", {
+                onChange={handleChange("Name")}
+                {...register("Name", {
+                  required: true,
                   pattern: {
                     value: /[0-9a-zA-Z]{3,}/,
                     message: "massage error",
                   },
                 })}
               />
-              {errors.login && (
+              {errors.Name && (
                 <p className={classes.txtError}>
                   Please enter more than 3 letters or numbers
                 </p>
@@ -130,9 +131,9 @@ export default function Register(props) {
               </FormControl>
 
             <FormControl className={clsx(classes.margin, classes.textField)}>
-            <InputLabel htmlFor="email">Email</InputLabel>
+            <InputLabel htmlFor="Email">Email</InputLabel>
               <Input
-                id="email"
+                id="Email"
                 placeholder="Email"
                 className={clsx(
                   // classes.margin,
@@ -140,7 +141,7 @@ export default function Register(props) {
                   classes.emailMargin
                 )}
                 onChange={handleChange("email")}
-                {...register("email", {
+                {...register("Email", {
                   required: true,
                   pattern: {
                     value: /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/,
@@ -148,7 +149,7 @@ export default function Register(props) {
                   },
                 })}
               />
-              {errors.email && (
+              {errors.Email && (
                 <p className={classes.txtError}>
                   Please enter correct email, example@ya.ru
                 </p>
@@ -176,7 +177,7 @@ export default function Register(props) {
                       </IconButton>
                     </InputAdornment>
                   }
-                  {...register("password", {
+                  {...register("Password", {
                     required: true,
                     pattern: {
                       value: /(?=.{4,})/,
@@ -184,7 +185,7 @@ export default function Register(props) {
                     },
                   })}
                 />
-                {errors.password && (
+                {errors.Password && (
                   <p className={classes.txtError}>
                     You must enter more than 8 characters
                   </p>

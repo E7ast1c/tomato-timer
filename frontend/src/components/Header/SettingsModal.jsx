@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import React, {useEffect, useState} from "react";
+import {makeStyles} from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import PropTypes from "prop-types";
-
-import { setLocalStorageKey } from "../LocalStorageManager";
-import { getLocalStorageKey } from "../LocalStorageManager";
-
-import { useForm } from "react-hook-form";
-import { useDispatch, useSelector } from "react-redux";
-import { changeDefaultTimeAction, changeLongBreakAction, changeShortBreakAction } from "../../Store/Actions/TimeSettingsReduser";
+import {useDispatch, useSelector} from "react-redux";
+import {
+  changeDefaultTimeAction,
+  changeLongBreakAction,
+  changeShortBreakAction
+} from "../../Store/Actions/TimeSettingsReduser";
+import {getUserSettingsManager, setUserSettingsManager} from "../AuthManager";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
   input: {
     "& > *": {
       margin: theme.spacing(1),
-      width: "25ch",
+      width: "5em",
     },
   },
   btnGroup: {
@@ -41,9 +41,6 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "space-between",
   },
-  input: {
-    width: "5em",
-  },
 }));
 
 export default function SettingModal(props) {
@@ -51,12 +48,14 @@ export default function SettingModal(props) {
   const dispatch = useDispatch();
 
 
-  const timeDefultDuration = useSelector(state => state.timeSettings.settings.user.TimerSettings.DefaultDuration)
+  const timeDefaultDuration = useSelector(state => state.timeSettings.settings.user.TimerSettings.DefaultDuration)
   const longBreakDuration = useSelector(state => state.timeSettings.settings.user.TimerSettings.LongBreakDuration)
   const shortBreakDuration = useSelector(state => state.timeSettings.settings.user.TimerSettings.ShortBreakDuration)
+  // token
+  // const token = useSelector (state => state.timeSettings.settings.token)
+  // console.log("token", token)
 
-
-  const changeDefultTime = (currentTime) => {
+  const changeDefaultTime = (currentTime) => {
     dispatch(changeDefaultTimeAction(+currentTime))
   }
 
@@ -72,8 +71,8 @@ export default function SettingModal(props) {
   const classes = useStyles();
   const timeKey = "defDuaration";
 
-  const [valueDefultTime, setValueDefultTime] = useState(
-    timeDefultDuration
+  const [valueDefaultTime, setValueDefaultTime] = useState(
+    timeDefaultDuration
   );
   const [valueShortBreak, setValueShortBreak] = useState(
     shortBreakDuration
@@ -84,6 +83,15 @@ export default function SettingModal(props) {
 
   const [isDisabled, setIsDisabled] = useState(false);
 
+  const [allSettings, setAllSettings] = useState({
+    "alarmTrack": "string",
+    "defaultDuration": valueDefaultTime,
+    "longBreakDuration": longBreakDuration,
+    "shortBreakDuration": valueShortBreak,
+    "tickTrack": "string"
+  })
+
+
   // const {
   //   register,
   //   handleSubmit,
@@ -92,14 +100,10 @@ export default function SettingModal(props) {
   // const onSubmit = (data) => console.log(data);
 
   useEffect(() => {
-    valueDefultTime >= 1 ? setIsDisabled(false) : setIsDisabled(true);
-  }, [valueDefultTime]);
-  useEffect(() => {
+    valueDefaultTime >= 1 ? setIsDisabled(false) : setIsDisabled(true);
     valueShortBreak >= 1 ? setIsDisabled(false) : setIsDisabled(true);
-  }, [valueShortBreak]);
-  useEffect(() => {
     valueLongBreak >= 1 ? setIsDisabled(false) : setIsDisabled(true);
-  }, [valueLongBreak]);
+  }, [valueDefaultTime, valueShortBreak, valueLongBreak]);
 
   return (
     <div>
@@ -111,7 +115,7 @@ export default function SettingModal(props) {
         onClose={() => props.prop.setSettingsModal(false)}
         onSubmit={() => {
           props.prop.setSettingsModal(false);
-          changeDefultTime(valueDefultTime)
+          changeDefaultTime(valueDefaultTime)
           changeLongBreak(valueLongBreak)
           changeShortBreak(valueShortBreak)
 
@@ -146,8 +150,8 @@ export default function SettingModal(props) {
                 id="outlined-basic"
                 label="Minutes"
                 variant="outlined"
-                onChange={(e) => setValueDefultTime(e.target.value)}
-                value={valueDefultTime}
+                onChange={(e) => setValueDefaultTime(e.target.value)}
+                value={valueDefaultTime}
               />
             </form>
           </div>
@@ -210,9 +214,11 @@ export default function SettingModal(props) {
               variant="contained"
               onClick={() => {
                 prop.setSettingsModal(false);
-                changeDefultTime(valueDefultTime)
+                changeDefaultTime(valueDefaultTime)
                 changeShortBreak(valueShortBreak)
                 changeLongBreak(valueLongBreak)
+                // api set user settings
+                dispatch(setUserSettingsManager(allSettings))
               }}
             >
               Save
@@ -225,6 +231,16 @@ export default function SettingModal(props) {
               }}
             >
               Cancel
+            </Button>
+            <Button
+              color="primary"
+              variant="contained"
+              onClick={() => {
+                props.prop.setSettingsModal(false);
+                dispatch(getUserSettingsManager())
+              }}
+            >
+              Get Settings
             </Button>
           </div>
         </div>

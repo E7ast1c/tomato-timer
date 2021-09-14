@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import React, {useEffect, useState} from "react";
+import {makeStyles} from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
@@ -8,13 +8,9 @@ import Link from "@material-ui/core/Link";
 import Register from "./RegisterModal";
 import SettingModal from "./SettingsModal";
 import LoiginModal from "./LoiginModal";
-import { clearLocalStorage, getUserName } from "../LocalStorageManager";
-// import { getUserData } from '../LocalStorageManager'
-import { useDispatch } from "react-redux";
-
-
-import PropTypes from "prop-types";
-import { changeDefaultTimeAction, clearUsersSettingsAction } from "../../Store/Actions/TimeSettingsReduser";
+import {clearLocalStorage, getUserName} from "../LocalStorageManager";
+import {useDispatch} from "react-redux";
+import {clearUsersSettingsAction} from "../../Store/Actions/TimeSettingsReduser";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -75,22 +71,22 @@ export default function Header(props) {
   const clearSettings = {
     user: {
       TimerSettings: {
-        DefaultDuration: 25,
-        LongBreakDuration: 15, 
-        ShortBreakDuration: 5,
+        DefaultDuration: 30,
+        LongBreakDuration: 20,
+        ShortBreakDuration: 1,
       }
     }
   }
-
-
-
-
-  const isLocalStorageName = getUserName(user)
-
+  const [userName, setUserName] = useState("")
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    setUserName(getUserName(user))
+  })
 
   const clearUsersSettings = () => {
     dispatch(clearUsersSettingsAction(clearSettings))
+    setUserName("")
   }
 
   return (
@@ -119,7 +115,7 @@ export default function Header(props) {
         </Typography>
 
         <div className={classes.authButton}>
-          {isLocalStorageName != null ? (
+          {userName != undefined ? (
             <div className={classes.authButton}>
               <Typography
                 className={classes.userName}
@@ -128,7 +124,7 @@ export default function Header(props) {
                 align="center"
                 noWrap
               >
-                {isLocalStorageName}
+                {userName}
               </Typography>
 
               <Button

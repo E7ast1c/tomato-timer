@@ -32,7 +32,7 @@ export default function Time(props) {
     dispatch(startStopTimerAction(true))
   }
 
-  const timeDefultDuration = useSelector(state => state.timeSettings.settings.user.TimerSettings.DefaultDuration)
+  const timeDefaultDuration = useSelector(state => state.timeSettings.settings.user.TimerSettings.DefaultDuration)
   const longBreakDuration = useSelector(state => state.timeSettings.settings.user.TimerSettings.LongBreakDuration)
   const shortBreakDuration = useSelector(state => state.timeSettings.settings.user.TimerSettings.ShortBreakDuration)
   const vueCurrentTimer = useSelector(state => state.vueCurrentTimer)
@@ -40,7 +40,7 @@ export default function Time(props) {
 
   let time;
   if(vueCurrentTimer.pomodoro){
-    time = timeDefultDuration * 60000
+    time = timeDefaultDuration * 60000
   } else if(vueCurrentTimer.shortBreak){
     time = shortBreakDuration * 60000
   } else if(vueCurrentTimer.longBreak){
@@ -49,7 +49,7 @@ export default function Time(props) {
 
   // ----- Convert in minutes ------
   // const time = getLocalStorageKey(timeKey) * 60000;
-  // const time = timeDefultDuration * 60000
+  // const time = timeDefaultDuration * 60000
 
   return (
     <div className={classes.timer}

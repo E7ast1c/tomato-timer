@@ -51,7 +51,7 @@ export function setUserData(data) {
 export function clearLocalStorage() {
   localStorage.clear();
 }
-
+// Get name from Local Storage
 export function getUserName(user) {
   if (localStorage.getItem(user)) {
     const userName = JSON.parse(localStorage.getItem('user'))
@@ -60,3 +60,15 @@ export function getUserName(user) {
     return;
   }
 }
+
+// Get token from Local Storage
+export function getToken(){
+  if(localStorage.getItem('token')){
+    const token = localStorage.getItem("token")
+    return token
+  } else {
+    return;
+  }
+}
+
+

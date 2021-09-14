@@ -12,8 +12,10 @@ import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import IconButton from "@material-ui/core/IconButton";
 import PropTypes from "prop-types";
+import config from "../../configuration.json";
 
-import {AuthLogin, setTimeSettingsRedux} from "../AuthManager";
+
+import {AuthLoginManager} from "../AuthManager";
 
 import {useForm} from "react-hook-form";
 
@@ -53,7 +55,6 @@ const useStyles = makeStyles((theme) => ({
 export default function LoiginModal(props) {
   const prop = props.prop;
 
-
   const {
     register,
     handleSubmit,
@@ -70,13 +71,6 @@ export default function LoiginModal(props) {
   });
 
   const dispatch = useDispatch();
-  // const changeCurrentTime = () => {
-  //   dispatch(currentTimeAction(1))
-  // }
-
-  const updateTimeSettingsRedux = data => {
-    dispatch(setTimeSettingsRedux(data))
-  }
 
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
@@ -91,11 +85,7 @@ export default function LoiginModal(props) {
   };
 
   const onSubmit = async (data) => {
-    const sucssefull = await AuthLogin(data);
-    updateTimeSettingsRedux(data)
-    prop.setIsAuthenticated(sucssefull);
-    console.log(sucssefull);
-    // changeCurrentTime()
+    dispatch(AuthLoginManager(data))
     handleClose();
   };
   const handleClose = () => {

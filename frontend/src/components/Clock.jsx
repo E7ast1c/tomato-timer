@@ -10,14 +10,14 @@ import { useSelector } from "react-redux";
 const Clock = (props) => {
   const [progress, setProgress] = useState(0);
 
-  const timeDefultDuration = useSelector(state => state.timeSettings.settings.user.TimerSettings.DefaultDuration)
+  const timeDefaultDuration = useSelector(state => state.timeSettings.settings.user.TimerSettings.DefaultDuration)
   const longBreakDuration = useSelector(state => state.timeSettings.settings.user.TimerSettings.LongBreakDuration)
   const shortBreakDuration = useSelector(state => state.timeSettings.settings.user.TimerSettings.ShortBreakDuration)
   const vueCurrentTimer = useSelector(state => state.vueCurrentTimer)
 
   let time;
   if(vueCurrentTimer.pomodoro){
-    time = timeDefultDuration 
+    time = timeDefaultDuration
   } else if(vueCurrentTimer.shortBreak){
     time = shortBreakDuration
   } else if(vueCurrentTimer.longBreak){

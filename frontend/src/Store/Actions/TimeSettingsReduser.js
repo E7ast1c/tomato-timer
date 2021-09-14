@@ -1,10 +1,11 @@
 const timeSettings = {
+  authFlag: false,
   settings: {
     user: {
       TimerSettings: {
-        DefaultDuration: 25,
-        LongBreakDuration: 15, 
-        ShortBreakDuration: 5,
+        DefaultDuration: 30,
+        LongBreakDuration: 20,
+        ShortBreakDuration: 1,
       }
     }
   }
@@ -15,6 +16,7 @@ const CLEAR_SETTINGS = "CLEAR_SETTINGS";
 const CHANGE_DEFAULT_TIME = 'CHANGE_DEFAULT_TIME'
 const CHANGE_LONG_BREAKE = 'CHANGE_LONG_BREAKE'
 const CHANGE_SHORT_BREAK = 'CHANGE_SHORT_BREAK'
+const CHANGE_AUTH_FLAG = "CHANGE_AUTH_FLAG"
 
 export const timeSettingsReduser = (state = timeSettings, action) => {
   switch (action.type) {

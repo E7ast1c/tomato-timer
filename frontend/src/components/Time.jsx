@@ -32,7 +32,7 @@ export default function Time(props) {
   const timeKey = "defDuaration";
   const dispatch = useDispatch();
 
-  const timeDefultDuration = useSelector(state => state.timeSettings.settings.user.TimerSettings.DefaultDuration)
+  const timeDefaultDuration = useSelector(state => state.timeSettings.settings.user.TimerSettings.DefaultDuration)
   const longBreakDuration = useSelector(state => state.timeSettings.settings.user.TimerSettings.LongBreakDuration)
   const shortBreakDuration = useSelector(state => state.timeSettings.settings.user.TimerSettings.ShortBreakDuration)
   const vueCurrentTimer = useSelector(state => state.vueCurrentTimer)
@@ -42,7 +42,7 @@ export default function Time(props) {
   }
   let time;
   if(vueCurrentTimer.pomodoro){
-    time = timeDefultDuration 
+    time = timeDefaultDuration
   } else if(vueCurrentTimer.shortBreak){
     time = shortBreakDuration
   } else if(vueCurrentTimer.longBreak){
@@ -53,8 +53,8 @@ export default function Time(props) {
 
 
   // ---- Convert in minutes ------
-  // const timeDefultDuration = getLocalStorageKey(timeKey) * 60;
-  // const timeDefultDuration = timeDefultDuration
+  // const timeDefaultDuration = getLocalStorageKey(timeKey) * 60;
+  // const timeDefaultDuration = timeDefaultDuration
 
   function getExpiryDate(time) {
     let expiry = new Date();

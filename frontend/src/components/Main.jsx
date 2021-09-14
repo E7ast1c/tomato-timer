@@ -28,21 +28,8 @@ export default function Main() {
 
 
   // Test state time settings 
-  const timeSettings = useSelector(state => state.timeSettings.settings)
-  console.log(timeSettings);
-  console.log(vueCurrentTimer);
-
-
-  // let currentTimeComponent;
-
-  // if(vueCurrentTimer.pomodoro){
-  //   currentTimeComponent = statusTimer ? (<Time />):(<FakeTime />)
-  // } else if(vueCurrentTimer.shortBreak){
-  //   currentTimeComponent = statusTimer ? (<Time />):(<FakeTime />)
-  // } else if(vueCurrentTimer.longBreak){
-  //   currentTimeComponent = statusTimer ? (<Time />):(<FakeTime />)
-  // }
-
+  const timeSettings = useSelector(state => state.timeSettings)
+  console.log("main timesettings", timeSettings)
   return (
     <div>
       {changeCurrentTime && <Header />}
