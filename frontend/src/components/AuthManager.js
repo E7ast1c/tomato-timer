@@ -37,7 +37,7 @@ export const setUserSettingsManager = (data) => {
 export const getUserSettingsManager = () => {
   return async function(dispatch){
     const token = getToken()
-    const response = await getAuthSettings()
+    const response = await getAuthSettings(token)
 
     console.log("REDUX GUSM", response)
   }
