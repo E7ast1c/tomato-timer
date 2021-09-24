@@ -60,8 +60,9 @@ export default function Time(props) {
     let expiry = new Date();
     expiry.setSeconds(expiry.getSeconds() + time * 60);
     return expiry;
-  }
 
+
+  }
   const classes = useStyles();
 
   const [clockEnabled, setClockEnabled] = useState(false);
@@ -82,6 +83,10 @@ export default function Time(props) {
     expiryTimestamp: getExpiryDate(time),
     onExpire: () => console.warn("onExpire called"),
   });
+
+  console.log('minutes', minutes)
+  console.log('seconds', seconds)
+  console.log('isRunning', isRunning)
 
   return (
     <div className={classes.timer}>

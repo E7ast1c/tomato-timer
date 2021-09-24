@@ -1,19 +1,30 @@
-import React, {useEffect, useState} from "react";
+import React, {ChangeEvent, useEffect, useState} from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import PropTypes from "prop-types";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {
   changeDefaultTimeAction,
   changeLongBreakAction,
-  changeShortBreakAction
+  changeShortBreakAction,
+  changeTickTrackAction
 } from "../../Store/Actions/TimeSettingsReduser";
-import {getUserSettingsManager, setUserSettingsManager} from "../AuthManager";
+import {getUserSettingsManager} from "../AuthManager";
+import {MenuItem} from "@material-ui/core";
+import {useTypedSelector} from "../../hooks/useTypedSelector";
+
+import signal_bam from "../../ringtone/signal.mp3";
+import signal_piano from "../../ringtone/signal_piano.mp3"
+import signal_ring from "../../ringtone/signal_ring.mp3"
 
 const useStyles = makeStyles((theme) => ({
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+  },
   modal: {
     display: "flex",
     alignItems: "center",
@@ -43,27 +54,24 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SettingModal(props) {
+
+export default function SettingModal(props: any) {
   const prop = props.prop;
   const dispatch = useDispatch();
 
+  const timeDefaultDuration = useTypedSelector(state => state.timeSettings.settings.user.TimerSettings.DefaultDuration)
+  const longBreakDuration = useTypedSelector(state => state.timeSettings.settings.user.TimerSettings.LongBreakDuration)
+  const shortBreakDuration = useTypedSelector(state => state.timeSettings.settings.user.TimerSettings.ShortBreakDuration)
 
-  const timeDefaultDuration = useSelector(state => state.timeSettings.settings.user.TimerSettings.DefaultDuration)
-  const longBreakDuration = useSelector(state => state.timeSettings.settings.user.TimerSettings.LongBreakDuration)
-  const shortBreakDuration = useSelector(state => state.timeSettings.settings.user.TimerSettings.ShortBreakDuration)
-  // token
-  // const token = useSelector (state => state.timeSettings.settings.token)
-  // console.log("token", token)
-
-  const changeDefaultTime = (currentTime) => {
+  const changeDefaultTime = (currentTime: number) => {
     dispatch(changeDefaultTimeAction(+currentTime))
   }
 
-  const changeLongBreak = (currentTime) => {
+  const changeLongBreak = (currentTime: number) => {
     dispatch(changeLongBreakAction(+currentTime))
   }
 
-  const changeShortBreak = (currentTime) => {
+  const changeShortBreak = (currentTime: number) => {
     dispatch(changeShortBreakAction(+currentTime))
   }
 
@@ -92,6 +100,40 @@ export default function SettingModal(props) {
   })
 
 
+const [ringtone, setRingtone] = useState(signal_piano)
+//test
+  useEffect(() => {
+    dispatch(changeTickTrackAction(ringtone))
+  }, [])
+  //
+
+  const changeRingtone = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+    setRingtone(event.target.value)
+  }
+
+  const optionRingtone = [
+    {
+      value: 'none',
+      label: 'none',
+    },
+    {
+      value: signal_piano,
+      label: 'piano',
+    },
+    {
+      value: signal_ring,
+      label: 'ring',
+    },
+    {
+      value: signal_bam,
+      label: 'bam',
+    },
+  ]
+
+  // const changeRingtone = (event) => {
+  //
+  // }
+
   // const {
   //   register,
   //   handleSubmit,
@@ -116,11 +158,11 @@ export default function SettingModal(props) {
         onSubmit={() => {
           props.prop.setSettingsModal(false);
           changeDefaultTime(valueDefaultTime)
-          changeLongBreak(valueLongBreak)
-          changeShortBreak(valueShortBreak)
+          // changeLongBreak(valueLongBreak)
+          // changeShortBreak(valueShortBreak)
 
         }}
-        onClick={(e) => e.preventDefault()}
+        onClick={(e: React.MouseEvent<HTMLDivElement>) => e.preventDefault()}
         closeAfterTransition
         BackdropComponent={Backdrop}
         BackdropProps={{
@@ -136,21 +178,18 @@ export default function SettingModal(props) {
             <h3>Enter pomodoro time</h3>
             <form
               // onSubmit={handleSubmit(onSubmit)}
-              className={classes.root}
+              // className={classes.root}
               noValidate
               autoComplete="off"
             >
-              {/* <input {...register("age", { min: 18, max: 99 })} />
-              {errors.age && (
-                <p>You Must be older then 18 and younger then 99 years old</p>
-              )} */}
+
               <TextField
                 type="number"
                 className={classes.input}
                 id="outlined-basic"
                 label="Minutes"
                 variant="outlined"
-                onChange={(e) => setValueDefaultTime(e.target.value)}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => setValueDefaultTime(e.target.value)}
                 value={valueDefaultTime}
               />
             </form>
@@ -162,21 +201,17 @@ export default function SettingModal(props) {
             <h3>Enter Short Break</h3>
             <form
               // onSubmit={handleSubmit(onSubmit)}
-              className={classes.root}
+              // className={classes.root}
               noValidate
               autoComplete="off"
             >
-              {/* <input {...register("age", { min: 18, max: 99 })} />
-              {errors.age && (
-                <p>You Must be older then 18 and younger then 99 years old</p>
-              )} */}
               <TextField
                 type="number"
                 className={classes.input}
                 id="outlined-basic"
                 label="Minutes"
                 variant="outlined"
-                onChange={(e) => setValueShortBreak(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => setValueShortBreak(e.target.value)}
                 value={valueShortBreak}
               />
             </form>
@@ -188,24 +223,41 @@ export default function SettingModal(props) {
             <h3>Enter Long Break</h3>
             <form
               // onSubmit={handleSubmit(onSubmit)}
-              className={classes.root}
+              // className={classes.root}
               noValidate
               autoComplete="off"
             >
-              {/* <input {...register("age", { min: 18, max: 99 })} />
-              {errors.age && (
-                <p>You Must be older then 18 and younger then 99 years old</p>
-              )} */}
               <TextField
                 type="number"
                 className={classes.input}
                 id="outlined-basic"
                 label="Minutes"
                 variant="outlined"
-                onChange={(e) => setValueLongBreak(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => setValueLongBreak(e.target.value)}
                 value={valueLongBreak}
               />
             </form>
+          </div>
+          <div className={classes.settingsTime}
+          >
+            <h3>Choose ringtone</h3>
+            <TextField
+              variant="outlined"
+              className={classes.formControl}
+              onChange={(event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => changeRingtone(event)}
+              select
+              label="Ringtone"
+              value={ringtone}
+            >
+              {optionRingtone.map(option =>
+              <MenuItem
+                key={option.value}
+                value={option.value}
+              >
+                {option.label}
+              </MenuItem>
+              )}
+            </TextField>
           </div>
           <div className={classes.btnGroup}>
             <Button
@@ -217,8 +269,10 @@ export default function SettingModal(props) {
                 changeDefaultTime(valueDefaultTime)
                 changeShortBreak(valueShortBreak)
                 changeLongBreak(valueLongBreak)
+                dispatch(changeTickTrackAction(ringtone))
+
                 // api set user settings
-                dispatch(setUserSettingsManager(allSettings))
+                // dispatch(setUserSettingsManager(allSettings))
               }}
             >
               Save

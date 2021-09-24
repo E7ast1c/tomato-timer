@@ -45,23 +45,26 @@ export async function setUserSettings(userSettings, token){
 }
 
 export async function getAuthSettings(token){
-  console.log('token', token)
-  const myHeaders = new Headers()
-  // myHeaders.append("accept", "application/json")
-  myHeaders.append("Content-Type", "text/plain")
-  myHeaders.append("x-access-token", token)
-  // myHeaders.append("Access-Control-Allow-Origin", "*")
-  const response = await fetch("http://localhost:8081/auth/get-user-settings", {
-    method: 'GET',
-    headers: myHeaders,
-    mode: 'no-cors',
-    // cache: 'default',
-    // withCredentials: true,
-    // credentials: 'include',
-    credentials: 'same-origin',
-    redirect: 'follow'
-  })
-    console.log(response)
+  console.log("token", token)
+  try{
+    const response = await axios.get('http://localhost:8081/auth/get-user-settings', {
+      mode: 'no-cors',
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          'Content-Type': 'application/json',
+          // 'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+          Accept: 'application/json',
+          "x-access-token": token,
+        },
+      withCredentials: true,
+      credentials: 'same-origin',
+      crossdomain: true,
+    })
+    return console.log('response', response)
+  }catch (error){
+    console.log(error)
+  }
+
 }
 
 

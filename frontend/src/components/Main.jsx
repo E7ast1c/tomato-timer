@@ -1,13 +1,14 @@
-import React, { useState, useEffect, useLayoutEffect } from "react";
+import React from "react";
 import Time from "./Time";
 import Header from "./Header/Header";
 import TimerButton from "./TimerButton";
-import Button from "@material-ui/core/Button";
-import { makeStyles } from "@material-ui/core/styles";
+import {makeStyles} from "@material-ui/core/styles";
 import FakeTime from "./FakeTime";
-import { useSelector } from "react-redux";
-import ShortClock from "./ShortClock";
-import LongClock from "./LongClock";
+import {useSelector} from "react-redux";
+import {StyledMusicButton} from "./MainStyles";
+import {useTypedSelector} from "../hooks/useTypedSelector";
+import MusicButton from "./MusicButton";
+import MusicButton2 from "./MusicButton2";
 
 
 const useStyles = makeStyles({
@@ -28,22 +29,20 @@ export default function Main() {
 
 
   // Test state time settings 
-  const timeSettings = useSelector(state => state.timeSettings)
+  const timeSettings = useTypedSelector(state => state.timeSettings)
   console.log("main timesettings", timeSettings)
   return (
     <div>
       {changeCurrentTime && <Header />}
       <div>
         <TimerButton />
-      <div>
+      </div>
           {/* {currentTimeComponent} */}
          { statusTimer ? (<Time />):(<FakeTime />)}
-      </div>
-       
 
-
-        
-      </div>
+        <StyledMusicButton>
+          <MusicButton2/>
+        </StyledMusicButton>
     </div>
   );
 }

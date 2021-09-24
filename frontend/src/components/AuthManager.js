@@ -1,4 +1,4 @@
-import {getAuthSettings, login, register, setUserSettings} from "./Api";
+import {getAuthSettings, login, register, setUserSettings} from "../API/Api";
 import {getToken, setUserData} from "./LocalStorageManager";
 import {getTimeSettingsAction} from "../Store/Actions/TimeSettingsReduser"
 
