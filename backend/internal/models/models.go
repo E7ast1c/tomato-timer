@@ -7,9 +7,9 @@ import (
 
 type User struct {
 	gorm.Model
-	Name          string            `gorm:"type:varchar(50)"`
-	Email         string            `gorm:"type:varchar(320);unique_index"`
-	Password      string            `json:"Password"`
+	Name          string            `gorm:"type:varchar(50)" validate:"required,min=3,max=50"`
+	Email         string            `gorm:"type:varchar(320);unique_index;" validate:"required,email,min=6,max=32"`
+	Password      string            `json:"Password" validate:"required,email,min=6,max=16"`
 	TimerSettings UserTimerSettings `gorm:"embedded"`
 }
 

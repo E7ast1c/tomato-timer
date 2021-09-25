@@ -3,6 +3,7 @@ package handler
 import (
 	"tomato-timer/backend/internal/auth"
 	"tomato-timer/backend/internal/models"
+	"github.com/go-playground/validator/v10"
 
 	"github.com/gofiber/fiber/v2"
 	"golang.org/x/crypto/bcrypt"
@@ -123,6 +124,12 @@ func (h *Handler) Login(fCtx *fiber.Ctx) error {
 	if err := fCtx.BodyParser(user); err != nil {
 		return fCtx.Status(fiber.StatusBadRequest).
 			JSON(Response("decode user failed", err.Error()))
+	}
+
+	valid := validator.New()
+	err := valid.Struct(user)
+	if err != nil {
+		return err
 	}
 
 	dbUser, dbErr := h.Repo.UserRepo.GetUserDataByEmail(user.Email)
