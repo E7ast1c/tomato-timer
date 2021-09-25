@@ -15,9 +15,11 @@ func Handlers(handle *handler.Handler, fApp *fiber.App) {
 	mw := middleware.New(handle)
 
 	fApp.Use(cors.New(cors.Config{
-		AllowOrigins: "*",
-		AllowMethods: "GET,POST",
-		AllowHeaders: "Origin, Content-Type, Accept",
+		Next:             nil,
+		AllowOrigins:     "*",
+		AllowMethods:     "POST, GET, OPTIONS, PUT, DELETE",
+		AllowHeaders:     "Accept, Content-Type, Content-Length, Accept-Encoding, X-Access-Token",
+		AllowCredentials: true,
 	}))
 
 	fApp.Use(logger.New())

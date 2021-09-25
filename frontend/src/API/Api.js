@@ -50,11 +50,11 @@ export async function getAuthSettings(token){
     const response = await axios.get('http://localhost:8081/auth/get-user-settings', {
       mode: 'no-cors',
         headers: {
-          "Access-Control-Allow-Origin": "*",
+          // "Access-Control-Allow-Origin": "*",
           'Content-Type': 'application/json',
           // 'Access-Control-Allow-Headers': 'Content-Type, Authorization',
           Accept: 'application/json',
-          "x-access-token": token,
+          "x-access-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOjEwLCJOYW1lIjoiIiwiRW1haWwiOiJhZG1pbkBhZG1pbi5ydSIsImV4cCI6MTYzMjU2NzUyNX0.n_iTwIwvIAEr26QGteE_YkVCSEyRfzetD0GhQtfaD4A",
         },
       withCredentials: true,
       credentials: 'same-origin',
