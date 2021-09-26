@@ -3,8 +3,8 @@ package handler
 import (
 	"tomato-timer/backend/internal/auth"
 	"tomato-timer/backend/internal/models"
-	"github.com/go-playground/validator/v10"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -75,10 +75,14 @@ func (h *Handler) SetUserSetting(fCtx *fiber.Ctx) error {
 // @Failure default {object} string
 // @Router /register [post]
 func (h *Handler) RegisterUser(fCtx *fiber.Ctx) error {
-	user := &models.User{}
+	user := &models.UserMin{}
 	if err := fCtx.BodyParser(user); err != nil {
 		return fCtx.Status(fiber.StatusBadRequest).
 			JSON(Response("error on login request", err.Error()))
+	}
+
+	if err := validator.New().Struct(user); err != nil {
+		return err
 	}
 
 	pass, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
@@ -87,9 +91,11 @@ func (h *Handler) RegisterUser(fCtx *fiber.Ctx) error {
 			JSON(Response("password encryption failed", err.Error()))
 	}
 
-	user.Password = string(pass)
-
-	createdUser, err := h.Repo.UserRepo.CreateUser(user)
+	createdUser, err := h.Repo.UserRepo.CreateUser(&models.User{
+		Name:          user.Name,
+		Email:         user.Email,
+		Password:      string(pass),
+	})
 	if err != nil {
 		return fCtx.Status(fiber.StatusInternalServerError).
 			JSON(Response("create user db record failed", err.Error()))
@@ -126,9 +132,7 @@ func (h *Handler) Login(fCtx *fiber.Ctx) error {
 			JSON(Response("decode user failed", err.Error()))
 	}
 
-	valid := validator.New()
-	err := valid.Struct(user)
-	if err != nil {
+	if err := validator.New().Struct(user); err != nil {
 		return err
 	}
 
