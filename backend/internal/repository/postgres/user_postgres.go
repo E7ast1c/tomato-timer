@@ -28,9 +28,7 @@ func (up *UserPostgres) GetAllUsers() ([]models.User, error) {
 
 func (up *UserPostgres) GetUserDataByEmail(email string) (*models.User, error) {
 	user := &models.User{}
-	if err := up.DB.Where("Email = ?", email).First(user).Error; errors.Is(err, sql.ErrNoRows) {
-		return nil, errors.New("email address not found")
-	} else if err != nil {
+	if err := up.DB.Where("Email = ?", email).First(user).Error; err != nil {
 		return nil, err
 	}
 

@@ -1,12 +1,14 @@
 package handler
 
 import (
+	"errors"
 	"tomato-timer/backend/internal/auth"
 	"tomato-timer/backend/internal/models"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 	"golang.org/x/crypto/bcrypt"
+	"gorm.io/gorm"
 )
 
 // GetUserSettings godoc
@@ -82,7 +84,8 @@ func (h *Handler) RegisterUser(fCtx *fiber.Ctx) error {
 	}
 
 	if err := validator.New().Struct(user); err != nil {
-		return err
+		return fCtx.Status(fiber.StatusBadRequest).
+			JSON(Response("validation failed", err.Error()))
 	}
 
 	pass, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
@@ -133,11 +136,16 @@ func (h *Handler) Login(fCtx *fiber.Ctx) error {
 	}
 
 	if err := validator.New().Struct(user); err != nil {
-		return err
+		return fCtx.Status(fiber.StatusBadRequest).
+			JSON(Response("validation failed", err.Error()))
 	}
 
 	dbUser, dbErr := h.Repo.UserRepo.GetUserDataByEmail(user.Email)
 	if dbErr != nil {
+		if errors.Is(dbErr, gorm.ErrRecordNotFound) {
+			return fCtx.Status(fiber.StatusBadRequest).
+				JSON(Response("invalid login credentials", dbErr))
+		}
 		return fCtx.Status(fiber.StatusBadRequest).
 			JSON(Response("db user get failed", dbErr.Error()))
 	}

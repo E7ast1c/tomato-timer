@@ -30,7 +30,7 @@ func (mw *middleware) New() fiber.Handler {
 		}
 
 		logrus.Info(claims.Claims.(*models.UserToken))
-		fc.Locals(mw.ContextUser, claims.Claims.(*models.UserToken))
+		fc.Locals(mw.MiddlewareContext, claims.Claims.(*models.UserToken))
 		return fc.Next()
 	}
 }

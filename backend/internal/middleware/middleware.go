@@ -1,13 +1,24 @@
 package middleware
 
 import (
-	"tomato-timer/backend/internal/handler"
+	"tomato-timer/backend/config"
+	dao "tomato-timer/backend/internal/repository"
+
+	"gorm.io/gorm"
 )
 
 type middleware struct {
-	handler.Handler
+	Repo   dao.Repository
+	DB     *gorm.DB
+	Config config.APIServer
+	MiddlewareContext string
 }
 
-func New(h *handler.Handler) *middleware {
-	return &middleware{*h}
+func New (repo dao.Repository, db *gorm.DB, config config.APIServer, mc string) *middleware {
+	return &middleware{
+		Repo:   repo,
+		DB:     db,
+		Config: config,
+		MiddlewareContext: mc,
+	}
 }

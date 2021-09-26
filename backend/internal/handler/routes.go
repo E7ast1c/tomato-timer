@@ -1,8 +1,7 @@
-package routes
+package handler
 
 import (
 	_ "tomato-timer/backend/cmd/docs"
-	"tomato-timer/backend/internal/handler"
 	"tomato-timer/backend/internal/middleware"
 
 	swagger "github.com/arsmn/fiber-swagger/v2"
@@ -11,8 +10,8 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/logger"
 )
 
-func Handlers(handle *handler.Handler, fApp *fiber.App) {
-	mw := middleware.New(handle)
+func Handlers(handle *Handler, fApp *fiber.App) *fiber.App {
+	mw := middleware.New(handle.Repo,handle.DB, handle.Config, handle.Options.ContextUser)
 
 	fApp.Use(cors.New(cors.Config{
 		Next:             nil,
@@ -41,4 +40,6 @@ func Handlers(handle *handler.Handler, fApp *fiber.App) {
 	authRoute.Use(mw.New())
 	authRoute.Get("/get-user-settings", handle.GetUserSettings)
 	authRoute.Post("/set-user-settings", handle.SetUserSetting)
+
+	return fApp
 }

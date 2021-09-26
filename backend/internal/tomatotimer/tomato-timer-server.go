@@ -8,7 +8,6 @@ import (
 	"tomato-timer/backend/internal/handler"
 	"tomato-timer/backend/internal/models"
 	"tomato-timer/backend/internal/repository/postgres"
-	"tomato-timer/backend/internal/routes"
 	graceful_shutdown "tomato-timer/backend/pkg/graceful-shutdown"
 
 	"github.com/gofiber/fiber/v2"
@@ -42,7 +41,7 @@ func (app *App) RunServer(conf config.AppConfig, ctx context.Context) (*fiber.Ap
 	})
 
 	handle := handler.NewHandler(*repo, db, conf.APIServer, nil)
-	routes.Handlers(handle, fApp)
+	handler.Handlers(handle, fApp)
 
 	closer.Subscribe("httpServer", func() error {
 		return fApp.Shutdown()

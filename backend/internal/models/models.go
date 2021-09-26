@@ -8,7 +8,7 @@ import (
 type User struct {
 	gorm.Model
 	Name          string            `gorm:"type:varchar(50)"`
-	Email         string            `gorm:"type:varchar(320);unique_index;" validate:"required,email,min=6,max=32"`
+	Email         string            `gorm:"type:varchar(320);unique_index;" validate:"required,email,min=4,max=32"`
 	Password      string            `json:"Password" validate:"required,min=6,max=16"`
 	TimerSettings UserTimerSettings `gorm:"embedded"`
 }
@@ -22,7 +22,7 @@ type UserTimerSettings struct {
 }
 
 type UserMin struct {
-	Name     string `json:"Name" validate:"required,min=6,max=16"`
+	Name     string `json:"Name" validate:"required,min=4,max=16"`
 	Email    string `json:"Email" validate:"required,email,min=6,max=32"`
 	Password string `json:"Password" validate:"required,min=6,max=16"`
 }
