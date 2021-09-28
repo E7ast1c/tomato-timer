@@ -10,7 +10,7 @@ import SettingModal from "./SettingsModal";
 import LoiginModal from "./LoiginModal";
 import {clearLocalStorage, getUserName} from "../LocalStorageManager";
 import {useDispatch} from "react-redux";
-import {clearUsersSettingsAction} from "../../Store/Actions/TimeSettingsReduser";
+import {clearUsersSettingsAction} from "../../Store/Actions/TimeSettingsReduсer";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -82,7 +82,10 @@ export default function Header(props) {
 
   useEffect(() => {
     setUserName(getUserName(user))
+
   })
+
+
 
   const clearUsersSettings = () => {
     dispatch(clearUsersSettingsAction(clearSettings))
@@ -115,7 +118,7 @@ export default function Header(props) {
         </Typography>
 
         <div className={classes.authButton}>
-          {userName != undefined ? (
+          {userName !== undefined ? (
             <div className={classes.authButton}>
               <Typography
                 className={classes.userName}

@@ -34,7 +34,8 @@ const useStyles = makeStyles((theme) => ({
     border: "2px solid #000",
     boxShadow: theme.shadows[5],
     padding: theme.spacing(5, 5, 5),
-    [theme.breakpoints.down(`sm`)]: {
+    borderRadius: 7,
+      [theme.breakpoints.down(`sm`)]: {
       width: '14em',
     },
     [theme.breakpoints.up(`sm`)]: {
@@ -109,7 +110,7 @@ export default function LoiginModal(props) {
                 <Input
                   id="email"
                   className={clsx(classes.margin, classes.textField)}
-                  onChange={handleChange("email")}
+                  onChange={handleChange("Email")}
                   type="text"
                   placeholder="Email"
                   {...register("email", {
@@ -131,7 +132,7 @@ export default function LoiginModal(props) {
                 <Input
                   id="password"
                   type={values.showPassword ? "text" : "password"}
-                  onChange={handleChange("password")}
+                  onChange={handleChange("Password")}
                   endAdornment={
                     <InputAdornment position="end">
                       <IconButton

@@ -11,8 +11,8 @@ import {
   changeLongBreakAction,
   changeShortBreakAction,
   changeTickTrackAction
-} from "../../Store/Actions/TimeSettingsReduser";
-import {getUserSettingsManager} from "../AuthManager";
+} from "../../Store/Actions/TimeSettingsReduсer";
+import {getUserSettingsManager, setUserSettingsManager} from "../AuthManager";
 import {MenuItem} from "@material-ui/core";
 import {useTypedSelector} from "../../hooks/useTypedSelector";
 
@@ -36,6 +36,7 @@ const useStyles = makeStyles((theme) => ({
     border: "2px solid #000",
     boxShadow: theme.shadows[4],
     padding: theme.spacing(2, 5, 3),
+    borderRadius: 7
   },
   input: {
     "& > *": {
@@ -91,6 +92,7 @@ export default function SettingModal(props: any) {
 
   const [isDisabled, setIsDisabled] = useState(false);
 
+  //temporary solution
   const [allSettings, setAllSettings] = useState({
     "alarmTrack": "string",
     "defaultDuration": valueDefaultTime,
@@ -100,14 +102,18 @@ export default function SettingModal(props: any) {
   })
 
 
-const [ringtone, setRingtone] = useState(signal_piano)
+
+const [ringtone, setRingtone] = useState('')
 //test
-  useEffect(() => {
-    dispatch(changeTickTrackAction(ringtone))
-  }, [])
-  //
+//   useEffect(() => {
+//     dispatch(changeTickTrackAction(ringtone))
+//   }, [])
+//   //
+
+
 
   const changeRingtone = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+    console.log(event)
     setRingtone(event.target.value)
   }
 
@@ -127,6 +133,7 @@ const [ringtone, setRingtone] = useState(signal_piano)
     {
       value: signal_bam,
       label: 'bam',
+
     },
   ]
 
@@ -145,6 +152,14 @@ const [ringtone, setRingtone] = useState(signal_piano)
     valueDefaultTime >= 1 ? setIsDisabled(false) : setIsDisabled(true);
     valueShortBreak >= 1 ? setIsDisabled(false) : setIsDisabled(true);
     valueLongBreak >= 1 ? setIsDisabled(false) : setIsDisabled(true);
+    setAllSettings({
+      "alarmTrack": "string",
+      "defaultDuration": +valueDefaultTime,
+      "longBreakDuration": +valueLongBreak,
+      "shortBreakDuration": +valueShortBreak,
+      "tickTrack": "string"
+    })
+
   }, [valueDefaultTime, valueShortBreak, valueLongBreak]);
 
   return (
@@ -158,8 +173,8 @@ const [ringtone, setRingtone] = useState(signal_piano)
         onSubmit={() => {
           props.prop.setSettingsModal(false);
           changeDefaultTime(valueDefaultTime)
-          // changeLongBreak(valueLongBreak)
-          // changeShortBreak(valueShortBreak)
+          changeLongBreak(valueLongBreak)
+          changeShortBreak(valueShortBreak)
 
         }}
         onClick={(e: React.MouseEvent<HTMLDivElement>) => e.preventDefault()}
@@ -211,7 +226,8 @@ const [ringtone, setRingtone] = useState(signal_piano)
                 id="outlined-basic"
                 label="Minutes"
                 variant="outlined"
-                onChange={(e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => setValueShortBreak(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) =>
+                  setValueShortBreak(e.target.value)}
                 value={valueShortBreak}
               />
             </form>
@@ -233,7 +249,8 @@ const [ringtone, setRingtone] = useState(signal_piano)
                 id="outlined-basic"
                 label="Minutes"
                 variant="outlined"
-                onChange={(e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => setValueLongBreak(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) =>
+                  setValueLongBreak(e.target.value)}
                 value={valueLongBreak}
               />
             </form>
@@ -244,7 +261,7 @@ const [ringtone, setRingtone] = useState(signal_piano)
             <TextField
               variant="outlined"
               className={classes.formControl}
-              onChange={(event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => changeRingtone(event)}
+              onChange={(event : ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => changeRingtone(event)}
               select
               label="Ringtone"
               value={ringtone}
@@ -272,7 +289,7 @@ const [ringtone, setRingtone] = useState(signal_piano)
                 dispatch(changeTickTrackAction(ringtone))
 
                 // api set user settings
-                // dispatch(setUserSettingsManager(allSettings))
+                dispatch(setUserSettingsManager(allSettings))
               }}
             >
               Save
@@ -285,16 +302,6 @@ const [ringtone, setRingtone] = useState(signal_piano)
               }}
             >
               Cancel
-            </Button>
-            <Button
-              color="primary"
-              variant="contained"
-              onClick={() => {
-                props.prop.setSettingsModal(false);
-                dispatch(getUserSettingsManager())
-              }}
-            >
-              Get Settings
             </Button>
           </div>
         </div>

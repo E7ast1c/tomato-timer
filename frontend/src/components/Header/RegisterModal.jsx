@@ -31,6 +31,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     backgroundColor: "#f2f3f4",
     border: "2px solid #000",
+    borderRadius: 7,
     boxShadow: theme.shadows[5],
     padding: theme.spacing(4, 5, 4),
     [theme.breakpoints.down(`sm`)]:{

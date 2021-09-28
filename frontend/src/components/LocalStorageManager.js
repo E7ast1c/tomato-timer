@@ -64,7 +64,7 @@ export function getUserName(user) {
 // Get token from Local Storage
 export function getToken(){
   if(localStorage.getItem('token')){
-    const token = localStorage.getItem("token")
+    const token = localStorage.getItem("token").replace(/"/g, '')
     return token
   } else {
     return;

@@ -8,6 +8,7 @@ const headers = {
 }
 
 export async function login(userData) {
+  console.log('userData', userData)
   const response = await axios.post(
     `${baseAdress}/login`,
     JSON.stringify(userData),
@@ -28,16 +29,15 @@ export async function register(userData) {
 }
 
 export async function setUserSettings(userSettings, token){
+  console.log('userSettings', userSettings)
+  console.log('token', token)
   const response = await axios.post(
     `${baseAdress}/auth/set-user-settings`,
     JSON.stringify(userSettings),
     {
       headers: {
-        "Access-Control-Allow-Headers": "x-access-token",
-        "Access-Control-Allow-Origin": "*",
-        // "Authorization": `Bearer ${token}`,
-        "x-access-token": token
-        // "x-access-token": token
+        "Content-Type": "application/json",
+        'x-access-token': token,
       }
     })
   console.log("setUserSettings response", response)
@@ -45,27 +45,16 @@ export async function setUserSettings(userSettings, token){
 }
 
 export async function getAuthSettings(token){
-  console.log("token", token)
   try{
     const response = await axios.get('http://localhost:8081/auth/get-user-settings', {
-      mode: 'no-cors',
-        headers: {
-          // "Access-Control-Allow-Origin": "*",
-          'Content-Type': 'application/json',
-          // 'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-          Accept: 'application/json',
-          "x-access-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOjEwLCJOYW1lIjoiIiwiRW1haWwiOiJhZG1pbkBhZG1pbi5ydSIsImV4cCI6MTYzMjU2NzUyNX0.n_iTwIwvIAEr26QGteE_YkVCSEyRfzetD0GhQtfaD4A",
-        },
-      withCredentials: true,
-      credentials: 'same-origin',
-      crossdomain: true,
+      headers: {
+        'x-access-token': token,
+      },
     })
-    return console.log('response', response)
+    console.log('api response', response)
+    return response
   }catch (error){
     console.log(error)
   }
-
 }
-
-
 
