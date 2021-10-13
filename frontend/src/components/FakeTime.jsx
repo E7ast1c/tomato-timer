@@ -11,7 +11,7 @@ import moment from "moment";
 
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
-import { startStopTimerAction } from '../Store/Actions/StartStopTimerReducer'
+import { startStopTimerAction } from "../Store/Actions/StartStopTimerReducer";
 
 const useStyles = makeStyles({
   timer: {
@@ -27,24 +27,29 @@ const useStyles = makeStyles({
 export default function Time(props) {
   const classes = useStyles();
   const timeKey = "defDuaration";
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const startTimer = () => {
-    dispatch(startStopTimerAction(true))
-  }
+    dispatch(startStopTimerAction(true));
+  };
 
-  const timeDefaultDuration = useSelector(state => state.timeSettings.settings.user.TimerSettings.DefaultDuration)
-  const longBreakDuration = useSelector(state => state.timeSettings.settings.user.TimerSettings.LongBreakDuration)
-  const shortBreakDuration = useSelector(state => state.timeSettings.settings.user.TimerSettings.ShortBreakDuration)
-  const vueCurrentTimer = useSelector(state => state.vueCurrentTimer)
-
+  const timeDefaultDuration = useSelector(
+    (state) => state.timeSettings.settings.user.TimerSettings.DefaultDuration
+  );
+  const longBreakDuration = useSelector(
+    (state) => state.timeSettings.settings.user.TimerSettings.LongBreakDuration
+  );
+  const shortBreakDuration = useSelector(
+    (state) => state.timeSettings.settings.user.TimerSettings.ShortBreakDuration
+  );
+  const vueCurrentTimer = useSelector((state) => state.vueCurrentTimer);
 
   let time;
-  if(vueCurrentTimer.pomodoro){
-    time = timeDefaultDuration * 60000
-  } else if(vueCurrentTimer.shortBreak){
-    time = shortBreakDuration * 60000
-  } else if(vueCurrentTimer.longBreak){
-    time = longBreakDuration * 60000
+  if (vueCurrentTimer.pomodoro) {
+    time = timeDefaultDuration * 60000;
+  } else if (vueCurrentTimer.shortBreak) {
+    time = shortBreakDuration * 60000;
+  } else if (vueCurrentTimer.longBreak) {
+    time = longBreakDuration * 60000;
   }
 
   // ----- Convert in minutes ------
@@ -52,8 +57,7 @@ export default function Time(props) {
   // const time = timeDefaultDuration * 60000
 
   return (
-    <div className={classes.timer}
-    >
+    <div className={classes.timer}>
       <div
         style={{
           display: "flex",

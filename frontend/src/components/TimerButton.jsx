@@ -1,39 +1,39 @@
 import React from "react";
-import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
+import { makeStyles } from "@material-ui/core/styles";
+import Button from "@material-ui/core/Button";
+import ButtonGroup from "@material-ui/core/ButtonGroup";
 import { useDispatch } from "react-redux";
-import { vuePomodoroTimerAction, vueShortBreakTimerAction, vueLongBreakTimerAction } from "../Store/Actions/VueCurrentTimer";
-
+import {
+  vuePomodoroTimerAction,
+  vueShortBreakTimerAction,
+  vueLongBreakTimerAction,
+} from "../Store/Actions/VueCurrentTimer";
 
 const useStyles = makeStyles((theme) => ({
   btngroup: {
-    marginTop: '1em'
+    marginTop: "1em",
   },
   btn: {
-    color: '#fff',
+    color: "#fff",
     // '&:checked': {
     //   background: 'tomato'
     // },
   },
   activeBtn: {
-    background: 'tomato'
-  }
+    background: "tomato",
+  },
 }));
 
 export default function TimerButton() {
   const classes = useStyles();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   return (
     <div>
       <ButtonGroup variant="text" className={classes.btngroup}>
         <Button
           className={classes.btn}
-          onClick={
-            () =>
-              dispatch(vuePomodoroTimerAction(true))
-          }
+          onClick={() => dispatch(vuePomodoroTimerAction(true))}
         >
           Pomodoro
         </Button>
@@ -46,8 +46,10 @@ export default function TimerButton() {
         <Button
           className={classes.btn}
           onClick={() => dispatch(vueLongBreakTimerAction(true))}
-        >Long break</Button>
+        >
+          Long break
+        </Button>
       </ButtonGroup>
     </div>
-  )
+  );
 }

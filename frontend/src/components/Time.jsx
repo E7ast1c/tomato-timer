@@ -13,9 +13,7 @@ import ViewClock from "./FakeProgress";
 
 import { getLocalStorageKey } from "./LocalStorageManager";
 import { useDispatch, useSelector } from "react-redux";
-import { startStopTimerAction } from '../Store/Actions/StartStopTimerReducer';
-
-
+import { startStopTimerAction } from "../Store/Actions/StartStopTimerReducer";
 
 const useStyles = makeStyles({
   timer: {
@@ -32,25 +30,28 @@ export default function Time(props) {
   const timeKey = "defDuaration";
   const dispatch = useDispatch();
 
-  const timeDefaultDuration = useSelector(state => state.timeSettings.settings.user.TimerSettings.DefaultDuration)
-  const longBreakDuration = useSelector(state => state.timeSettings.settings.user.TimerSettings.LongBreakDuration)
-  const shortBreakDuration = useSelector(state => state.timeSettings.settings.user.TimerSettings.ShortBreakDuration)
-  const vueCurrentTimer = useSelector(state => state.vueCurrentTimer)
+  const timeDefaultDuration = useSelector(
+    (state) => state.timeSettings.settings.user.TimerSettings.DefaultDuration
+  );
+  const longBreakDuration = useSelector(
+    (state) => state.timeSettings.settings.user.TimerSettings.LongBreakDuration
+  );
+  const shortBreakDuration = useSelector(
+    (state) => state.timeSettings.settings.user.TimerSettings.ShortBreakDuration
+  );
+  const vueCurrentTimer = useSelector((state) => state.vueCurrentTimer);
 
   const stopTimer = () => {
-    dispatch(startStopTimerAction(false))
-  }
+    dispatch(startStopTimerAction(false));
+  };
   let time;
-  if(vueCurrentTimer.pomodoro){
-    time = timeDefaultDuration
-  } else if(vueCurrentTimer.shortBreak){
-    time = shortBreakDuration
-  } else if(vueCurrentTimer.longBreak){
-    time = longBreakDuration
+  if (vueCurrentTimer.pomodoro) {
+    time = timeDefaultDuration;
+  } else if (vueCurrentTimer.shortBreak) {
+    time = shortBreakDuration;
+  } else if (vueCurrentTimer.longBreak) {
+    time = longBreakDuration;
   }
-
-
-
 
   // ---- Convert in minutes ------
   // const timeDefaultDuration = getLocalStorageKey(timeKey) * 60;
@@ -60,9 +61,8 @@ export default function Time(props) {
     let expiry = new Date();
     expiry.setSeconds(expiry.getSeconds() + time * 60);
     return expiry;
-
-
   }
+
   const classes = useStyles();
 
   const [clockEnabled, setClockEnabled] = useState(false);
@@ -84,9 +84,9 @@ export default function Time(props) {
     onExpire: () => console.warn("onExpire called"),
   });
 
-  console.log('minutes', minutes)
-  console.log('seconds', seconds)
-  console.log('isRunning', isRunning)
+  console.log("minutes", minutes);
+  console.log("seconds", seconds);
+  console.log("isRunning", isRunning);
 
   return (
     <div className={classes.timer}>
@@ -100,10 +100,11 @@ export default function Time(props) {
 
       <div>
         <p>{isRunning ? "Timer running" : "Timer stopped"}</p>
-        {`${minutes < 10 ? `0${minutes}` : minutes}:${seconds < 10 ? `0${seconds}` : seconds
-          }`}
+        {`${minutes < 10 ? `0${minutes}` : minutes}:${
+          seconds < 10 ? `0${seconds}` : seconds
+        }`}
       </div>
-      <Clock  />
+      <Clock />
 
       <div>
         <Button

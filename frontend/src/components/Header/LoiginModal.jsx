@@ -1,7 +1,7 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import clsx from "clsx";
 
-import {makeStyles} from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Modal from "@material-ui/core/Modal";
 import Input from "@material-ui/core/Input";
@@ -14,12 +14,11 @@ import IconButton from "@material-ui/core/IconButton";
 import PropTypes from "prop-types";
 import config from "../../configuration.json";
 
+import { AuthLoginManager } from "../AuthManager";
 
-import {AuthLoginManager} from "../AuthManager";
+import { useForm } from "react-hook-form";
 
-import {useForm} from "react-hook-form";
-
-import {useDispatch} from "react-redux";
+import { useDispatch } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -35,12 +34,12 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: theme.shadows[5],
     padding: theme.spacing(5, 5, 5),
     borderRadius: 7,
-      [theme.breakpoints.down(`sm`)]: {
-      width: '14em',
+    [theme.breakpoints.down(`sm`)]: {
+      width: "14em",
     },
     [theme.breakpoints.up(`sm`)]: {
-      width: '25em'
-    }
+      width: "25em",
+    },
   },
   btnGroup: {
     display: "flex",
@@ -86,7 +85,7 @@ export default function LoiginModal(props) {
   };
 
   const onSubmit = async (data) => {
-    dispatch(AuthLoginManager(data))
+    dispatch(AuthLoginManager(data));
     handleClose();
   };
   const handleClose = () => {
@@ -163,11 +162,7 @@ export default function LoiginModal(props) {
                 )}
               </FormControl>
               <div className={classes.btnGroup}>
-                <Button
-                  type="submit"
-                  color="primary"
-                  variant="contained"
-                >
+                <Button type="submit" color="primary" variant="contained">
                   Ok
                 </Button>
                 <Button

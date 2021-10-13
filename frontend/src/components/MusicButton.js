@@ -1,102 +1,60 @@
-import React from 'react'
-import ReactHowler from 'react-howler'
-import raf from 'raf' // requestAnimationFrame polyfill
-// import Button from '../components/Button'
-import tune from '../ringtone/signal_piano.mp3'
+import React, { useCallback, useState } from "react";
+import ReactHowler from "react-howler";
+import tune from "../ringtone/signal.mp3";
+import { useTypedSelector } from "../hooks/useTypedSelector";
 
-class FullControl extends React.Component {
-  constructor (props) {
-    super(props)
 
-    this.state = {
-      playing: false,
-      loaded: false,
-      loop: true,
-      mute: false,
-      volume: 1.0,
-      seek: 0.0,
-      rate: 1,
-      isSeeking: false
+const MusicButton = () => {
+  const ringtone = useTypedSelector(
+    (state) => state.timeSettings.settings.user.TimerSettings.TickTrack
+  );
+
+  const [playing, setPlaying] = useState(false);
+  const [loop, setLoop] = useState(true);
+  const [mute, setMute] = useState(false);
+  const [volume, setVolume] = useState(1.0);
+  const [player, setPlayer] = useState();
+
+  function handleOnPlay() {
+    setPlaying(true);
+  }
+
+  function handleOnEnd() {
+    setPlaying(false);
+    // clearRAF()
+  }
+
+  function handleStop() {
+    player.stop();
+    setPlaying(false);
+  }
+
+  const playerRef = useCallback((node) => {
+    if (node !== null) {
+      setPlayer(node);
     }
-    this.handleToggle = this.handleToggle.bind(this)
-    // this.handleOnLoad = this.handleOnLoad.bind(this)
-    this.handleOnEnd = this.handleOnEnd.bind(this)
-    this.handleOnPlay = this.handleOnPlay.bind(this)
-    this.handleStop = this.handleStop.bind(this)
-  }
+  });
 
-  // componentWillUnmount () {
-  //   this.clearRAF()
-  // }
+  return (
+    <div className="full-control">
+      <ReactHowler
+        src={[ringtone]}
+        playing={playing}
+        onPlay={handleOnPlay}
+        onEnd={handleOnEnd}
+        loop={loop}
+        mute={mute}
+        volume={volume}
+        ref={playerRef}
+      />
 
-  handleToggle () {
-    this.setState({
-      playing: !this.state.playing
-    })
-  }
+      {!playing ? (
+          <button onClick={handleOnPlay}>Play</button>
+      ) : (
+        <button onClick={handleStop}>Stop</button>
+      )}
+    </div>
+  );
+};
 
-  // handleOnLoad () {
-  //   this.setState({
-  //     loaded: true,
-  //     duration: this.player.duration()
-  //   })
-  // }
-
-  handleOnPlay () {
-    this.setState({
-      playing: true
-    })
-    // this.renderSeekPos()
-  }
-
-  handleOnEnd () {
-    this.setState({
-      playing: false
-    })
-    // this.clearRAF()
-  }
-
-  handleStop () {
-    this.player.stop()
-    this.setState({
-      playing: false // Need to update our local state so we don't immediately invoke autoplay
-    })
-    // this.renderSeekPos()
-  }
-
-
-
-
-  // clearRAF () {
-  //   raf.cancel(this._raf)
-  // }
-
-  render () {
-    return (
-      <div className='full-control'>
-        <ReactHowler
-          src={[tune]}
-          playing={this.state.playing}
-          // onLoad={this.handleOnLoad}
-          onPlay={this.handleOnPlay}
-          onEnd={this.handleOnEnd}
-          loop={this.state.loop}
-          mute={this.state.mute}
-          volume={this.state.volume}
-          ref={(ref) => (this.player = ref)}
-        />
-
-
-
-        <button onClick={this.handleToggle}>
-          {(this.state.playing) ? 'Pause' : 'Play'}
-        </button>
-        <button onClick={this.handleStop}>
-          Stop
-        </button>
-      </div>
-    )
-  }
-}
-
-export default FullControl
+export default MusicButton;

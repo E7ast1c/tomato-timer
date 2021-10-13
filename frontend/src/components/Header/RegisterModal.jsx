@@ -1,7 +1,7 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import clsx from "clsx";
 
-import {makeStyles} from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Input from "@material-ui/core/Input";
 import Modal from "@material-ui/core/Modal";
@@ -14,11 +14,10 @@ import IconButton from "@material-ui/core/IconButton";
 import PropTypes from "prop-types";
 import config from "../../configuration.json";
 
+import { useForm } from "react-hook-form";
 
-import {useForm} from "react-hook-form";
-
-import {AuthRegisterManager } from '../AuthManager'
-import {useDispatch} from "react-redux";
+import { AuthRegisterManager } from "../AuthManager";
+import { useDispatch } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -34,11 +33,11 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: 7,
     boxShadow: theme.shadows[5],
     padding: theme.spacing(4, 5, 4),
-    [theme.breakpoints.down(`sm`)]:{
-      width: '14em',
+    [theme.breakpoints.down(`sm`)]: {
+      width: "14em",
     },
     [theme.breakpoints.up(`sm`)]: {
-      width: "25em"
+      width: "25em",
     },
   },
   emailMargin: {
@@ -53,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Register(props) {
   const prop = props.prop;
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const {
     register,
@@ -93,9 +92,9 @@ export default function Register(props) {
   };
 
   const onSubmit = async (data) => {
-    dispatch(AuthRegisterManager(data))
-    handleClose()
-  }
+    dispatch(AuthRegisterManager(data));
+    handleClose();
+  };
 
   return (
     <div>
@@ -109,52 +108,52 @@ export default function Register(props) {
         <div>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className={classes.paper}>
-            <FormControl className={clsx(classes.margin, classes.textField)}>
-            <InputLabel htmlFor="login">Login</InputLabel>
-              <Input
-                id="login"
-                placeholder="Login"
-                // className={clsx(classes.margin, classes.textField)}
-                onChange={handleChange("Name")}
-                {...register("Name", {
-                  required: true,
-                  pattern: {
-                    value: /[0-9a-zA-Z]{3,}/,
-                    message: "massage error",
-                  },
-                })}
-              />
-              {errors.Name && (
-                <p className={classes.txtError}>
-                  Please enter more than 3 letters or numbers
-                </p>
-              )}
+              <FormControl className={clsx(classes.margin, classes.textField)}>
+                <InputLabel htmlFor="login">Login</InputLabel>
+                <Input
+                  id="login"
+                  placeholder="Login"
+                  // className={clsx(classes.margin, classes.textField)}
+                  onChange={handleChange("Name")}
+                  {...register("Name", {
+                    required: true,
+                    pattern: {
+                      value: /[0-9a-zA-Z]{3,}/,
+                      message: "massage error",
+                    },
+                  })}
+                />
+                {errors.Name && (
+                  <p className={classes.txtError}>
+                    Please enter more than 3 letters or numbers
+                  </p>
+                )}
               </FormControl>
 
-            <FormControl className={clsx(classes.margin, classes.textField)}>
-            <InputLabel htmlFor="Email">Email</InputLabel>
-              <Input
-                id="Email"
-                placeholder="Email"
-                className={clsx(
-                  // classes.margin,
-                  // classes.textField,
-                  classes.emailMargin
+              <FormControl className={clsx(classes.margin, classes.textField)}>
+                <InputLabel htmlFor="Email">Email</InputLabel>
+                <Input
+                  id="Email"
+                  placeholder="Email"
+                  className={clsx(
+                    // classes.margin,
+                    // classes.textField,
+                    classes.emailMargin
+                  )}
+                  onChange={handleChange("email")}
+                  {...register("Email", {
+                    required: true,
+                    pattern: {
+                      value: /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/,
+                      message: "massage error",
+                    },
+                  })}
+                />
+                {errors.Email && (
+                  <p className={classes.txtError}>
+                    Please enter correct email, example@ya.ru
+                  </p>
                 )}
-                onChange={handleChange("email")}
-                {...register("Email", {
-                  required: true,
-                  pattern: {
-                    value: /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/,
-                    message: "massage error",
-                  },
-                })}
-              />
-              {errors.Email && (
-                <p className={classes.txtError}>
-                  Please enter correct email, example@ya.ru
-                </p>
-              )}
               </FormControl>
               <FormControl className={clsx(classes.margin, classes.textField)}>
                 <InputLabel htmlFor="password">Password</InputLabel>
@@ -193,11 +192,7 @@ export default function Register(props) {
                 )}
               </FormControl>
               <div className={classes.btnGroup}>
-                <Button
-                  type="submit"
-                  color="primary"
-                  variant="contained"
-                >
+                <Button type="submit" color="primary" variant="contained">
                   Ok
                 </Button>
                 <Button

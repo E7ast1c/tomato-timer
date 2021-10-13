@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from "react";
-import {makeStyles} from "@material-ui/core/styles";
+import React, { useEffect, useState } from "react";
+import { makeStyles } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
@@ -8,10 +8,13 @@ import Link from "@material-ui/core/Link";
 import Register from "./RegisterModal";
 import SettingModal from "./SettingsModal";
 import LoiginModal from "./LoiginModal";
-import {clearLocalStorage, getUserName} from "../LocalStorageManager";
-import {useDispatch} from "react-redux";
-import {clearUsersSettingsAction} from "../../Store/Actions/TimeSettingsReduсer";
-
+import { clearLocalStorage, getUserName } from "../LocalStorageManager";
+import { useDispatch } from "react-redux";
+import {
+  changeAuthFlagAction,
+  clearUsersSettingsAction,
+} from "../../Store/Actions/TimeSettingsReduсer";
+import { useTypedSelector } from "../../hooks/useTypedSelector";
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
@@ -53,8 +56,8 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
   },
   userName: {
-    fontSize: '1em',
-    alignSelf: 'center',
+    fontSize: "1em",
+    alignSelf: "center",
   },
 }));
 
@@ -66,7 +69,7 @@ export default function Header(props) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const classes = useStyles();
   const title = "Tomato timer";
-  const user = 'user';
+  const user = "user";
   // const clearSettings = {}
   const clearSettings = {
     user: {
@@ -74,28 +77,31 @@ export default function Header(props) {
         DefaultDuration: 30,
         LongBreakDuration: 20,
         ShortBreakDuration: 1,
-      }
-    }
-  }
-  const [userName, setUserName] = useState("")
+      },
+    },
+  };
+  const [userName, setUserName] = useState("");
   const dispatch = useDispatch();
+  const { authFlag } = useTypedSelector((state) => state.timeSettings);
 
   useEffect(() => {
-    setUserName(getUserName(user))
-
-  })
-
-
+    setUserName(getUserName(user));
+  }, [authFlag]);
 
   const clearUsersSettings = () => {
-    dispatch(clearUsersSettingsAction(clearSettings))
-    setUserName("")
-  }
+    dispatch(clearUsersSettingsAction(clearSettings));
+    dispatch(changeAuthFlagAction(false));
+    setUserName("");
+  };
 
   return (
     <React.Fragment>
       <Toolbar className={classes.toolbar}>
-        <Link href="https://github.com/E7ast1c/tomato-timer" color="inherit" target="_blank" >
+        <Link
+          href="https://github.com/E7ast1c/tomato-timer"
+          color="inherit"
+          target="_blank"
+        >
           <GitHubIcon className={classes.toolbarIcon} />
         </Link>
         <Button
@@ -137,7 +143,7 @@ export default function Header(props) {
                 onClick={() => {
                   setIsAuthenticated(!isAuthenticated),
                     clearLocalStorage(),
-                    clearUsersSettings()
+                    clearUsersSettings();
                 }}
               >
                 Sing out
@@ -171,9 +177,7 @@ export default function Header(props) {
         />
       )}
       {registerModal && <Register prop={{ registerModal, setRegisterModal }} />}
-      {settingsModal && (
-        <SettingModal prop={{ setSettingsModal }} />
-      )}
+      {settingsModal && <SettingModal prop={{ setSettingsModal }} />}
     </React.Fragment>
   );
 }

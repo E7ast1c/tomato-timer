@@ -7,24 +7,27 @@ export function setLocalStorageKey(key, value) {
 }
 
 export function setLoginTimerSettings(data) {
-  const currentTime = data.data.user.TimerSettings
+  const currentTime = data.data.user.TimerSettings;
   const timerSettingsData = [
-    { name: 'defDuaration',  value: currentTime.DefaultDuration },
-    { name: 'longBreakDuaration', value: currentTime.LongBreakDuration},
-    { name: 'shortBreakDuration', value: currentTime.ShortBreakDuration},
-    { name: 'tickTrack', value: currentTime.TickTrack },
-    { name: 'alarmTrack', value: currentTime.AlarmTrack },
-  ]
+    { name: "defDuaration", value: currentTime.DefaultDuration },
+    { name: "longBreakDuaration", value: currentTime.LongBreakDuration },
+    { name: "shortBreakDuration", value: currentTime.ShortBreakDuration },
+    { name: "tickTrack", value: currentTime.TickTrack },
+    { name: "alarmTrack", value: currentTime.AlarmTrack },
+  ];
 
-  for (let i = 0; i < timerSettingsData.length; i++){
-    localStorage.setItem(timerSettingsData[i].name, JSON.stringify(timerSettingsData[i].value))
+  for (let i = 0; i < timerSettingsData.length; i++) {
+    localStorage.setItem(
+      timerSettingsData[i].name,
+      JSON.stringify(timerSettingsData[i].value)
+    );
   }
 }
 
 export function getLocalStorageKey(key) {
   if (localStorage.getItem(key)) {
     const time = JSON.parse(localStorage.getItem("defDuaration"));
-    return time; 
+    return time;
   } else {
     return 1;
   }
@@ -51,21 +54,22 @@ export function setUserData(data) {
 export function clearLocalStorage() {
   localStorage.clear();
 }
+
 // Get name from Local Storage
 export function getUserName(user) {
   if (localStorage.getItem(user)) {
-    const userName = JSON.parse(localStorage.getItem('user'))
-    return userName.name
+    const userName = JSON.parse(localStorage.getItem("user"));
+    return userName.name;
   } else {
     return;
   }
 }
 
 // Get token from Local Storage
-export function getToken(){
-  if(localStorage.getItem('token')){
-    const token = localStorage.getItem("token").replace(/"/g, '')
-    return token
+export function getToken() {
+  if (localStorage.getItem("token")) {
+    const token = localStorage.getItem("token").replace(/"/g, "");
+    return token;
   } else {
     return;
   }
