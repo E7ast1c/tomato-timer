@@ -28,18 +28,12 @@ jobs:
         run: ls ${{ github.workspace }}
       - name: "Job status"
         run: echo "⚡️ ${{ job.name }} status is ${{ job.status }}."
-
-  deploy:
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v2
-        - name: rsync deployments
-          uses: burnett01/rsync-deployments@5.1
-          with:
-            switches: -avzr --delete
-            path: /backend
-            remote_path: ${{ secrets.PATH }}
-            remote_host: ${{ secrets.HOST }}
-            remote_port: ${{ secrets.PORT }}
-            remote_user: ${{ secrets.USER }}
-            remote_key: ${{ secrets.KEY }}
+      - name: "Deploy"
+        with:
+          switches: -avzr --delete
+          path: /backend
+          remote_path: ${{ secrets.PATH }}
+          remote_host: ${{ secrets.HOST }}
+          remote_port: ${{ secrets.PORT }}
+          remote_user: ${{ secrets.USER }}
+          remote_key: ${{ secrets.KEY }}
