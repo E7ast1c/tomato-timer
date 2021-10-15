@@ -41,6 +41,30 @@ func (h *Handler) HealthCheck(fCtx *fiber.Ctx) error {
 	return fCtx.JSON(serviceErrors.errors)
 }
 
+// Version godoc
+// @Summary show a service health
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} string
+// @Failure 400,404 {object} HealthReport
+// @Failure 500 {object} HealthReport
+// @Failure default {object} string
+// @Router /version [get]
+func (h *Handler) Version(fCtx *fiber.Ctx) error {
+	serviceErrors := NewHealthErrors()
+	checkDBConnection(serviceErrors, h)
+
+	if len(serviceErrors.errors) != 0 {
+		se, err := json.Marshal(serviceErrors.errors)
+		if err != nil {
+			return err
+		}
+		return fiber.NewError(http.StatusInternalServerError, string(se))
+	}
+
+	return fCtx.JSON(serviceErrors.errors)
+}
+
 func checkDBConnection(hs *HealthReport, h *Handler) {
 	db, err := h.DB.DB()
 	if err != nil {

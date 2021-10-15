@@ -1,0 +1,45 @@
+name: backend
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build_backend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: backend
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Go
+        uses: actions/setup-go@v2
+      - name: Add rsync action
+      - uses: burnett01/rsync-deployments@5.1
+        with:
+          go-version: 1.16
+      - name: Build
+        run: go build -v -o main ./cmd/main.go
+      - name: Test
+        run: go test -v ./...
+      - name: List files in the repository
+        run: ls ${{ github.workspace }}
+      - name: "Job status"
+        run: echo "⚡️ ${{ job.name }} status is ${{ job.status }}."
+
+  deploy:
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v2
+        - name: rsync deployments
+          uses: burnett01/rsync-deployments@5.1
+          with:
+            switches: -avzr --delete
+            path: /backend
+            remote_path: ${{ secrets.PATH }}
+            remote_host: ${{ secrets.HOST }}
+            remote_port: ${{ secrets.PORT }}
+            remote_user: ${{ secrets.USER }}
+            remote_key: ${{ secrets.KEY }}
