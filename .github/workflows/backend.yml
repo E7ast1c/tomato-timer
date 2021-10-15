@@ -20,6 +20,13 @@ jobs:
       - uses: burnett01/rsync-deployments@5.1
         with:
           go-version: 1.16
+          switches: -avzr --delete
+          path: /backend
+          remote_path: ${{ secrets.PATH }}
+          remote_host: ${{ secrets.HOST }}
+          remote_port: ${{ secrets.PORT }}
+          remote_user: ${{ secrets.USER }}
+          remote_key: ${{ secrets.KEY }}
       - name: Build
         run: go build -v -o main ./cmd/main.go
       - name: Test
@@ -29,11 +36,3 @@ jobs:
       - name: "Job status"
         run: echo "⚡️ ${{ job.name }} status is ${{ job.status }}."
       - name: "Deploy"
-        with:
-          switches: -avzr --delete
-          path: /backend
-          remote_path: ${{ secrets.PATH }}
-          remote_host: ${{ secrets.HOST }}
-          remote_port: ${{ secrets.PORT }}
-          remote_user: ${{ secrets.USER }}
-          remote_key: ${{ secrets.KEY }}
