@@ -7,6 +7,11 @@ on:
 
 jobs:
   deploy:
+    defaults:
+      run:
+        shell: bash
+        working-directory: backend
+
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -14,7 +19,7 @@ jobs:
         uses: burnett01/rsync-deployments@5.1
         with:
           switches: -avzr --delete
-          path: backend/
+          path: /
           remote_path: ${{ secrets.PATH }}
           remote_host: ${{ secrets.HOST }}
           remote_port: ${{ secrets.PORT }}
