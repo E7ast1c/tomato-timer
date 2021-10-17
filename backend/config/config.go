@@ -8,6 +8,7 @@ import (
 type AppConfig struct {
 	DBConfig  DBConfig
 	APIServer APIServer
+	Version   string
 }
 
 type DBConfig struct {
@@ -26,5 +27,6 @@ func NewAppConfig() AppConfig {
 			Port:       http.PortCombiner(env.MustEnvString("PORT")),
 			SignSecret: env.MustEnvString("SIGN_SECRET"),
 		},
+		Version: "1.0.0",
 	}
 }
