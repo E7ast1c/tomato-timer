@@ -1,8 +1,7 @@
 import React, { useCallback, useState } from "react";
 import ReactHowler from "react-howler";
-import tune from "../ringtone/signal.mp3";
 import { useTypedSelector } from "../hooks/useTypedSelector";
-
+import { StyledPlayBtn } from "./MainStyles";
 
 const MusicButton = () => {
   const ringtone = useTypedSelector(
@@ -47,12 +46,7 @@ const MusicButton = () => {
         volume={volume}
         ref={playerRef}
       />
-
-      {!playing ? (
-          <button onClick={handleOnPlay}>Play</button>
-      ) : (
-        <button onClick={handleStop}>Stop</button>
-      )}
+      <StyledPlayBtn onClick={!playing ? handleOnPlay : handleStop } pl={!playing} />
     </div>
   );
 };
