@@ -15,13 +15,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: rsync deployments
-        uses: burnett01/rsync-deployments@5.1
-        with:
-          switches: -avzr --delete
-          path: /
-          remote_path: ${{ secrets.PATH }}
-          remote_host: ${{ secrets.HOST }}
-          remote_port: ${{ secrets.PORT }}
-          remote_user: ${{ secrets.USER }}
-          remote_key: ${{ secrets.KEY }}
+      # Setup key
+      - run: set -eu
+      - run: mkdir "$HOME/.ssh"
+      - run: echo "${{ secrets.KEY }}" > "$HOME/.ssh/key"
+      - run: chmod 600 "$HOME/.ssh/key"
+      # Deploy
+      - run: rsync -e "ssh -i $HOME/.ssh/key -p ${{ secrets.PORT }} -o StrictHostKeyChecking=no" -avz --delete . ${{ secrets.USER }}@${{ secrets.HOST }}:${{ secrets.PATH }}
