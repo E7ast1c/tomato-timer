@@ -21,4 +21,4 @@ jobs:
       - run: echo "${{ secrets.KEY }}" > "$HOME/.ssh/key"
       - run: chmod 600 "$HOME/.ssh/key"
       # Deploy
-      - run: rsync -e "ssh -i $HOME/.ssh/key -p ${{ secrets.PORT }} -o StrictHostKeyChecking=no" -avz --no-perms --omit-dir-times --delete --exclude='.*/' $GITHUB_WORKSPACE ${{ secrets.USER }}@${{ secrets.HOST }}:${{ secrets.PATH }}
+      - run: rsync -e "ssh -i $HOME/.ssh/key -p ${{ secrets.PORT }} -o StrictHostKeyChecking=no" -avz --no-perms --omit-dir-times --delete --exclude='.*/' $GITHUB_WORKSPACE/ ${{ secrets.USER }}@${{ secrets.HOST }}:${{ secrets.PATH }}
