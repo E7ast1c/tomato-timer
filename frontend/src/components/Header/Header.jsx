@@ -124,7 +124,7 @@ export default function Header(props) {
         </Typography>
 
         <div className={classes.authButton}>
-          {userName !== undefined ? (
+          {authFlag ? (
             <div className={classes.authButton}>
               <Typography
                 className={classes.userName}

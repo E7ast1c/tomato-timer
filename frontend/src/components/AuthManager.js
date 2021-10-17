@@ -20,7 +20,9 @@ export const AuthRegisterManager = (data) => {
   return async function (dispatch) {
     const currentUser = await register(data);
     dispatch(getLoginAction(currentUser.data.data));
+    dispatch(changeAuthFlagAction(true));
     setUserData(currentUser.data.data);
+    getUserName();
   };
 };
 
