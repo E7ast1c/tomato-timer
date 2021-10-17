@@ -5,7 +5,7 @@ services:
         build:
             context: frontend/
         ports:
-            - ${FRONTEND_PORT}:${FRONTEND_PORT}
+            - ${FRONTEND_PORT}:80
         depends_on:
             - backend
 

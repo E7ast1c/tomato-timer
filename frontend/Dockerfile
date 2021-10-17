@@ -1,21 +1,13 @@
-FROM node:10
-
-# Create app directory
-RUN mkdir -p /src/app
-WORKDIR /src/app
-
-# to make npm test run only once non-interactively
-ENV CI=true
-
-# Install app dependencies
-COPY package.json /src/app/
-RUN npm install
-
-# Bundle app source
-COPY . /src/app
-
-# Build and optimize react app
+# build react app and store in /app/build
+FROM node:13.12.0-alpine as build
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . ./
 RUN npm run build
 
-# defined in package.json
-CMD [ "npm", "start" ]
+# expose 80 port via nginx
+FROM nginx:stable-alpine
+COPY --from=build /app/build /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
