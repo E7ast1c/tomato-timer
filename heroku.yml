@@ -1,7 +1,0 @@
-build:
-  docker:
-    web: backend/Dockerfile
-    worker: frontend/Dockerfile
-run:
-  web: "/app/main"
-  worker: npm start
