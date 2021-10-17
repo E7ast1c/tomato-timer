@@ -23,7 +23,9 @@ jobs:
       - run: chmod 600 "$HOME/.ssh/key"
 
       # Setup env
-      - run: echo "${{ secrets.ENV_SECRET }}\nDEPLOY_TIMESTAMP=$(date '+%d-%m-%Y %H:%M:%S')" > "$GITHUB_WORKSPACE/.env"
+      - run: echo "${{ secrets.ENV_SECRET }}" > "$GITHUB_WORKSPACE/.env"
+      - run: echo "DEPLOY_TIMESTAMP=$(date '+%d-%m-%Y %H:%M:%S')" >> "$GITHUB_WORKSPACE/.env"
+      - run: echo "VERSION=branch-${{ github.ref }};gh-run-id-${{ github.run_id }};gh-run-number-${{ github.run_number }}" >> "$GITHUB_WORKSPACE/.env"
 
       # Deploy
       - run: rsync -e "ssh -i $HOME/.ssh/key -p ${{ secrets.PORT }} -o StrictHostKeyChecking=no" -avz --no-perms --omit-dir-times --delete --exclude='.*/' $GITHUB_WORKSPACE/ ${{ secrets.USER }}@${{ secrets.HOST }}:${{ secrets.PATH }}
