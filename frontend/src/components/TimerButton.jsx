@@ -7,7 +7,7 @@ import {
   vuePomodoroTimerAction,
   vueShortBreakTimerAction,
   vueLongBreakTimerAction,
-} from "../Store/Actions/VueCurrentTimer";
+} from "../store/Actions/VueCurrentTimer";
 
 const useStyles = makeStyles((theme) => ({
   btngroup: {

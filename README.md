@@ -29,4 +29,4 @@ Name | Description
 [React timer hook](https://github.com/amrlabib/react-timer-hook) | React custom hook for  handle timer, stopwatch, and time logic/state in your react component.
 
 
-### 👾  You can visit last built version of application by [link](http://tomato-timer.surge.sh/)
+### 👾  You can visit last built version of application by [link](http://code-monkey.tech/)

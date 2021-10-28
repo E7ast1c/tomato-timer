@@ -9,8 +9,8 @@ import MusicButton from "./MusicButton";
 import { getUserSettingsManager } from "./AuthManager";
 import { getUserName } from "./LocalStorageManager";
 import {useTypedSelector} from "../hooks/useTypedSelector";
-import {RootState} from "../Store/store";
-import {changeAuthFlagAction} from "../Store/Actions/TimeSettingsReduсer";
+import {RootState} from "../store/store";
+import {changeAuthFlagAction} from "../store/Actions/TimeSettingsReduсer";
 
 export default function Main() {
   const dispatch = useDispatch();

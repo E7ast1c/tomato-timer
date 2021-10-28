@@ -13,7 +13,7 @@ import ViewClock from "./FakeProgress";
 
 import { getLocalStorageKey } from "./LocalStorageManager";
 import { useDispatch, useSelector } from "react-redux";
-import { startStopTimerAction } from "../Store/Actions/StartStopTimerReducer";
+import { startStopTimerAction } from "../store/Actions/StartStopTimerReducer";
 
 const useStyles = makeStyles({
   timer: {

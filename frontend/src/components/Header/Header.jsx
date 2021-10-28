@@ -13,7 +13,7 @@ import { useDispatch } from "react-redux";
 import {
   changeAuthFlagAction,
   clearUsersSettingsAction,
-} from "../../Store/Actions/TimeSettingsReduсer";
+} from "../../store/Actions/TimeSettingsReduсer";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 
 const useStyles = makeStyles((theme) => ({

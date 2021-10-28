@@ -11,7 +11,7 @@ import {
   changeLongBreakAction,
   changeShortBreakAction,
   changeTickTrackAction,
-} from "../../Store/Actions/TimeSettingsReduсer";
+} from "../../store/Actions/TimeSettingsReduсer";
 import { getUserSettingsManager, setUserSettingsManager } from "../AuthManager";
 import { MenuItem } from "@material-ui/core";
 import { useTypedSelector } from "../../hooks/useTypedSelector";

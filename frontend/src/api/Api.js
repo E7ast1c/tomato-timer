@@ -1,7 +1,7 @@
 import axios from "axios";
 import config from "../configuration.json";
 
-const baseAdress = config.TOMATO_API_URL;
+const baseAdress = process.env.NODE_ENV === 'production' ? config.TOMATO_API_URL_PROD : config.TOMATO_API_URL_DEV;
 
 const headers = {
   "Content-Type": "application/json",

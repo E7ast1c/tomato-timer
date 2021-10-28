@@ -11,7 +11,7 @@ import moment from "moment";
 
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
-import { startStopTimerAction } from "../Store/Actions/StartStopTimerReducer";
+import { startStopTimerAction } from "../store/Actions/StartStopTimerReducer";
 
 const useStyles = makeStyles({
   timer: {

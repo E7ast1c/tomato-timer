@@ -1,10 +1,10 @@
-import { getAuthSettings, login, register, setUserSettings } from "../API/Api";
+import { getAuthSettings, login, register, setUserSettings } from "../api/Api";
 import { getToken, getUserName, setUserData } from "./LocalStorageManager";
 import {
   getSettingsAction,
   getLoginAction,
   changeAuthFlagAction,
-} from "../Store/Actions/TimeSettingsReduсer";
+} from "../store/Actions/TimeSettingsReduсer";
 
 export const AuthLoginManager = (data) => {
   return async function (dispatch) {
