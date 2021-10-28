@@ -23,20 +23,19 @@ func Handlers(handle *Handler, fApp *fiber.App) *fiber.App {
 
 	fApp.Use(logger.New())
 
-	fApp.Get("/swagger/*", swagger.Handler) // default
-
-	fApp.Get("/swagger/*", swagger.New(swagger.Config{ // custom
+	// Base routes
+	fApi := fApp.Group("/api")
+	fApi.Get("/swagger/*", swagger.Handler) // default
+	fApi.Get("/swagger/*", swagger.New(swagger.Config{ // custom
 		URL:         "http://localhost" + handle.Config.Port + "/swagger/doc.json",
 		DeepLinking: false,
 	}))
-
-	fApp.Get("/health-check", handle.HealthCheck)
-
-	fApp.Post("/register", handle.RegisterUser)
-	fApp.Post("login", handle.Login)
+	fApi.Get("/health-check", handle.HealthCheck)
+	fApi.Post("/register", handle.RegisterUser)
+	fApi.Post("login", handle.Login)
 
 	// Auth routes
-	authRoute := fApp.Group("/auth")
+	authRoute := fApi.Group("/auth")
 	authRoute.Use(mw.New())
 	authRoute.Get("/get-user-settings", handle.GetUserSettings)
 	authRoute.Post("/set-user-settings", handle.SetUserSetting)
