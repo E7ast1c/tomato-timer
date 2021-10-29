@@ -1,8 +1,6 @@
 # build react app and store in /app/build
 FROM node:13.12.0-alpine as build
 
-ENV NODE_ENV=production
-
 WORKDIR /app
 COPY package*.json ./
 RUN npm ci
