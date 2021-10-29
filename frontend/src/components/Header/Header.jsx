@@ -146,7 +146,7 @@ export default function Header(props) {
                     clearUsersSettings();
                 }}
               >
-                Sing out
+                Sign out
               </Button>
             </div>
           ) : (
