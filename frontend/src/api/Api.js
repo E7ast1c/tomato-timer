@@ -48,7 +48,7 @@ export async function setUserSettings(userSettings, token) {
 export async function getAuthSettings(token) {
   try {
     const response = await axios.get(
-      "http://localhost:8081/auth/get-user-settings",
+		`${baseAdress}/auth/get-user-settings`,
       {
         headers: {
           "x-access-token": token,
