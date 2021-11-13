@@ -1,21 +1,18 @@
 import { applyMiddleware, combineReducers, createStore } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
-import { startStopTimerReducer } from "./Actions/StartStopTimerReducer";
-import { timeSettingsReduсer } from "./Actions/TimeSettingsReduсer";
-import { vueCurrentTimerReducer } from "./Actions/VueCurrentTimer";
+import { timerSettingsReduсer } from "./reducers/timerSettingsReduсer";
 import thunk from "redux-thunk";
-import { openModal } from "./Actions/OpenModal";
+import { openModal } from "./actions/modalActions";
 
 const rootReducer = combineReducers({
-  startStopTimer: startStopTimerReducer,
-  timeSettings: timeSettingsReduсer,
-  vueCurrentTimer: vueCurrentTimerReducer,
-  openModal: openModal,
+	timerSettings: timerSettingsReduсer,
+	// еще будет редюсер модалки
+	openModal: openModal,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
 
 export const store = createStore(
-  rootReducer,
-  composeWithDevTools(applyMiddleware(thunk))
+	rootReducer,
+	composeWithDevTools(applyMiddleware(thunk))
 );

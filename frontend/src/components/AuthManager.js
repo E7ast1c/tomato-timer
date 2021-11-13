@@ -4,7 +4,7 @@ import {
   getSettingsAction,
   getLoginAction,
   changeAuthFlagAction,
-} from "../store/Actions/TimeSettingsReduсer";
+} from "../store/actions/timerSettingsActions";
 
 export const AuthLoginManager = (data) => {
   return async function (dispatch) {

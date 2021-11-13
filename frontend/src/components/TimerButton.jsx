@@ -4,10 +4,9 @@ import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import { useDispatch } from "react-redux";
 import {
-  vuePomodoroTimerAction,
-  vueShortBreakTimerAction,
-  vueLongBreakTimerAction,
-} from "../store/Actions/VueCurrentTimer";
+	changeTimerModeAction,
+} from "../store/actions/timerSettingsActions";
+import { EnumTimerMode } from "../store/common";
 
 const useStyles = makeStyles((theme) => ({
   btngroup: {
@@ -15,9 +14,6 @@ const useStyles = makeStyles((theme) => ({
   },
   btn: {
     color: "#fff",
-    // '&:checked': {
-    //   background: 'tomato'
-    // },
   },
   activeBtn: {
     background: "tomato",
@@ -33,19 +29,19 @@ export default function TimerButton() {
       <ButtonGroup variant="text" className={classes.btngroup}>
         <Button
           className={classes.btn}
-          onClick={() => dispatch(vuePomodoroTimerAction(true))}
+          onClick={() => dispatch(changeTimerModeAction(EnumTimerMode.POMODORO))}
         >
           Pomodoro
         </Button>
         <Button
           className={classes.btn}
-          onClick={() => dispatch(vueShortBreakTimerAction(true))}
+          onClick={() => dispatch(changeTimerModeAction(EnumTimerMode.SHORT_BREAK))}
         >
           Short break
         </Button>
         <Button
           className={classes.btn}
-          onClick={() => dispatch(vueLongBreakTimerAction(true))}
+          onClick={() => dispatch(changeTimerModeAction(EnumTimerMode.LONG_BREAK))}
         >
           Long break
         </Button>

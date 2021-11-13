@@ -9,11 +9,12 @@ import Register from "./RegisterModal";
 import SettingModal from "./SettingsModal";
 import LoiginModal from "./LoiginModal";
 import { clearLocalStorage, getUserName } from "../LocalStorageManager";
+
 import { useDispatch } from "react-redux";
 import {
   changeAuthFlagAction,
   clearUsersSettingsAction,
-} from "../../store/Actions/TimeSettingsReduсer";
+} from "../../store/actions/timerSettingsActions";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 
 const useStyles = makeStyles((theme) => ({
@@ -82,11 +83,11 @@ export default function Header(props) {
   };
   const [userName, setUserName] = useState("");
   const dispatch = useDispatch();
-  const { authFlag } = useTypedSelector((state) => state.timeSettings);
+  const { AuthFlag } = useTypedSelector((state) => state.timerSettings);
 
   useEffect(() => {
     setUserName(getUserName(user));
-  }, [authFlag]);
+  }, [AuthFlag]);
 
   const clearUsersSettings = () => {
     dispatch(clearUsersSettingsAction(clearSettings));
@@ -124,7 +125,7 @@ export default function Header(props) {
         </Typography>
 
         <div className={classes.authButton}>
-          {authFlag ? (
+          {AuthFlag ? (
             <div className={classes.authButton}>
               <Typography
                 className={classes.userName}

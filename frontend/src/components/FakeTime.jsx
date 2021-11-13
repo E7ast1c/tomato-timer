@@ -10,89 +10,92 @@ import { getLocalStorageKey } from "./LocalStorageManager";
 import moment from "moment";
 
 import PropTypes from "prop-types";
+
 import { useDispatch, useSelector } from "react-redux";
-import { startStopTimerAction } from "../store/Actions/StartStopTimerReducer";
+import { changeTimerAction } from "../store/actions/timerSettingsActions.ts";
+
+import {EnumTimerAction, EnumTimerMode} from "../store/common"
+import { useTypedSelector } from "../hooks/useTypedSelector";
+
 
 const useStyles = makeStyles({
-  timer: {
-    display: "flex",
-    flexDirection: "column",
-    marginTop: "32vh",
-  },
-  btn: {
-    margin: ".2rem",
-  },
+	timer: {
+		display: "flex",
+		flexDirection: "column",
+		marginTop: "32vh",
+	},
+	btn: {
+		margin: ".2rem",
+	},
 });
 
 export default function Time(props) {
-  const classes = useStyles();
-  const timeKey = "defDuaration";
-  const dispatch = useDispatch();
-  const startTimer = () => {
-    dispatch(startStopTimerAction(true));
-  };
+	const classes = useStyles();
+	const dispatch = useDispatch();
+	const startTimer = () => {
+		dispatch(changeTimerAction(EnumTimerAction.START));
+	};
 
-  const timeDefaultDuration = useSelector(
-    (state) => state.timeSettings.settings.user.TimerSettings.DefaultDuration
-  );
-  const longBreakDuration = useSelector(
-    (state) => state.timeSettings.settings.user.TimerSettings.LongBreakDuration
-  );
-  const shortBreakDuration = useSelector(
-    (state) => state.timeSettings.settings.user.TimerSettings.ShortBreakDuration
-  );
-  const vueCurrentTimer = useSelector((state) => state.vueCurrentTimer);
+const {TimerMode} = useTypedSelector((state) => state.timerSettings)
+	const minuteInMilliseconds = 60000;
+	let time;
+	switch (TimerMode) {
+		case EnumTimerMode.POMODORO:
+			time = useTypedSelector(
+				(state) => state.timerSettings.UserSettings.DefaultDuration
+			) * minuteInMilliseconds;
+			break;
+		case EnumTimerMode.SHORT_BREAK:
+			time == useTypedSelector(
+				(state) => state.timerSettings.UserSettings.ShortBreakDuration
+			) * minuteInMilliseconds;
+			break;
+		case EnumTimerMode.LONG_BREAK:
+			time = useTypedSelector(
+				(state) => state.timerSettings.UserSettings.LongBreakDuration
+			) * minuteInMilliseconds;
+			break;
+		default:
+			break;
+	}
 
-  let time;
-  if (vueCurrentTimer.pomodoro) {
-    time = timeDefaultDuration * 60000;
-  } else if (vueCurrentTimer.shortBreak) {
-    time = shortBreakDuration * 60000;
-  } else if (vueCurrentTimer.longBreak) {
-    time = longBreakDuration * 60000;
-  }
+	return (
+		<div className={classes.timer}>
+			<div
+				style={{
+					display: "flex",
+					alignContent: "center",
+					justifyContent: "center",
+				}}
+			></div>
+			<div>
+				<p>{"Timer stopped"}</p>
+				{moment(time).format("mm:ss")}
+			</div>
 
-  // ----- Convert in minutes ------
-  // const time = getLocalStorageKey(timeKey) * 60000;
-  // const time = timeDefaultDuration * 60000
-
-  return (
-    <div className={classes.timer}>
-      <div
-        style={{
-          display: "flex",
-          alignContent: "center",
-          justifyContent: "center",
-        }}
-      ></div>
-      <div>
-        <p>{"Timer stopped"}</p>
-        {moment(time).format("mm:ss")}
-      </div>
-
-      <Box display="flex" alignItems="center" justifyContent="center">
-        <Box width="60%" mr={1}>
-          <LinearProgress variant="determinate" value={0} />
-        </Box>
-        <Box minWidth={35}>
-          <Typography variant="body2">{"0%"}</Typography>
-        </Box>
-      </Box>
-      <div>
-        <Button
-          className={classes.btn}
-          variant="contained"
-          color="primary"
-          onClick={() => startTimer()}
-        >
-          Start
-        </Button>
-        <Button className={classes.btn} variant="contained" color="secondary">
-          Stop
-        </Button>
-      </div>
-    </div>
-  );
+			<Box display="flex" alignItems="center" justifyContent="center">
+				<Box width="60%" mr={1}>
+					<LinearProgress variant="determinate" value={0} />
+				</Box>
+				<Box minWidth={35}>
+					<Typography variant="body2">{"0%"}</Typography>
+				</Box>
+			</Box>
+			<div>
+				<Button
+					className={classes.btn}
+					variant="contained"
+					color="primary"
+					onClick={() => startTimer()}
+				>
+					Start
+				</Button>
+				<Button className={classes.btn} variant="contained" color="secondary">
+					Stop
+				</Button>
+			</div>
+		</div>
+	);
 }
 
 

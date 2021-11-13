@@ -5,7 +5,7 @@ import { StyledPlayBtn } from "./MainStyles";
 
 const MusicButton = () => {
   const ringtone = useTypedSelector(
-    (state) => state.timeSettings.settings.user.TimerSettings.TickTrack
+    (state) => state.timerSettings.UserSettings.TickTrack
   );
 
   const [playing, setPlaying] = useState(false);

@@ -1,24 +1,28 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
+
 import { makeStyles } from "@material-ui/core/styles";
+
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import PropTypes from "prop-types";
+
+import signal_bam from "../../ringtone/signal.mp3";
+import signal_piano from "../../ringtone/signal_piano.mp3";
+import signal_ring from "../../ringtone/signal_ring.mp3";
+
+import { getUserSettingsManager, setUserSettingsManager } from "../AuthManager";
+import { MenuItem } from "@material-ui/core";
+
 import { useDispatch } from "react-redux";
+import { useTypedSelector } from "../../hooks/useTypedSelector";
 import {
   changeDefaultTimeAction,
   changeLongBreakAction,
   changeShortBreakAction,
   changeTickTrackAction,
-} from "../../store/Actions/TimeSettingsReduсer";
-import { getUserSettingsManager, setUserSettingsManager } from "../AuthManager";
-import { MenuItem } from "@material-ui/core";
-import { useTypedSelector } from "../../hooks/useTypedSelector";
-
-import signal_bam from "../../ringtone/signal.mp3";
-import signal_piano from "../../ringtone/signal_piano.mp3";
-import signal_ring from "../../ringtone/signal_ring.mp3";
+} from "../../store/actions/timerSettingsActions";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -59,15 +63,15 @@ export default function SettingModal(props: any) {
   const prop = props.prop;
   const dispatch = useDispatch();
 
-  const timeDefaultDuration = useTypedSelector(
-    (state) => state.timeSettings.settings.user.TimerSettings.DefaultDuration
-  );
-  const longBreakDuration = useTypedSelector(
-    (state) => state.timeSettings.settings.user.TimerSettings.LongBreakDuration
-  );
-  const shortBreakDuration = useTypedSelector(
-    (state) => state.timeSettings.settings.user.TimerSettings.ShortBreakDuration
-  );
+  // const timeDefaultDuration = useTypedSelector(
+  //   (state) => state.timeSettings.settings.user.TimerSettings.DefaultDuration
+  // );
+  // const longBreakDuration = useTypedSelector(
+  //   (state) => state.timeSettings.settings.user.TimerSettings.LongBreakDuration
+  // );
+  // const shortBreakDuration = useTypedSelector(
+  //   (state) => state.timeSettings.settings.user.TimerSettings.ShortBreakDuration
+  // );
 
   const changeDefaultTime = (currentTime: number) => {
     dispatch(changeDefaultTimeAction(+currentTime));
@@ -84,20 +88,20 @@ export default function SettingModal(props: any) {
   const classes = useStyles();
   const timeKey = "defDuaration";
 
-  const [valueDefaultTime, setValueDefaultTime] = useState(timeDefaultDuration);
-  const [valueShortBreak, setValueShortBreak] = useState(shortBreakDuration);
-  const [valueLongBreak, setValueLongBreak] = useState(longBreakDuration);
+  const [valueDefaultTime, setValueDefaultTime] = useState(0);
+  const [valueShortBreak, setValueShortBreak] = useState(0);
+  const [valueLongBreak, setValueLongBreak] = useState(0);
 
-  const [isDisabled, setIsDisabled] = useState(false);
+  // const [isDisabled, setIsDisabled] = useState(false);
 
-  //temporary solution
-  const [allSettings, setAllSettings] = useState({
-    alarmTrack: "string",
-    defaultDuration: valueDefaultTime,
-    longBreakDuration: longBreakDuration,
-    shortBreakDuration: valueShortBreak,
-    tickTrack: "string",
-  });
+  // //temporary solution
+  // const [allSettings, setAllSettings] = useState({
+  //   alarmTrack: "string",
+  //   defaultDuration: valueDefaultTime,
+  //   longBreakDuration: longBreakDuration,
+  //   shortBreakDuration: valueShortBreak,
+  //   tickTrack: "string",
+  // });
 
   const [ringtone, setRingtone] = useState("");
   //test
@@ -143,18 +147,18 @@ export default function SettingModal(props: any) {
   // } = useForm();
   // const onSubmit = (data) => console.log(data);
 
-  useEffect(() => {
-    valueDefaultTime >= 1 ? setIsDisabled(false) : setIsDisabled(true);
-    valueShortBreak >= 1 ? setIsDisabled(false) : setIsDisabled(true);
-    valueLongBreak >= 1 ? setIsDisabled(false) : setIsDisabled(true);
-    setAllSettings({
-      alarmTrack: "string",
-      defaultDuration: +valueDefaultTime,
-      longBreakDuration: +valueLongBreak,
-      shortBreakDuration: +valueShortBreak,
-      tickTrack: "string",
-    });
-  }, [valueDefaultTime, valueShortBreak, valueLongBreak]);
+  // useEffect(() => {
+  //   valueDefaultTime >= 1 ? setIsDisabled(false) : setIsDisabled(true);
+  //   valueShortBreak >= 1 ? setIsDisabled(false) : setIsDisabled(true);
+  //   valueLongBreak >= 1 ? setIsDisabled(false) : setIsDisabled(true);
+  //   setAllSettings({
+  //     alarmTrack: "string",
+  //     defaultDuration: +valueDefaultTime,
+  //     longBreakDuration: +valueLongBreak,
+  //     shortBreakDuration: +valueShortBreak,
+  //     tickTrack: "string",
+  //   });
+  // }, [valueDefaultTime, valueShortBreak, valueLongBreak]);
 
   return (
     <div>
@@ -197,7 +201,7 @@ export default function SettingModal(props: any) {
                 label="Minutes"
                 variant="outlined"
                 onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                  setValueDefaultTime(e.target.value)
+                  setValueDefaultTime(0)
                 }
                 value={valueDefaultTime}
               />
@@ -222,7 +226,7 @@ export default function SettingModal(props: any) {
                 variant="outlined"
                 onChange={(
                   e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-                ) => setValueShortBreak(e.target.value)}
+                ) => setValueShortBreak(0)}
                 value={valueShortBreak}
               />
             </form>
@@ -246,7 +250,7 @@ export default function SettingModal(props: any) {
                 variant="outlined"
                 onChange={(
                   e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-                ) => setValueLongBreak(e.target.value)}
+                ) => setValueLongBreak(0)}
                 value={valueLongBreak}
               />
             </form>
@@ -272,7 +276,7 @@ export default function SettingModal(props: any) {
           </div>
           <div className={classes.btnGroup}>
             <Button
-              disabled={isDisabled}
+              // disabled={isDisabled}
               color="primary"
               variant="contained"
               onClick={() => {
@@ -283,7 +287,7 @@ export default function SettingModal(props: any) {
                 dispatch(changeTickTrackAction(ringtone));
 
                 // api set user settings
-                dispatch(setUserSettingsManager(allSettings));
+                // dispatch(setUserSettingsManager(allSettings));
               }}
             >
               Save

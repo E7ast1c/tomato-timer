@@ -5,7 +5,7 @@ import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { useDispatch } from "react-redux";
-import { changeErrorModal } from "../../store/Actions/OpenModal";
+import { changeErrorModal } from "../../store/actions/modalActions";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
