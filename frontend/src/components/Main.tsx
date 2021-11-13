@@ -36,7 +36,7 @@ return (
 		<div>
 			<TimerButton />
 		</div>
-		{status ? <Time /> : <FakeTime />}
+		{<Time />}	  {/* <FakeTime /> */}
 
 		<StyledMusicButton>
 			<MusicButton />

@@ -20,16 +20,6 @@ export const changeDefaultTimeAction = (payload: any) => ({
 	payload,
 });
 
-export const changeLongBreakAction = (payload: any) => ({
-	type: TimerActionsTypes.CHANGE_LONG_BREAK,
-	payload,
-});
-
-export const changeShortBreakAction = (payload: any) => ({
-	type: TimerActionsTypes.CHANGE_SHORT_BREAK,
-	payload,
-});
-
 export const changeTickTrackAction = (payload: any) => ({
 	type: TimerActionsTypes.CHANGE_TICKTRACK,
 	payload,

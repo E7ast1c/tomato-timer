@@ -7,26 +7,27 @@ import { useSelector } from "react-redux";
 
 const Clock = (props) => {
   const [progress, setProgress] = useState(0);
+	const [duration, setDuration] = useState(props.duration)
 
-  const timeDefaultDuration = useSelector(
-    (state) => state.timeSettings.settings.user.TimerSettings.DefaultDuration
-  );
-  const longBreakDuration = useSelector(
-    (state) => state.timeSettings.settings.user.TimerSettings.LongBreakDuration
-  );
-  const shortBreakDuration = useSelector(
-    (state) => state.timeSettings.settings.user.TimerSettings.ShortBreakDuration
-  );
-  const vueCurrentTimer = useSelector((state) => state.vueCurrentTimer);
+  // const timeDefaultDuration = useSelector(
+  //   (state) => state.timeSettings.settings.user.TimerSettings.DefaultDuration
+  // );
+  // const longBreakDuration = useSelector(
+  //   (state) => state.timeSettings.settings.user.TimerSettings.LongBreakDuration
+  // );
+  // const shortBreakDuration = useSelector(
+  //   (state) => state.timeSettings.settings.user.TimerSettings.ShortBreakDuration
+  // );
+  // const vueCurrentTimer = useSelector((state) => state.vueCurrentTimer);
 
   let time;
-  if (vueCurrentTimer.pomodoro) {
-    time = timeDefaultDuration;
-  } else if (vueCurrentTimer.shortBreak) {
-    time = shortBreakDuration;
-  } else if (vueCurrentTimer.longBreak) {
-    time = longBreakDuration;
-  }
+  // if (vueCurrentTimer.pomodoro) {
+  //   time = timeDefaultDuration;
+  // } else if (vueCurrentTimer.shortBreak) {
+  //   time = shortBreakDuration;
+  // } else if (vueCurrentTimer.longBreak) {
+  //   time = longBreakDuration;
+  // }
   // const prop = props.params;
   const MIN = 0;
 

@@ -13,7 +13,8 @@ import ViewClock from "./FakeProgress";
 
 import { getLocalStorageKey } from "./LocalStorageManager";
 import { useDispatch, useSelector } from "react-redux";
-import { timerSettingsAction } from "../store/actions/timerSettingsActions";
+import { changeTimerAction } from "../store/actions/timerSettingsActions";
+import { EnumTimerAction, EnumTimerMode } from "../store/common";
 
 const useStyles = makeStyles({
 	timer: {
@@ -29,27 +30,23 @@ const useStyles = makeStyles({
 export default function Time(props) {
 	const dispatch = useDispatch();
 
-	const vueCurrentTimer = useSelector((state) => state.vueCurrentTimer);
-	console.log(vueCurrentTimer)
-	const stopTimer = () => {
-		dispatch(TimerSettingsAction(false));
-	};
+	const {TimerMode} = useSelector((state) => state.timerSettings);
 
 	let time;
-	switch (true) {
-		case vueCurrentTimer.pomodoro:
+	switch (TimerMode) {
+		case EnumTimerMode.POMODORO:
 			time = useSelector(
-				(state) => state.timerSettings.settings.user.TimerSettings.DefaultDuration
+				(state) => state.timerSettings.UserSettings.DefaultDuration
 			);
 			break;
-		case vueCurrentTimer.shortBreak:
-			time = shortBreakDuration = useSelector(
-				(state) => state.timeSettings.settings.user.TimerSettings.ShortBreakDuration
+		case EnumTimerMode.SHORT_BREAK:
+			time = useSelector(
+				(state) => state.timerSettings.UserSettings.ShortBreakDuration
 			);
 			break;
-		case vueCurrentTimer.longBreak:
+		case EnumTimerMode.SHORT_BREAK:
 			time = useSelector(
-				(state) => state.timeSettings.settings.user.TimerSettings.LongBreakDuration
+				(state) => state.timerSettings.UserSettings.LongBreakDuration
 			);
 			break;
 		default:
@@ -106,22 +103,23 @@ export default function Time(props) {
 				{`${minutes < 10 ? `0${minutes}` : minutes}:${seconds < 10 ? `0${seconds}` : seconds
 					}`}
 			</div>
-			<Clock />
+			<Clock duration={time} />
 
 			<div>
 				<Button
 					className={classes.btn}
 					variant="contained"
 					color="primary"
-					onClick={start}
+					onClick={() => dispatch(changeTimerAction(EnumTimerAction.START))}
 				>
 					Start
 				</Button>
+				
 				<Button
 					className={classes.btn}
 					variant="contained"
 					color="secondary"
-					onClick={() => stopTimer()}
+					onClick={() => dispatch(changeTimerAction(EnumTimerAction.STOP))}
 				>
 					Stop
 				</Button>

@@ -62,7 +62,7 @@ function Timer(props) {
           className={classes.btn}
           variant="contained"
           color="primary"
-          onClick={() => start()}
+          onClick={start}
         >
           Start
         </Button>
@@ -78,7 +78,7 @@ function Timer(props) {
           className={classes.btn}
           variant="contained"
           color="secondary"
-          onClick={() => stop()}
+          onClick={stop}
         >
           Stop
         </Button>

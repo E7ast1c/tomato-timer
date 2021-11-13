@@ -19,8 +19,6 @@ import { useDispatch } from "react-redux";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import {
   changeDefaultTimeAction,
-  changeLongBreakAction,
-  changeShortBreakAction,
   changeTickTrackAction,
 } from "../../store/actions/timerSettingsActions";
 
@@ -63,27 +61,17 @@ export default function SettingModal(props: any) {
   const prop = props.prop;
   const dispatch = useDispatch();
 
-  // const timeDefaultDuration = useTypedSelector(
-  //   (state) => state.timeSettings.settings.user.TimerSettings.DefaultDuration
-  // );
-  // const longBreakDuration = useTypedSelector(
-  //   (state) => state.timeSettings.settings.user.TimerSettings.LongBreakDuration
-  // );
-  // const shortBreakDuration = useTypedSelector(
-  //   (state) => state.timeSettings.settings.user.TimerSettings.ShortBreakDuration
-  // );
+  // const changeDefaultTime = (currentTime: number) => {
+  //   dispatch(changeDefaultTimeAction(+currentTime));
+  // };
 
-  const changeDefaultTime = (currentTime: number) => {
-    dispatch(changeDefaultTimeAction(+currentTime));
-  };
+  // const changeLongBreak = (currentTime: number) => {
+  //   dispatch(changeLongBreakAction(+currentTime));
+  // };
 
-  const changeLongBreak = (currentTime: number) => {
-    dispatch(changeLongBreakAction(+currentTime));
-  };
-
-  const changeShortBreak = (currentTime: number) => {
-    dispatch(changeShortBreakAction(+currentTime));
-  };
+  // const changeShortBreak = (currentTime: number) => {
+  //   dispatch(changeShortBreakAction(+currentTime));
+  // };
 
   const classes = useStyles();
   const timeKey = "defDuaration";
@@ -170,9 +158,9 @@ export default function SettingModal(props: any) {
         onClose={() => props.prop.setSettingsModal(false)}
         onSubmit={() => {
           props.prop.setSettingsModal(false);
-          changeDefaultTime(valueDefaultTime);
-          changeLongBreak(valueLongBreak);
-          changeShortBreak(valueShortBreak);
+          // changeDefaultTime(valueDefaultTime);
+          // changeLongBreak(valueLongBreak);
+          // changeShortBreak(valueShortBreak);
         }}
         onClick={(e: React.MouseEvent<HTMLDivElement>) => e.preventDefault()}
         closeAfterTransition
@@ -281,9 +269,9 @@ export default function SettingModal(props: any) {
               variant="contained"
               onClick={() => {
                 prop.setSettingsModal(false);
-                changeDefaultTime(valueDefaultTime);
-                changeShortBreak(valueShortBreak);
-                changeLongBreak(valueLongBreak);
+                // changeDefaultTime(valueDefaultTime);
+                // changeShortBreak(valueShortBreak);
+                // changeLongBreak(valueLongBreak);
                 dispatch(changeTickTrackAction(ringtone));
 
                 // api set user settings

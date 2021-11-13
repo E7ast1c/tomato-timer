@@ -1,4 +1,3 @@
-import React, { useState, useEffect, useLayoutEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 
@@ -6,17 +5,13 @@ import LinearProgress from "@material-ui/core/LinearProgress";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 
-import { getLocalStorageKey } from "./LocalStorageManager";
 import moment from "moment";
 
-import PropTypes from "prop-types";
-
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { changeTimerAction } from "../store/actions/timerSettingsActions.ts";
 
 import {EnumTimerAction, EnumTimerMode} from "../store/common"
 import { useTypedSelector } from "../hooks/useTypedSelector";
-
 
 const useStyles = makeStyles({
 	timer: {
@@ -32,9 +27,6 @@ const useStyles = makeStyles({
 export default function Time(props) {
 	const classes = useStyles();
 	const dispatch = useDispatch();
-	const startTimer = () => {
-		dispatch(changeTimerAction(EnumTimerAction.START));
-	};
 
 const {TimerMode} = useTypedSelector((state) => state.timerSettings)
 	const minuteInMilliseconds = 60000;
@@ -86,11 +78,17 @@ const {TimerMode} = useTypedSelector((state) => state.timerSettings)
 					className={classes.btn}
 					variant="contained"
 					color="primary"
-					onClick={() => startTimer()}
+					onClick={dispatch(changeTimerAction(EnumTimerAction.START))}
 				>
 					Start
 				</Button>
-				<Button className={classes.btn} variant="contained" color="secondary">
+				
+				<Button 
+				className={classes.btn} 
+				variant="contained" 
+				color="secondary"
+				onClick={dispatch(changeTimerAction(EnumTimerAction.STOP))}
+				>
 					Stop
 				</Button>
 			</div>
