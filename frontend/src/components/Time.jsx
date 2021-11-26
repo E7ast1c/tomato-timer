@@ -8,8 +8,7 @@ import Box from "@material-ui/core/Box";
 import { useStopwatch, useTimer } from "react-timer-hook";
 import PropTypes from "prop-types";
 
-import Clock from "./Clock";
-import ViewClock from "./FakeProgress";
+import ProgressBar from "./ProgressBar";
 
 import { getLocalStorageKey } from "./LocalStorageManager";
 import { useDispatch, useSelector } from "react-redux";
@@ -33,20 +32,20 @@ export default function Time(props) {
 	const classes = useStyles();
 	const { TimerMode, TimerAction } = useSelector((state) => state.timerSettings);
 
-	let time;
+	let timerDuration;
 	switch (TimerMode) {
 		case EnumTimerMode.POMODORO:
-			time = useSelector(
+			timerDuration = useSelector(
 				(state) => state.timerSettings.UserSettings.DefaultDuration
 			);
 			break;
 		case EnumTimerMode.SHORT_BREAK:
-			time = useSelector(
+			timerDuration = useSelector(
 				(state) => state.timerSettings.UserSettings.ShortBreakDuration
 			);
 			break;
 		case EnumTimerMode.SHORT_BREAK:
-			time = useSelector(
+			timerDuration = useSelector(
 				(state) => state.timerSettings.UserSettings.LongBreakDuration
 			);
 			break;
@@ -54,9 +53,20 @@ export default function Time(props) {
 			break;
 	}
 
-	function getExpiryDate(time) {
+	function getExpiryDate(timerDuration) {
 		let expiry = new Date();
-		return expiry.setSeconds(expiry.getSeconds() + time * 60);
+		return expiry.setSeconds(expiry.getSeconds() + timerDuration * 60);
+	}
+
+	function calcProgress(minutes, seconds) {
+		let current = new Date();
+		current.setSeconds(current.getSeconds() + time * 60);
+		console.log(current)
+
+		let zero = new Date();
+		zero.setSeconds(zero.getSeconds() + seconds);
+		zero.setMinutes(zero.getMinutes() + minutes);
+		console.log(current)
 	}
 
 	function headerCorrector(action) {
@@ -82,9 +92,8 @@ export default function Time(props) {
 		restart,
 	} = useTimer({
 		autoStart: noAutoStart,
-		// offsetTimestamp: getExpiryDate(time),
-		expiryTimestamp: getExpiryDate(time),
-		onExpire: () => dispatch(changeTimerAction(EnumTimerAction.START))
+		expiryTimestamp: getExpiryDate(timerDuration),
+		onExpire: () => dispatch(changeTimerAction("MusicNotification"))
 	});
 
 	return (
@@ -93,14 +102,15 @@ export default function Time(props) {
 				<p>{`Timer ${headerCorrector(TimerAction)}`}</p>
 				{`${minutes < 10 ? `0${minutes}` : minutes}:${seconds < 10 ? `0${seconds}` : seconds
 			}`}
+			{/* {calcProgress(minutes, seconds)} */}
 			</div>
-			<Clock duration={time} />
+			<ProgressBar duration={timerDuration} />
 
 			<div>
 				<Button
 					className={classes.btn}
 					variant="contained"
-					color="primary"
+					style={{ backgroundColor: "yellowgreen" }}
 					onClick={() => {
 						start()
 						dispatch(changeTimerAction(EnumTimerAction.START));
@@ -112,7 +122,7 @@ export default function Time(props) {
 				<Button
 					className={classes.btn}
 					variant="contained"
-					color="default"
+					color="primary"
 					onClick={() => {
 						pause()
 						dispatch(changeTimerAction(EnumTimerAction.PAUSE));

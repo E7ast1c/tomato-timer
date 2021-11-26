@@ -1,8 +1,7 @@
 import React, { useEffect } from "react";
 import Time from "./Time";
 import Header from "./Header/Header";
-import TimerButton from "./TimerButton";
-import FakeTime from "./FakeTime";
+import TimerModeButtons from "./TimerModeButtons";
 import { useDispatch, useSelector } from "react-redux";
 import { StyledMusicButton } from "./MainStyles";
 import MusicButton from "./MusicNotification";
@@ -33,9 +32,10 @@ return (
 	<div>
 		{timerSettings?.UserSettings.DefaultDuration && <Header />}
 		<div>
-			<TimerButton />
+			<TimerModeButtons />
 		</div>
 		<Time />  
+		
 		<StyledMusicButton>
 			<MusicButton />
 		</StyledMusicButton>
