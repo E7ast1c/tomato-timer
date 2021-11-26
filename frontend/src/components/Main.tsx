@@ -5,7 +5,7 @@ import TimerButton from "./TimerButton";
 import FakeTime from "./FakeTime";
 import { useDispatch, useSelector } from "react-redux";
 import { StyledMusicButton } from "./MainStyles";
-import MusicButton from "./MusicButton";
+import MusicButton from "./MusicNotification";
 import { getUserSettingsManager } from "./AuthManager";
 import { getUserName } from "./LocalStorageManager";
 import { useTypedSelector } from "../hooks/useTypedSelector";
@@ -36,7 +36,6 @@ return (
 			<TimerButton />
 		</div>
 		<Time />  
-		{/* <FakeTime /> */}
 		<StyledMusicButton>
 			<MusicButton />
 		</StyledMusicButton>

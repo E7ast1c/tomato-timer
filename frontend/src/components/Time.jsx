@@ -5,7 +5,7 @@ import Button from "@material-ui/core/Button";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
-import {useStopwatch, useTimer} from "react-timer-hook";
+import { useStopwatch, useTimer } from "react-timer-hook";
 import PropTypes from "prop-types";
 
 import Clock from "./Clock";
@@ -26,11 +26,12 @@ const useStyles = makeStyles({
 		margin: ".2rem",
 	},
 });
-const noAutoStartTimer = false;
+
+const noAutoStart = false;
 export default function Time(props) {
 	const dispatch = useDispatch();
-
-	const {TimerMode} = useSelector((state) => state.timerSettings);
+	const classes = useStyles();
+	const { TimerMode, TimerAction } = useSelector((state) => state.timerSettings);
 
 	let time;
 	switch (TimerMode) {
@@ -53,75 +54,85 @@ export default function Time(props) {
 			break;
 	}
 
-	// ---- Convert in minutes ------
-	// const timeDefaultDuration = getLocalStorageKey(timeKey) * 60;
-	// const timeDefaultDuration = timeDefaultDuration
-
 	function getExpiryDate(time) {
 		let expiry = new Date();
-		expiry.setSeconds(expiry.getSeconds() + time * 60);
-		return expiry;
+		return expiry.setSeconds(expiry.getSeconds() + time * 60);
 	}
 
-	const classes = useStyles();
-
-	// const [clockEnabled, setClockEnabled] = useState(false);
-	// const [pauseClock, setPauseClock] = useState(false);
-	// // const [progress, setProgress] = useState(0);
+	function headerCorrector(action) {
+		switch (action) {
+			case EnumTimerAction.START:
+				return "started"
+			case EnumTimerAction.PAUSE:
+				return "paused"
+			case EnumTimerAction.STOP:
+				return "stopped"
+			default:
+				break;
+		}
+	}
 
 	const {
-    seconds,
-    minutes,
-    hours,
-    days,
-    isRunning,
-    start,
-    pause,
-    resume,
-    restart,
-  } = useTimer({
-		autoStart: noAutoStartTimer,
+		seconds,
+		minutes,
+		isRunning,
+		start,
+		pause,
+		resume,
+		restart,
+	} = useTimer({
+		autoStart: noAutoStart,
 		// offsetTimestamp: getExpiryDate(time),
-    expiryTimestamp: getExpiryDate(time),
-    // onExpire: () => console.warn("onExpire called"),
-  });
+		expiryTimestamp: getExpiryDate(time),
+		onExpire: () => dispatch(changeTimerAction(EnumTimerAction.START))
+	});
 
 	return (
-    <div className={classes.timer}>
-      <div>
-        <p>{isRunning ? "Timer running" : "Timer stopped"}</p>
-        {`${minutes < 10 ? `0${minutes}` : minutes}:${
-          seconds < 10 ? `0${seconds}` : seconds
-        }`}
-      </div>
-      <Clock duration={time} />
+		<div className={classes.timer}>
+			<div>
+				<p>{`Timer ${headerCorrector(TimerAction)}`}</p>
+				{`${minutes < 10 ? `0${minutes}` : minutes}:${seconds < 10 ? `0${seconds}` : seconds
+			}`}
+			</div>
+			<Clock duration={time} />
 
-      <div>
-        <Button
-          className={classes.btn}
-          variant="contained"
-          color="primary"
-          onClick={() => {
+			<div>
+				<Button
+					className={classes.btn}
+					variant="contained"
+					color="primary"
+					onClick={() => {
 						start()
-            dispatch(changeTimerAction(EnumTimerAction.START));
-          }}
-        >
-          Start
-        </Button>
+						dispatch(changeTimerAction(EnumTimerAction.START));
+					}}
+				>
+					start
+				</Button>
 
-        <Button
-          className={classes.btn}
-          variant="contained"
-          color="secondary"
-          onClick={() => {
-						pause();
-						restart(getExpiryDate(time), noAutoStartTimer);
-            dispatch(changeTimerAction(EnumTimerAction.STOP));
-          }}
-        >
-          Stop
-        </Button>
-      </div>
-    </div>
-  );
+				<Button
+					className={classes.btn}
+					variant="contained"
+					color="default"
+					onClick={() => {
+						pause()
+						dispatch(changeTimerAction(EnumTimerAction.PAUSE));
+					}}
+				>
+					pause
+				</Button>
+
+				<Button
+					className={classes.btn}
+					variant="contained"
+					color="secondary"
+					onClick={() => {
+						restart(getExpiryDate(time), noAutoStart);
+						dispatch(changeTimerAction(EnumTimerAction.STOP));
+					}}
+				>
+					stop
+				</Button>
+			</div>
+		</div>
+	);
 }
