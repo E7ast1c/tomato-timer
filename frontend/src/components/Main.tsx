@@ -28,7 +28,6 @@ export default function Main() {
 	// const {authFlag} = useTypedSelector((state: RootState) => state.timerSettings?.authFlag);
 	const timerSettings = useTypedSelector((state: RootState) => state.timerSettings)
 
-	console.log("DefaultDuration", timerSettings);
 
 return (
 	<div>
@@ -36,8 +35,8 @@ return (
 		<div>
 			<TimerButton />
 		</div>
-		{<Time />}	  {/* <FakeTime /> */}
-
+		<Time />  
+		{/* <FakeTime /> */}
 		<StyledMusicButton>
 			<MusicButton />
 		</StyledMusicButton>

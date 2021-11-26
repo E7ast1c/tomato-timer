@@ -19,7 +19,7 @@
         "react-howler": "^5.2.0",
         "react-redux": "^7.2.2",
         "react-scripts": "4.0.1",
-        "react-timer-hook": "^2.0.7",
+        "react-timer-hook": "^3.0.5",
         "redux": "^4.0.5",
         "redux-devtools-extension": "^2.13.9",
         "redux-logger": "^3.0.6",

@@ -37,6 +37,6 @@ export const getUserSettingsManager = () => {
   return async function (dispatch) {
     const token = getToken();
     const response = await getAuthSettings(token);
-    dispatch(getSettingsAction(response.data.data.settings));
+    // dispatch(getSettingsAction(response.data.data.settings));
   };
 };
