@@ -14,6 +14,7 @@ import { getLocalStorageKey } from "./LocalStorageManager";
 import { useDispatch, useSelector } from "react-redux";
 import { changeTimerAction } from "../store/actions/timerSettingsActions";
 import { EnumTimerAction, EnumTimerMode } from "../store/common";
+import { duration } from "moment";
 
 const useStyles = makeStyles({
 	timer: {
@@ -58,17 +59,6 @@ export default function Time(props) {
 		return expiry.setSeconds(expiry.getSeconds() + timerDuration * 60);
 	}
 
-	function calcProgress(minutes, seconds) {
-		let current = new Date();
-		current.setSeconds(current.getSeconds() + time * 60);
-		console.log(current)
-
-		let zero = new Date();
-		zero.setSeconds(zero.getSeconds() + seconds);
-		zero.setMinutes(zero.getMinutes() + minutes);
-		console.log(current)
-	}
-
 	function headerCorrector(action) {
 		switch (action) {
 			case EnumTimerAction.START:
@@ -102,9 +92,9 @@ export default function Time(props) {
 				<p>{`Timer ${headerCorrector(TimerAction)}`}</p>
 				{`${minutes < 10 ? `0${minutes}` : minutes}:${seconds < 10 ? `0${seconds}` : seconds
 			}`}
-			{/* {calcProgress(minutes, seconds)} */}
+			
 			</div>
-			<ProgressBar duration={timerDuration} />
+			<ProgressBar minutes={minutes} seconds={seconds} duration={timerDuration}/>
 
 			<div>
 				<Button
@@ -136,7 +126,7 @@ export default function Time(props) {
 					variant="contained"
 					color="secondary"
 					onClick={() => {
-						restart(getExpiryDate(time), noAutoStart);
+						restart(getExpiryDate(timerDuration), noAutoStart);
 						dispatch(changeTimerAction(EnumTimerAction.STOP));
 					}}
 				>
