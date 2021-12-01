@@ -19,6 +19,7 @@ import { AuthLoginManager } from "../AuthManager";
 import { useForm } from "react-hook-form";
 
 import { useDispatch } from "react-redux";
+import {loginThunk} from "../../redux/thunk";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -85,7 +86,9 @@ export default function LoiginModal(props) {
   };
 
   const onSubmit = async (data) => {
-    dispatch(AuthLoginManager(data));
+    // dispatch(AuthLoginManager(data));
+    console.log("login modal data", data)
+    dispatch(loginThunk(data))
     handleClose();
   };
   const handleClose = () => {

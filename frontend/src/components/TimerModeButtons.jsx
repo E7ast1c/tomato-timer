@@ -5,8 +5,8 @@ import ButtonGroup from "@material-ui/core/ButtonGroup";
 import { useDispatch } from "react-redux";
 import {
 	changeTimerModeAction,
-} from "../store/actions/timerSettingsActions";
-import { EnumTimerMode } from "../store/common";
+} from "../redux/actions/timerSettingsActions";
+import { EnumTimerMode } from "../redux/common";
 
 const useStyles = makeStyles((theme) => ({
   btngroup: {

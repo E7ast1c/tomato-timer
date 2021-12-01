@@ -5,17 +5,18 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import GitHubIcon from "@material-ui/icons/GitHub";
 import Link from "@material-ui/core/Link";
-import Register from "./RegisterModal";
-import SettingModal from "./SettingsModal";
-import LoiginModal from "./LoiginModal";
+import Register from "../Modals/RegisterModal";
+import SettingModal from "../Modals/SettingsModal";
+import LoiginModal from "../Modals/LoiginModal";
 import { clearLocalStorage, getUserName } from "../LocalStorageManager";
 
-import { useDispatch } from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {
   changeAuthFlagAction,
   clearUsersSettingsAction,
-} from "../../store/actions/timerSettingsActions";
+} from "../../redux/actions/timerSettingsActions";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
+import {RootState} from "../../redux/store";
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
@@ -62,7 +63,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Header(props) {
+export default function Header() {
   // const setCurrentDuarationTime = props.setCurrentDuarationTime;
   const [registerModal, setRegisterModal] = useState(false);
   const [settingsModal, setSettingsModal] = useState(false);
@@ -83,8 +84,12 @@ export default function Header(props) {
   };
   const [userName, setUserName] = useState("");
   const dispatch = useDispatch();
-  const { AuthFlag } = useTypedSelector((state) => state.timerSettings);
+  // const { AuthFlag } = useTypedSelector((state) => state.timerSettings);
 
+  // test
+  const {AuthFlag} = useSelector((state: RootState) => state.timerSettings)
+  const testUserName = useSelector((state: RootState) => state.timerSettings.data.user.Name)
+  console.log("testUserName", testUserName)
   useEffect(() => {
     setUserName(getUserName(user));
   }, [AuthFlag]);
@@ -134,7 +139,8 @@ export default function Header(props) {
                 align="center"
                 noWrap
               >
-                {userName}
+                {/*{userName}*/}
+                {testUserName}
               </Typography>
 
               <Button

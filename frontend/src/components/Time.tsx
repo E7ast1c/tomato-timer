@@ -12,9 +12,10 @@ import ProgressBar from "./ProgressBar";
 
 import { getLocalStorageKey } from "./LocalStorageManager";
 import { useDispatch, useSelector } from "react-redux";
-import { changeTimerAction } from "../store/actions/timerSettingsActions";
-import { EnumTimerAction, EnumTimerMode } from "../store/common";
+import { changeTimerAction } from "../redux/actions/timerSettingsActions";
+import { EnumTimerAction, EnumTimerMode } from "../redux/common";
 import { duration } from "moment";
+import {RootState} from "../redux/store";
 
 const useStyles = makeStyles({
 	timer: {
@@ -28,45 +29,50 @@ const useStyles = makeStyles({
 });
 
 const noAutoStart = false;
-export default function Time(props) {
+export default function Time() {
 	const dispatch = useDispatch();
 	const classes = useStyles();
-	const { TimerMode, TimerAction } = useSelector((state) => state.timerSettings);
+	const {TimerMode, TimerAction} = useSelector(
+		(state: RootState) => state.timerSettings
+	);
 
-	let timerDuration;
+	let timerDuration: any;
 	switch (TimerMode) {
 		case EnumTimerMode.POMODORO:
 			timerDuration = useSelector(
-				(state) => state.timerSettings.UserSettings.DefaultDuration
+				(state: RootState) =>
+					state.timerSettings.data.user.TimerSettings.DefaultDuration
 			);
 			break;
 		case EnumTimerMode.SHORT_BREAK:
 			timerDuration = useSelector(
-				(state) => state.timerSettings.UserSettings.ShortBreakDuration
+				(state: RootState) =>
+					state.timerSettings.data.user.TimerSettings.ShortBreakDuration
 			);
 			break;
 		case EnumTimerMode.SHORT_BREAK:
 			timerDuration = useSelector(
-				(state) => state.timerSettings.UserSettings.LongBreakDuration
+				(state: RootState) =>
+					state.timerSettings.data.user.TimerSettings.LongBreakDuration
 			);
 			break;
 		default:
 			break;
 	}
 
-	function getExpiryDate(timerDuration) {
+	function getExpiryDate(timerDuration: any) {
 		let expiry = new Date();
 		return expiry.setSeconds(expiry.getSeconds() + timerDuration * 60);
 	}
 
-	function headerCorrector(action) {
+	function headerCorrector(action: string) {
 		switch (action) {
 			case EnumTimerAction.START:
-				return "started"
+				return "started";
 			case EnumTimerAction.PAUSE:
-				return "paused"
+				return "paused";
 			case EnumTimerAction.STOP:
-				return "stopped"
+				return "stopped";
 			default:
 				break;
 		}
@@ -82,27 +88,32 @@ export default function Time(props) {
 		restart,
 	} = useTimer({
 		autoStart: noAutoStart,
+		// @ts-ignore
 		expiryTimestamp: getExpiryDate(timerDuration),
-		onExpire: () => dispatch(changeTimerAction("MusicNotification"))
+		// @ts-ignore
+		onExpire: () => dispatch(changeTimerAction("MusicNotification")),
 	});
 
 	return (
 		<div className={classes.timer}>
 			<div>
 				<p>{`Timer ${headerCorrector(TimerAction)}`}</p>
-				{`${minutes < 10 ? `0${minutes}` : minutes}:${seconds < 10 ? `0${seconds}` : seconds
-			}`}
-			
+				{`${minutes < 10 ? `0${minutes}` : minutes}:${
+					seconds < 10 ? `0${seconds}` : seconds
+				}`}
 			</div>
-			<ProgressBar minutes={minutes} seconds={seconds} duration={timerDuration}/>
-
+			<ProgressBar
+				minutes={minutes}
+				seconds={seconds}
+				duration={timerDuration}
+			/>
 			<div>
 				<Button
 					className={classes.btn}
 					variant="contained"
-					style={{ backgroundColor: "yellowgreen" }}
+					style={{backgroundColor: "yellowgreen"}}
 					onClick={() => {
-						start()
+						start();
 						dispatch(changeTimerAction(EnumTimerAction.START));
 					}}
 				>
@@ -114,7 +125,7 @@ export default function Time(props) {
 					variant="contained"
 					color="primary"
 					onClick={() => {
-						pause()
+						pause();
 						dispatch(changeTimerAction(EnumTimerAction.PAUSE));
 					}}
 				>
@@ -126,6 +137,7 @@ export default function Time(props) {
 					variant="contained"
 					color="secondary"
 					onClick={() => {
+						// @ts-ignore
 						restart(getExpiryDate(timerDuration), noAutoStart);
 						dispatch(changeTimerAction(EnumTimerAction.STOP));
 					}}

@@ -4,13 +4,13 @@ import Header from "./Header/Header";
 import TimerModeButtons from "./TimerModeButtons";
 import { useDispatch, useSelector } from "react-redux";
 import { StyledMusicButton } from "./MainStyles";
-import MusicButton from "./MusicNotification";
+import MusicNotification from "./MusicNotification";
 import { getUserSettingsManager } from "./AuthManager";
 import { getUserName } from "./LocalStorageManager";
 import { useTypedSelector } from "../hooks/useTypedSelector";
 
-import { RootState } from "../store/store";
-import { changeAuthFlagAction } from "../store/actions/timerSettingsActions";
+import { RootState } from "../redux/store";
+import { changeAuthFlagAction } from "../redux/actions/timerSettingsActions";
 
 export default function Main() {
 	const dispatch = useDispatch();
@@ -25,19 +25,19 @@ export default function Main() {
 	}, [dispatch]);
 
 	// const {authFlag} = useTypedSelector((state: RootState) => state.timerSettings?.authFlag);
-	const timerSettings = useTypedSelector((state: RootState) => state.timerSettings)
-
-
+	// const timerSettings = useTypedSelector((state: RootState) => state.timerSettings)
+	const timerSettings = useSelector((state: RootState) => state.timerSettings)
+	console.log("timerSettings", timerSettings)
 return (
 	<div>
-		{timerSettings?.UserSettings.DefaultDuration && <Header />}
+		{timerSettings.data.user.TimerSettings.DefaultDuration && <Header />}
 		<div>
 			<TimerModeButtons />
 		</div>
 		<Time />  
 		
 		<StyledMusicButton>
-			<MusicButton />
+			<MusicNotification />
 		</StyledMusicButton>
 	</div>
 );

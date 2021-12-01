@@ -20,7 +20,7 @@ import { useTypedSelector } from "../../hooks/useTypedSelector";
 import {
   changeDefaultTimeAction,
   changeTickTrackAction,
-} from "../../store/actions/timerSettingsActions";
+} from "../../redux/actions/timerSettingsActions";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -101,7 +101,6 @@ export default function SettingModal(props: any) {
   const changeRingtone = (
     event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
-    console.log(event);
     setRingtone(event.target.value);
   };
 

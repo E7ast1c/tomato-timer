@@ -4,17 +4,17 @@ import {
   getSettingsAction,
   getLoginAction,
   changeAuthFlagAction,
-} from "../store/actions/timerSettingsActions";
+} from "../redux/actions/timerSettingsActions";
 
-export const AuthLoginManager = (data) => {
-  return async function (dispatch) {
-    const currentUser = await login(data);
-    dispatch(getLoginAction(currentUser.data.data));
-    dispatch(changeAuthFlagAction(true));
-    setUserData(currentUser.data.data);
-    getUserName();
-  };
-};
+// export const AuthLoginManager = (data) => {
+//   return async function (dispatch) {
+//     const currentUser = await login(data);
+//     dispatch(getLoginAction(currentUser.data.data));
+//     dispatch(changeAuthFlagAction(true));
+//     setUserData(currentUser.data.data);
+//     getUserName();
+//   };
+// };
 
 export const AuthRegisterManager = (data) => {
   return async function (dispatch) {

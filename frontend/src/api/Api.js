@@ -7,16 +7,7 @@ const headers = {
   "Content-Type": "application/json",
 };
 
-export async function login(userData) {
-  console.log("userData", userData);
-  const response = await axios.post(
-    `${baseAdress}/login`,
-    JSON.stringify(userData),
-    { headers: headers }
-  );
-  console.log("axios login response", response);
-  return response;
-}
+
 
 export async function register(userData) {
   const response = await axios.post(
