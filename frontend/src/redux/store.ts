@@ -5,7 +5,7 @@ import thunk from "redux-thunk";
 // import { openModal } from "./actions/modalActions";
 import { configureStore } from "@reduxjs/toolkit";
 import {timerSettings} from "./timerSettingsSlice";
-
+import {openModal} from "./openModalSlice"
 
 // const rootReducer = combineReducers({
 // 	timerSettings: timerSettingsReduсer,
@@ -23,6 +23,7 @@ import {timerSettings} from "./timerSettingsSlice";
 const store = configureStore({
 	reducer: {
 		timerSettings: timerSettings.reducer,
+		openModal: openModal.reducer,
 	},
 	middleware: (getDefaultMiddleware) => {
 		return getDefaultMiddleware();

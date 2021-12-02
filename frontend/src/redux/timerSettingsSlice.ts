@@ -25,7 +25,6 @@ export const timerSettings = createSlice({
   name: "timerSettings",
   initialState,
   reducers: {
-
     clearTimerSettingsState: () => {
       return initialState;
     }

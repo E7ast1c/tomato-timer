@@ -10,13 +10,17 @@ import SettingModal from "../Modals/SettingsModal";
 import LoiginModal from "../Modals/LoiginModal";
 import { clearLocalStorage, getUserName } from "../LocalStorageManager";
 
-import {useDispatch, useSelector} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   changeAuthFlagAction,
   clearUsersSettingsAction,
 } from "../../redux/actions/timerSettingsActions";
-import { useTypedSelector } from "../../hooks/useTypedSelector";
-import {RootState} from "../../redux/store";
+import { RootState } from "../../redux/store";
+import {
+  toggleLoginModal,
+  toggleRegisterModal,
+  toggleSettingsModal,
+} from "../../redux/openModalSlice";
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
@@ -65,9 +69,9 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Header() {
   // const setCurrentDuarationTime = props.setCurrentDuarationTime;
-  const [registerModal, setRegisterModal] = useState(false);
-  const [settingsModal, setSettingsModal] = useState(false);
-  const [isLoginModal, setIsLoginModal] = useState(false);
+  // const [registerModal, setRegisterModal] = useState<boolean>(false);
+  // const [settingsModal, setSettingsModal] = useState(false);
+  // const [isLoginModal, setIsLoginModal] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const classes = useStyles();
   const title = "Tomato timer";
@@ -88,6 +92,8 @@ export default function Header() {
 
   // test
   const {AuthFlag} = useSelector((state: RootState) => state.timerSettings)
+  const {registerModal, settingsModal, loginModal} = useSelector((state: RootState) => state.openModal)
+
   const testUserName = useSelector((state: RootState) => state.timerSettings.data.user.Name)
   console.log("testUserName", testUserName)
   useEffect(() => {
@@ -114,7 +120,7 @@ export default function Header() {
           className={classes.settingsButton}
           variant="outlined"
           size="small"
-          onClick={() => setSettingsModal(!settingsModal)}
+          onClick={() => dispatch(toggleSettingsModal())}
         >
           Settings
         </Button>
@@ -162,7 +168,7 @@ export default function Header() {
                 className={classes.toolbarButton}
                 variant="outlined"
                 size="small"
-                onClick={() => setIsLoginModal(!isLoginModal)}
+                onClick={() => dispatch(toggleLoginModal())}
               >
                 Log in
               </Button>
@@ -170,7 +176,7 @@ export default function Header() {
                 className={classes.toolbarButton}
                 variant="outlined"
                 size="small"
-                onClick={() => setRegisterModal(!registerModal)}
+                onClick={() => dispatch(toggleRegisterModal())}
               >
                 Register
               </Button>
@@ -178,13 +184,9 @@ export default function Header() {
           )}
         </div>
       </Toolbar>
-      {isLoginModal && (
-        <LoiginModal
-          prop={{ isLoginModal, setIsLoginModal, setIsAuthenticated }}
-        />
-      )}
-      {registerModal && <Register prop={{ registerModal, setRegisterModal }} />}
-      {settingsModal && <SettingModal prop={{ setSettingsModal }} />}
+      {loginModal && <LoiginModal /> }
+      {registerModal && <Register /> }
+      {settingsModal && <SettingModal /> }
     </React.Fragment>
   );
 }

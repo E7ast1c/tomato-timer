@@ -15,12 +15,14 @@ import signal_ring from "../../ringtone/signal_ring.mp3";
 import { getUserSettingsManager, setUserSettingsManager } from "../AuthManager";
 import { MenuItem } from "@material-ui/core";
 
-import { useDispatch } from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import {
   changeDefaultTimeAction,
   changeTickTrackAction,
 } from "../../redux/actions/timerSettingsActions";
+import { toggleSettingsModal } from "../../redux/openModalSlice";
+import {RootState} from "../../redux/store";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -57,9 +59,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SettingModal(props: any) {
-  const prop = props.prop;
+export default function SettingModal() {
+  // const prop = props.prop;
   const dispatch = useDispatch();
+  const {settingsModal} = useSelector((state: RootState) => state.openModal)
+   const handleClose = () => {
+     dispatch(toggleSettingsModal())
+   };
 
   // const changeDefaultTime = (currentTime: number) => {
   //   dispatch(changeDefaultTimeAction(+currentTime));
@@ -153,10 +159,10 @@ export default function SettingModal(props: any) {
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
         className={classes.modal}
-        open={true}
-        onClose={() => props.prop.setSettingsModal(false)}
+        open={settingsModal}
+        onClose={handleClose}
         onSubmit={() => {
-          props.prop.setSettingsModal(false);
+          dispatch(toggleSettingsModal())
           // changeDefaultTime(valueDefaultTime);
           // changeLongBreak(valueLongBreak);
           // changeShortBreak(valueShortBreak);
@@ -267,7 +273,7 @@ export default function SettingModal(props: any) {
               color="primary"
               variant="contained"
               onClick={() => {
-                prop.setSettingsModal(false);
+                dispatch(toggleSettingsModal())
                 // changeDefaultTime(valueDefaultTime);
                 // changeShortBreak(valueShortBreak);
                 // changeLongBreak(valueLongBreak);
@@ -282,9 +288,7 @@ export default function SettingModal(props: any) {
             <Button
               color="secondary"
               variant="contained"
-              onClick={() => {
-                props.prop.setSettingsModal(false);
-              }}
+              onClick={handleClose}
             >
               Cancel
             </Button>
@@ -295,6 +299,6 @@ export default function SettingModal(props: any) {
   );
 }
 
-SettingModal.propTypes = {
-  prop: PropTypes.object.isRequired,
-};
+// SettingModal.propTypes = {
+//   prop: PropTypes.object.isRequired,
+// };
