@@ -1,12 +1,7 @@
-import React, { useState, useEffect, useLayoutEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 
-import LinearProgress from "@material-ui/core/LinearProgress";
-import Typography from "@material-ui/core/Typography";
-import Box from "@material-ui/core/Box";
-import { useStopwatch, useTimer } from "react-timer-hook";
-import PropTypes from "prop-types";
+import { useTimer } from "react-timer-hook";
 
 import ProgressBar from "./ProgressBar";
 
@@ -14,7 +9,6 @@ import { getLocalStorageKey } from "./LocalStorageManager";
 import { useDispatch, useSelector } from "react-redux";
 import { changeTimerAction } from "../redux/actions/timerSettingsActions";
 import { EnumTimerAction, EnumTimerMode } from "../redux/common";
-import { duration } from "moment";
 import {RootState} from "../redux/store";
 
 const useStyles = makeStyles({
