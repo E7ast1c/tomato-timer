@@ -41,7 +41,7 @@ export const GetDefaultRingtone = (): string => DefaultRingtoneArray.find(r => r
 const RingtonePlayer = () => {
 	const ringtone = useSelector(
 		(state: RootState) =>
-			state.timerSettings.data.user.TimerSettings.TickTrack || GetDefaultRingtone()
+			state.timerSettings.user.TimerSettings.TickTrack || GetDefaultRingtone()
 	);
 	const [playing, setPlaying] = useState(false);
 	const [volume] = useState(1.0);

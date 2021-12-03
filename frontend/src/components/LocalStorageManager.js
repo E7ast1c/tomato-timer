@@ -47,7 +47,7 @@ export function setUserData(data) {
       localStorage.setItem(key, JSON.stringify(userData[key]));
     }
   } else {
-    return;
+    return "";
   }
 }
 

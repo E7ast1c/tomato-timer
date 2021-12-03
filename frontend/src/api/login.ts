@@ -8,16 +8,16 @@ const headers = {
   "Content-Type": "application/json",
 };
 
-const login = async (userData: LoginData): Promise<TimerSettingsState> => {
+const login = async (userData: LoginData): Promise<TimerSettingsResponse> => {
   console.log("api userData", userData)
-  let data = {} as TimerSettingsState;
+  // let data = {} as TimerSettingsState;
   // try {
-    const response = await axios.post<TimerSettingsState>(
+    const { data } = await axios.post<TimerSettingsResponse>(
       `${baseAdress}/login`,
     userData,
     { headers: headers }
     );
-    data = response.data
+    // data = response.data
   // } catch (error: any) {
   //   console.warn(error);
   // }

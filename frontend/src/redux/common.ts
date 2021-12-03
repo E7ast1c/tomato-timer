@@ -4,15 +4,14 @@ export interface TimerSettingsResponse {
 }
 
 export interface TimerSettingsState {
-	// Settings: SettingsType;
-	data: DataSettingsType;
+	user : UserType;
 	Loading?: boolean;
 	AuthFlag: boolean;
 	TimerMode: string;
 	TimerAction: string;
 }
 export interface DataSettingsType {
-	token?: string;
+	// token?: string;
 	user : UserType;
 }
 

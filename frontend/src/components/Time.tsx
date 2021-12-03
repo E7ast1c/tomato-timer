@@ -41,19 +41,19 @@ export default function Time() {
 		case EnumTimerMode.POMODORO:
 			timerDuration = useSelector(
 				(state: RootState) =>
-					state.timerSettings.data.user.TimerSettings.DefaultDuration
+					state.timerSettings.user.TimerSettings.DefaultDuration
 			);
 			break;
 		case EnumTimerMode.SHORT_BREAK:
 			timerDuration = useSelector(
 				(state: RootState) =>
-					state.timerSettings.data.user.TimerSettings.ShortBreakDuration
+					state.timerSettings.user.TimerSettings.ShortBreakDuration
 			);
 			break;
 		case EnumTimerMode.SHORT_BREAK:
 			timerDuration = useSelector(
 				(state: RootState) =>
-					state.timerSettings.data.user.TimerSettings.LongBreakDuration
+					state.timerSettings.user.TimerSettings.LongBreakDuration
 			);
 			break;
 		default:

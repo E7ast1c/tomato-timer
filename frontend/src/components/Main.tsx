@@ -28,7 +28,7 @@ export default function Main() {
 	console.log("timerSettings", timerSettings)
 	return (
 		<div>
-			{timerSettings.data.user.TimerSettings.DefaultDuration && <Header />}
+			{timerSettings.user.TimerSettings.DefaultDuration && <Header />}
 			<div>
 				<TimerModeButtons />
 			</div>

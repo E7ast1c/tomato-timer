@@ -94,7 +94,7 @@ export default function Header() {
   const {AuthFlag} = useSelector((state: RootState) => state.timerSettings)
   const {registerModal, settingsModal, loginModal} = useSelector((state: RootState) => state.openModal)
 
-  const testUserName = useSelector((state: RootState) => state.timerSettings.data.user.Name)
+  const testUserName = useSelector((state: RootState) => state.timerSettings.user.Name)
   console.log("testUserName", testUserName)
   useEffect(() => {
     setUserName(getUserName(user));
