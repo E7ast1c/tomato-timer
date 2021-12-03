@@ -4,7 +4,7 @@ import Header from "./Header/Header";
 import TimerModeButtons from "./TimerModeButtons";
 import { useDispatch, useSelector } from "react-redux";
 import { StyledMusicButton } from "./MainStyles";
-import MusicNotification from "./MusicNotification";
+import RingtonePlayer from "./Ringtone";
 import { getUserSettingsManager } from "./AuthManager";
 import { getUserName } from "./LocalStorageManager";
 import { useTypedSelector } from "../hooks/useTypedSelector";
@@ -24,21 +24,19 @@ export default function Main() {
 		}
 	}, [dispatch]);
 
-	// const {authFlag} = useTypedSelector((state: RootState) => state.timerSettings?.authFlag);
-	// const timerSettings = useTypedSelector((state: RootState) => state.timerSettings)
 	const timerSettings = useSelector((state: RootState) => state.timerSettings)
 	console.log("timerSettings", timerSettings)
-return (
-	<div>
-		{timerSettings.data.user.TimerSettings.DefaultDuration && <Header />}
+	return (
 		<div>
-			<TimerModeButtons />
+			{timerSettings.data.user.TimerSettings.DefaultDuration && <Header />}
+			<div>
+				<TimerModeButtons />
+			</div>
+			<Time />
+
+			<StyledMusicButton>
+				<RingtonePlayer />
+			</StyledMusicButton>
 		</div>
-		<Time />  
-		
-		<StyledMusicButton>
-			<MusicNotification />
-		</StyledMusicButton>
-	</div>
-);
+	);
 }

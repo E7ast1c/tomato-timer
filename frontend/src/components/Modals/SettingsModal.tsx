@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -6,11 +6,8 @@ import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import PropTypes from "prop-types";
 
-import signal_bam from "../../ringtone/signal.mp3";
-import signal_piano from "../../ringtone/signal_piano.mp3";
-import signal_ring from "../../ringtone/signal_ring.mp3";
+import {GetRingtones} from "../Ringtone"
 
 import { getUserSettingsManager, setUserSettingsManager } from "../AuthManager";
 import { MenuItem } from "@material-ui/core";
@@ -60,98 +57,25 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SettingModal() {
-  // const prop = props.prop;
   const dispatch = useDispatch();
   const {settingsModal} = useSelector((state: RootState) => state.openModal)
    const handleClose = () => {
      dispatch(toggleSettingsModal())
    };
 
-  // const changeDefaultTime = (currentTime: number) => {
-  //   dispatch(changeDefaultTimeAction(+currentTime));
-  // };
-
-  // const changeLongBreak = (currentTime: number) => {
-  //   dispatch(changeLongBreakAction(+currentTime));
-  // };
-
-  // const changeShortBreak = (currentTime: number) => {
-  //   dispatch(changeShortBreakAction(+currentTime));
-  // };
-
   const classes = useStyles();
-  const timeKey = "defDuaration";
 
   const [valueDefaultTime, setValueDefaultTime] = useState(0);
   const [valueShortBreak, setValueShortBreak] = useState(0);
   const [valueLongBreak, setValueLongBreak] = useState(0);
 
-  // const [isDisabled, setIsDisabled] = useState(false);
-
-  // //temporary solution
-  // const [allSettings, setAllSettings] = useState({
-  //   alarmTrack: "string",
-  //   defaultDuration: valueDefaultTime,
-  //   longBreakDuration: longBreakDuration,
-  //   shortBreakDuration: valueShortBreak,
-  //   tickTrack: "string",
-  // });
-
   const [ringtone, setRingtone] = useState("");
-  //test
-  //   useEffect(() => {
-  //     dispatch(changeTickTrackAction(ringtone))
-  //   }, [])
-  //   //
 
   const changeRingtone = (
     event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
     setRingtone(event.target.value);
   };
-
-  const optionRingtone = [
-    {
-      value: "none",
-      label: "none",
-    },
-    {
-      value: signal_piano,
-      label: "piano",
-    },
-    {
-      value: signal_ring,
-      label: "ring",
-    },
-    {
-      value: signal_bam,
-      label: "bam",
-    },
-  ];
-
-  // const changeRingtone = (event) => {
-  //
-  // }
-
-  // const {
-  //   register,
-  //   handleSubmit,
-  //   formState: { errors },
-  // } = useForm();
-  // const onSubmit = (data) => console.log(data);
-
-  // useEffect(() => {
-  //   valueDefaultTime >= 1 ? setIsDisabled(false) : setIsDisabled(true);
-  //   valueShortBreak >= 1 ? setIsDisabled(false) : setIsDisabled(true);
-  //   valueLongBreak >= 1 ? setIsDisabled(false) : setIsDisabled(true);
-  //   setAllSettings({
-  //     alarmTrack: "string",
-  //     defaultDuration: +valueDefaultTime,
-  //     longBreakDuration: +valueLongBreak,
-  //     shortBreakDuration: +valueShortBreak,
-  //     tickTrack: "string",
-  //   });
-  // }, [valueDefaultTime, valueShortBreak, valueLongBreak]);
 
   return (
     <div>
@@ -163,9 +87,6 @@ export default function SettingModal() {
         onClose={handleClose}
         onSubmit={() => {
           dispatch(toggleSettingsModal())
-          // changeDefaultTime(valueDefaultTime);
-          // changeLongBreak(valueLongBreak);
-          // changeShortBreak(valueShortBreak);
         }}
         onClick={(e: React.MouseEvent<HTMLDivElement>) => e.preventDefault()}
         closeAfterTransition
@@ -182,8 +103,6 @@ export default function SettingModal() {
           >
             <h3>Enter pomodoro time</h3>
             <form
-              // onSubmit={handleSubmit(onSubmit)}
-              // className={classes.root}
               noValidate
               autoComplete="off"
             >
@@ -206,8 +125,6 @@ export default function SettingModal() {
           >
             <h3>Enter Short Break</h3>
             <form
-              // onSubmit={handleSubmit(onSubmit)}
-              // className={classes.root}
               noValidate
               autoComplete="off"
             >
@@ -260,7 +177,7 @@ export default function SettingModal() {
               label="Ringtone"
               value={ringtone}
             >
-              {optionRingtone.map((option) => (
+              {GetRingtones().map((option) => (
                 <MenuItem key={option.value} value={option.value}>
                   {option.label}
                 </MenuItem>
@@ -269,18 +186,11 @@ export default function SettingModal() {
           </div>
           <div className={classes.btnGroup}>
             <Button
-              // disabled={isDisabled}
               color="primary"
               variant="contained"
               onClick={() => {
                 dispatch(toggleSettingsModal())
-                // changeDefaultTime(valueDefaultTime);
-                // changeShortBreak(valueShortBreak);
-                // changeLongBreak(valueLongBreak);
                 dispatch(changeTickTrackAction(ringtone));
-
-                // api set user settings
-                // dispatch(setUserSettingsManager(allSettings));
               }}
             >
               Save
@@ -298,7 +208,3 @@ export default function SettingModal() {
     </div>
   );
 }
-
-// SettingModal.propTypes = {
-//   prop: PropTypes.object.isRequired,
-// };
