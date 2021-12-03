@@ -5,6 +5,7 @@ import { useTimer } from "react-timer-hook";
 
 import ProgressBar from "./ProgressBar";
 
+import { togglePlayRingtone } from "../redux/ringtoneSlice";
 import { getLocalStorageKey } from "./LocalStorageManager";
 import { useDispatch, useSelector } from "react-redux";
 import { changeTimerAction } from "../redux/actions/timerSettingsActions";
@@ -85,7 +86,7 @@ export default function Time() {
 		// @ts-ignore
 		expiryTimestamp: getExpiryDate(timerDuration),
 		// @ts-ignore
-		onExpire: () => dispatch(changeTimerAction("MusicNotification")),
+		onExpire: () => dispatch(togglePlayRingtone()),
 	});
 
 	return (

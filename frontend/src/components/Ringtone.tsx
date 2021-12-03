@@ -1,8 +1,9 @@
 import ReactHowler from "react-howler";
-import { useSelector } from "react-redux";
-import { RootState } from "../redux/store";
+import { useDispatch, useSelector } from "react-redux";
 import React, { ReactNode, useCallback, useState } from "react";
+import { RootState } from "../redux/store";
 
+import { togglePlayRingtone } from "../redux/ringtoneSlice";
 import { StyledPlayBtn } from "./MainStyles";
 
 import signal_bam from "../ringtone/signal.mp3";
@@ -39,16 +40,20 @@ export const GetDefaultRingtone = (): string => DefaultRingtoneArray.find(r => r
 
 
 const RingtonePlayer = () => {
+	const dispatch = useDispatch();
+
+	const { play } = useSelector((state: RootState) => state.ringtone)
 	const ringtone = useSelector(
 		(state: RootState) =>
 			state.timerSettings.user.TimerSettings.TickTrack || GetDefaultRingtone()
 	);
+
 	const [playing, setPlaying] = useState(false);
 	const [volume] = useState(1.0);
 	const [player, setPlayer] = useState<any>();
 
-	const handleOnPlay = () => setPlaying(!playing);
-	const handleOnEnd = () => setPlaying(!playing);
+	const playToggle = () => dispatch(togglePlayRingtone());
+	// const handleOnEnd = () => setPlaying(!playing);
 
 	function handleStop() {
 		player.stop();
@@ -64,23 +69,19 @@ const RingtonePlayer = () => {
 		[player]
 	);
 
-	function PlayRingtone(): void {
-		setPlaying(!playing);
-	}	
-
 	return (
 		<div className="full-control">
 			<ReactHowler
 				src={[ringtone]}
-				playing={playing}
-				onPlay={handleOnPlay}
-				onEnd={handleOnEnd}
+				playing={play}
+				// onPlay={playToggle}
+				// onEnd={playToggle}
 				volume={volume}
 				ref={playerRef}
 			/>
 			<StyledPlayBtn
-				onClick={!playing ? handleOnPlay : handleStop}
-				pl={!playing}
+				onClick={playToggle}
+				pl={!play}
 			/>
 		</div>
 	);

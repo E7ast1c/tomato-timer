@@ -2,28 +2,17 @@ import { applyMiddleware, combineReducers, createStore } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
 import { timerSettingsReduсer } from "./reducers/timerSettingsReduсer";
 import thunk from "redux-thunk";
-// import { openModal } from "./actions/modalActions";
-import { configureStore } from "@reduxjs/toolkit";
-import {timerSettings} from "./timerSettingsSlice";
-import {openModal} from "./openModalSlice"
 
-// const rootReducer = combineReducers({
-// 	timerSettings: timerSettingsReduсer,
-// 	// еще будет редюсер модалки
-// 	openModal: openModal,
-// });
-//
-// export type RootState = ReturnType<typeof rootReducer>;
-//
-// export const store = createStore(
-// 	rootReducer,
-// 	composeWithDevTools(applyMiddleware(thunk))
-// );
+import { configureStore } from "@reduxjs/toolkit";
+import { timerSettings } from "./timerSettingsSlice";
+import { openModal } from "./openModalSlice"
+import { ringtone } from "./ringtoneSlice";
 
 const store = configureStore({
 	reducer: {
 		timerSettings: timerSettings.reducer,
 		openModal: openModal.reducer,
+		ringtone: ringtone.reducer
 	},
 	middleware: (getDefaultMiddleware) => {
 		return getDefaultMiddleware();
