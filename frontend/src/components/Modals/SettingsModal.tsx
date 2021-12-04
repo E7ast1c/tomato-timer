@@ -7,7 +7,7 @@ import Backdrop from "@material-ui/core/Backdrop";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 
-import { GetRingtones } from "../Ringtone"
+import { GetRingtones } from "../Ringtone/Ringtone"
 
 import { getUserSettingsManager, setUserSettingsManager } from "../AuthManager";
 import { MenuItem } from "@material-ui/core";
@@ -20,6 +20,7 @@ import {
 } from "../../redux/actions/timerSettingsActions";
 import { toggleSettingsModal } from "../../redux/openModalSlice";
 import { RootState } from "../../redux/store";
+import RingtoneSelectPlayer from "../Ringtone/RingtoneSelectPlayer";
 
 const useStyles = makeStyles((theme) => ({
 	formControl: {
@@ -167,6 +168,7 @@ export default function SettingModal() {
 					</div>
 					<div className={classes.settingsTime}>
 						<h3>Choose ringtone</h3>
+					
 						<TextField
 							variant="outlined"
 							className={classes.formControl}
@@ -177,12 +179,15 @@ export default function SettingModal() {
 							label="Ringtone"
 							value={ringtone}
 						>
+								
 							{GetRingtones().map((option) => (
 								<MenuItem key={option.value} value={option.value}>
 									{option.label}
 								</MenuItem>
 							))}
+											
 						</TextField>
+						<RingtoneSelectPlayer/>	
 					</div>
 					<div className={classes.btnGroup}>
 						<Button

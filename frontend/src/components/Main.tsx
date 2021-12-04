@@ -3,8 +3,7 @@ import Time from "./Time";
 import Header from "./Header/Header";
 import TimerModeButtons from "./TimerModeButtons";
 import { useDispatch, useSelector } from "react-redux";
-import { StyledMusicButton } from "./MainStyles";
-import RingtonePlayer from "./Ringtone";
+import RingtonePlayer from "./Ringtone/RingtonePlayer";
 import { getUserSettingsManager } from "./AuthManager";
 import { getUserName } from "./LocalStorageManager";
 import { useTypedSelector } from "../hooks/useTypedSelector";
@@ -31,12 +30,8 @@ export default function Main() {
 			{timerSettings.user.TimerSettings.DefaultDuration && <Header />}
 			<div>
 				<TimerModeButtons />
+				<Time />
 			</div>
-			<Time />
-
-			<StyledMusicButton>
-				<RingtonePlayer />
-			</StyledMusicButton>
 		</div>
 	);
 }

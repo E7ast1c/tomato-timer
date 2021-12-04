@@ -1,7 +1,5 @@
 import React from "react";
 import styled, {keyframes} from "styled-components";
-import playBtn from "../img/play_btn.svg"
-import pauseBtn from "../img/pause_btn.svg"
 
 const animationMusicButton = keyframes`
   0% {
@@ -37,26 +35,4 @@ const animationMusicButton = keyframes`
   100% {
     transform: translate(1px, -2px) rotate(-1deg);
   }
-`;
-
-export const StyledMusicButton = styled.div`
-  position: absolute;
-  top: calc(100% - 150px);
-  left: calc(100% - 90%);
-
-  // &:hover {
-    //   animation: ${animationMusicButton} 0.5s infinite;
-  // }
-`;
-
-export const StyledPlayBtn = styled.button<{pl?:boolean}>`
-  width: 60px;
-  height: 60px;
-  color: transparent;
-  background : url(${(props: any) => (props.pl ? playBtn : pauseBtn)}) no-repeat;
-
-  border-radius: 50px;
-  border: none;
-  cursor: pointer;
-  overflow: hidden;
 `;

@@ -6,17 +6,17 @@ import { useTimer } from "react-timer-hook";
 import ProgressBar from "./ProgressBar";
 
 import { togglePlayRingtone } from "../redux/ringtoneSlice";
-import { getLocalStorageKey } from "./LocalStorageManager";
+import RingtonePlayer from "./Ringtone/RingtonePlayer";
 import { useDispatch, useSelector } from "react-redux";
 import { changeTimerAction } from "../redux/actions/timerSettingsActions";
 import { EnumTimerAction, EnumTimerMode } from "../redux/common";
-import {RootState} from "../redux/store";
+import { RootState } from "../redux/store";
 
 const useStyles = makeStyles({
 	timer: {
 		display: "flex",
 		flexDirection: "column",
-		marginTop: "32vh",
+		marginTop: "20vh",
 	},
 	btn: {
 		margin: ".2rem",
@@ -27,7 +27,7 @@ const noAutoStart = false;
 export default function Time() {
 	const dispatch = useDispatch();
 	const classes = useStyles();
-	const {TimerMode, TimerAction} = useSelector(
+	const { TimerMode, TimerAction } = useSelector(
 		(state: RootState) => state.timerSettings
 	);
 
@@ -92,10 +92,11 @@ export default function Time() {
 	return (
 		<div className={classes.timer}>
 			<div>
+				<RingtonePlayer />
 				<p>{`Timer ${headerCorrector(TimerAction)}`}</p>
-				{`${minutes < 10 ? `0${minutes}` : minutes}:${
-					seconds < 10 ? `0${seconds}` : seconds
-				}`}
+				{`${minutes < 10 ? `0${minutes}` : minutes}:${seconds < 10 ? `0${seconds}` : seconds
+					}`}
+
 			</div>
 			<ProgressBar
 				minutes={minutes}
@@ -106,7 +107,7 @@ export default function Time() {
 				<Button
 					className={classes.btn}
 					variant="contained"
-					style={{backgroundColor: "yellowgreen"}}
+					style={{ backgroundColor: "yellowgreen" }}
 					onClick={() => {
 						start();
 						dispatch(changeTimerAction(EnumTimerAction.START));
