@@ -6,17 +6,18 @@ import { useTimer } from "react-timer-hook";
 import ProgressBar from "./ProgressBar";
 
 import { togglePlayRingtone } from "../redux/ringtoneSlice";
-import RingtonePlayer from "./Ringtone/RingtonePlayer";
+import { getLocalStorageKey } from "./LocalStorageManager";
 import { useDispatch, useSelector } from "react-redux";
 import { changeTimerAction } from "../redux/actions/timerSettingsActions";
 import { EnumTimerAction, EnumTimerMode } from "../redux/common";
-import { RootState } from "../redux/store";
+import store, {RootState} from "../redux/store";
+import {useState} from "react";
 
 const useStyles = makeStyles({
 	timer: {
 		display: "flex",
 		flexDirection: "column",
-		marginTop: "20vh",
+		marginTop: "32vh",
 	},
 	btn: {
 		margin: ".2rem",
@@ -27,33 +28,30 @@ const noAutoStart = false;
 export default function Time() {
 	const dispatch = useDispatch();
 	const classes = useStyles();
-	const { TimerMode, TimerAction } = useSelector(
+	const {TimerMode, TimerAction, Loading} = useSelector(
 		(state: RootState) => state.timerSettings
 	);
+	// const {DefaultDuration, LongBreakDuration, ShortBreakDuration} = store.getState().timerSettings.user.TimerSettings
+	const {DefaultDuration,ShortBreakDuration, LongBreakDuration} = useSelector((state: RootState) => state.timerSettings.user.TimerSettings)
+	const [timerDuration, setTimerDuration] = useState(DefaultDuration)
 
-	let timerDuration: any;
-	switch (TimerMode) {
-		case EnumTimerMode.POMODORO:
-			timerDuration = useSelector(
-				(state: RootState) =>
-					state.timerSettings.user.TimerSettings.DefaultDuration
-			);
-			break;
-		case EnumTimerMode.SHORT_BREAK:
-			timerDuration = useSelector(
-				(state: RootState) =>
-					state.timerSettings.user.TimerSettings.ShortBreakDuration
-			);
-			break;
-		case EnumTimerMode.SHORT_BREAK:
-			timerDuration = useSelector(
-				(state: RootState) =>
-					state.timerSettings.user.TimerSettings.LongBreakDuration
-			);
-			break;
-		default:
-			break;
-	}
+	// let timerDuration: any;
+	useState(() => {
+		switch (TimerMode) {
+			case EnumTimerMode.POMODORO:
+				setTimerDuration(DefaultDuration)
+				break;
+			case EnumTimerMode.SHORT_BREAK:
+				setTimerDuration(ShortBreakDuration)
+				break;
+			case EnumTimerMode.LONG_BREAK:
+				setTimerDuration(LongBreakDuration)
+				break;
+			default:
+				break;
+		}
+		// @ts-ignore
+	}, [Loading])
 
 	function getExpiryDate(timerDuration: any) {
 		let expiry = new Date();
@@ -88,11 +86,12 @@ export default function Time() {
 		// @ts-ignore
 		onExpire: () => dispatch(togglePlayRingtone()),
 	});
+	const timerSettingsState = store.getState().timerSettings
+
 
 	return (
 		<div className={classes.timer}>
 			<div>
-				<RingtonePlayer />
 				<p>{`Timer ${headerCorrector(TimerAction)}`}</p>
 				{`${minutes < 10 ? `0${minutes}` : minutes}:${seconds < 10 ? `0${seconds}` : seconds
 					}`}
@@ -111,6 +110,7 @@ export default function Time() {
 					onClick={() => {
 						start();
 						dispatch(changeTimerAction(EnumTimerAction.START));
+						console.log("timerSettingsState", timerSettingsState)
 					}}
 				>
 					start

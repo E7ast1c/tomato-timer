@@ -9,15 +9,6 @@ export interface TimerSettingsState {
 	TimerMode: string;
 	TimerAction: string;
 }
-export interface DataSettingsType {
-	// token?: string;
-	user : UserType;
-}
-
-// export interface SettingsType {
-// 	token?: string;
-// 	user : UserType;
-// }
 
 export interface UserType {
 	Email?: string;
@@ -59,4 +50,11 @@ export enum EnumTimerAction {
 export interface LoginData {
 	Email: string;
 	Password: string;
+}
+export interface GetAuthSettingsResponse {
+	data: GetAuthSettingsState
+}
+export interface GetAuthSettingsState {
+	settings : UserSettingsType;
+	// Loading?: boolean;
 }

@@ -7,17 +7,11 @@ import Backdrop from "@material-ui/core/Backdrop";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 
-import { GetRingtones } from "../Ringtone/Ringtone"
-
-import { getUserSettingsManager, setUserSettingsManager } from "../AuthManager";
+import { GetRingtones } from "../Ringtone/Ringtone";
 import { MenuItem } from "@material-ui/core";
 
 import { useDispatch, useSelector } from "react-redux";
-import { useTypedSelector } from "../../hooks/useTypedSelector";
-import {
-	changeDefaultTimeAction,
-	changeTickTrackAction,
-} from "../../redux/actions/timerSettingsActions";
+import { changeTickTrackAction } from "../../redux/actions/timerSettingsActions";
 import { toggleSettingsModal } from "../../redux/openModalSlice";
 import { RootState } from "../../redux/store";
 import RingtoneSelectPlayer from "../Ringtone/RingtoneSelectPlayer";

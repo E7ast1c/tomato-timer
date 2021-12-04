@@ -36,20 +36,4 @@ export async function setUserSettings(userSettings, token) {
   return response;
 }
 
-export async function getAuthSettings(token) {
-  try {
-    const response = await axios.get(
-		`${baseAdress}/auth/get-user-settings`,
-      {
-        headers: {
-          "x-access-token": token,
-        },
-      }
-    );
-    console.log("api response", response);
-    return response;
-  } catch (error) {
-    console.log(error);
-  }
-}
 

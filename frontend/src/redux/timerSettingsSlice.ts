@@ -1,12 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { EnumTimerAction, EnumTimerMode, TimerSettingsState } from "./common";
-import { loginThunk } from "./thunk";
+import {getAuthSettingsThunk, loginThunk} from "./thunk";
 
 export const initialState: TimerSettingsState = {
 	user: {
 		Name: "",
 		TimerSettings: {
-			DefaultDuration: 30,
+			DefaultDuration: 40,
 			LongBreakDuration: 20,
 			ShortBreakDuration: 1,
 			TickTrack: "",
@@ -38,9 +38,20 @@ export const timerSettings = createSlice({
 		builder.addCase(loginThunk.rejected, (state) => {
 			state.Loading = false;
 			state.user = initialState.user
+		});
+		builder.addCase(getAuthSettingsThunk.pending, (state) => {
+			state.Loading = true;
+		});
+		builder.addCase(getAuthSettingsThunk.fulfilled, (state, { payload }) => {
+			state.Loading = false;
+			state.AuthFlag = true;
+			state.user.TimerSettings = payload.TimerSettings
+		});
+		builder.addCase(getAuthSettingsThunk.rejected, (state) => {
+			state.Loading = false;
+			state.user = initialState.user
 		})
-
-	}
+	},
 })
 
 export default timerSettings.reducer;

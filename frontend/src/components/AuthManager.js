@@ -1,10 +1,6 @@
-import { getAuthSettings, login, register, setUserSettings } from "../api/Api";
-import { getToken, getUserName, setUserData } from "./LocalStorageManager";
-import {
-  getSettingsAction,
-  getLoginAction,
-  changeAuthFlagAction,
-} from "../redux/actions/timerSettingsActions";
+import {register, setUserSettings} from "../api/Api";
+import {getToken, getUserName, setUserData} from "./LocalStorageManager";
+import {changeAuthFlagAction, getLoginAction,} from "../redux/actions/timerSettingsActions";
 
 // export const AuthLoginManager = (data) => {
 //   return async function (dispatch) {
@@ -33,10 +29,10 @@ export const setUserSettingsManager = (data) => {
   };
 };
 
-export const getUserSettingsManager = () => {
-  return async function (dispatch) {
-    const token = getToken();
-    const response = await getAuthSettings(token);
-    // dispatch(getSettingsAction(response.data.data.settings));
-  };
-};
+// export const getUserSettingsManager = () => {
+//   return async function (dispatch) {
+//     const token = getToken();
+//     const response = await getAuthSettings(token);
+//     // dispatch(getSettingsAction(response.data.data.settings));
+//   };
+// };
