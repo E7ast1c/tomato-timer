@@ -2,7 +2,7 @@ import axios from "axios";
 import config from "../configuration.json";
 import {LoginData, TimerSettingsResponse, TimerSettingsState} from "../redux/common";
 
-const baseAdress = process.env.NODE_ENV === 'production' ? config.TOMATO_API_URL_PROD : config.TOMATO_API_URL_DEV;
+const baseAdress = process.env.NODE_ENV === 'production' ? config.api.TOMATO_API_URL_PROD : config.api.TOMATO_API_URL_DEV;
 
 const headers = {
   "Content-Type": "application/json",

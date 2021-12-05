@@ -1,14 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { EnumTimerAction, EnumTimerMode, TimerSettingsState } from "./common";
 import {getAuthSettingsThunk, loginThunk} from "./thunk";
+import config from "../configuration.json";
 
 export const initialState: TimerSettingsState = {
 	user: {
 		Name: "",
 		TimerSettings: {
-			DefaultDuration: 40,
-			LongBreakDuration: 20,
-			ShortBreakDuration: 1,
+			DefaultDuration: config.defaultDuration.DefaultDuration,
+			LongBreakDuration: config.defaultDuration.LongBreakDuration,
+			ShortBreakDuration: config.defaultDuration.ShortBreakDuration,
 			TickTrack: "",
 		},
 	},

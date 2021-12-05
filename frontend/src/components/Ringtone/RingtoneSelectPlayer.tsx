@@ -5,19 +5,16 @@ import { RootState } from "../../redux/store";
 import { GetDefaultRingtone } from "./Ringtone"
 import { StyledSound } from "./RingtoneStyle"
 
+import PropTypes from "prop-types";
 import { togglePlayRingtone } from "../../redux/ringtoneSlice";
 
-const RingtoneSelectPlayer = () => {
-	const dispatch = useDispatch();
-	const { play } = useSelector((state: RootState) => state.ringtone);
-	const ringtone = useSelector((state: RootState) =>
-		state.timerSettings.user.TimerSettings.TickTrack || GetDefaultRingtone());
-
+const RingtoneSelectPlayer = (props: any) => {
 	const [player, setPlayer] = useState<any>();
+	const [playing, setPlaying] = useState<boolean>(false);
+
 	const volume: number = 1.0;
 
-	const playToggle = () => dispatch(togglePlayRingtone());
-
+	const playToggle = () => setPlaying(!playing);
 	const playerRef = useCallback(
 		(node: any) => {
 			if (node !== null) {
@@ -30,18 +27,23 @@ const RingtoneSelectPlayer = () => {
 	return (
 		<div>
 			<ReactHowler
-				src={[ringtone]}
-				playing={play}
+				src={[props.sound]}
+				playing={playing}
 				onEnd={playToggle}
 				volume={volume}
 				ref={playerRef}
 			/>
 			<StyledSound
 				onClick={playToggle}
-				white={false}
+				dark={true}
 			/>
 		</div>
 	);
 };
+
+RingtoneSelectPlayer.propTypes = {
+  sound: PropTypes.string.isRequired,
+};
+
 
 export default RingtoneSelectPlayer;

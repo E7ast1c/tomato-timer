@@ -4,19 +4,19 @@ import { GetAuthSettingsResponse } from "../redux/common";
 import { getToken } from "../components/LocalStorageManager";
 
 const baseAdress =
-  process.env.NODE_ENV === "production"
-    ? config.TOMATO_API_URL_PROD
-    : config.TOMATO_API_URL_DEV;
+	process.env.NODE_ENV === "production"
+		? config.api.TOMATO_API_URL_PROD
+		: config.api.TOMATO_API_URL_DEV;
 
 const getAuthSettings = async (): Promise<GetAuthSettingsResponse> => {
-  const token = getToken();
-  const {data} = await axios.get(`${baseAdress}/auth/get-user-settings`, {
-    headers: {
-      "x-access-token": token,
-    },
-  });
-  console.log("api response", data);
-  return data;
+	const token = getToken();
+	const { data } = await axios.get(`${baseAdress}/auth/get-user-settings`, {
+		headers: {
+			"x-access-token": token,
+		},
+	});
+	console.log("api response", data);
+	return data;
 }
 
 export default getAuthSettings;
