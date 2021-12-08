@@ -21,6 +21,7 @@ import {
   toggleRegisterModal,
   toggleSettingsModal,
 } from "../../redux/openModalSlice";
+import { clearTimerSettingsState } from "../../redux/timerSettingsSlice";
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
@@ -76,33 +77,20 @@ export default function Header() {
   const classes = useStyles();
   const title = "Tomato timer";
   const user = "user";
-  // const clearSettings = {}
-  const clearSettings = {
-    user: {
-      TimerSettings: {
-        DefaultDuration: 30,
-        LongBreakDuration: 20,
-        ShortBreakDuration: 1,
-      },
-    },
-  };
+
   const [userName, setUserName] = useState("");
   const dispatch = useDispatch();
-  // const { AuthFlag } = useTypedSelector((state) => state.timerSettings);
 
   // test
   const {AuthFlag} = useSelector((state: RootState) => state.timerSettings)
   const {registerModal, settingsModal, loginModal} = useSelector((state: RootState) => state.openModal)
-
-  const testUserName = useSelector((state: RootState) => state.timerSettings.user.Name)
 
   useEffect(() => {
     setUserName(getUserName(user));
   }, [AuthFlag]);
 
   const clearUsersSettings = () => {
-    dispatch(clearUsersSettingsAction(clearSettings));
-    dispatch(changeAuthFlagAction(false));
+    dispatch(clearTimerSettingsState());
     setUserName("");
   };
 
@@ -145,8 +133,7 @@ export default function Header() {
                 align="center"
                 noWrap
               >
-                {/*{userName}*/}
-                {testUserName}
+                {userName}
               </Typography>
 
               <Button
@@ -190,7 +177,3 @@ export default function Header() {
     </React.Fragment>
   );
 }
-
-// Header.propTypes = {
-//   setCurrentDuarationTime: PropTypes.func.isRequired,
-// };

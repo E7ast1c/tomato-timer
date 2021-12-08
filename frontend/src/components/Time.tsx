@@ -1,3 +1,4 @@
+import React, {useEffect, useState} from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 
@@ -8,9 +9,10 @@ import ProgressBar from "./ProgressBar";
 import { togglePlayRingtone } from "../redux/ringtoneSlice";
 import RingtonePlayer from "./Ringtone/RingtonePlayer";
 import { useDispatch, useSelector } from "react-redux";
-import { changeTimerAction } from "../redux/actions/timerSettingsActions";
+// import { changeTimerAction } from "../redux/actions/timerSettingsActions";
 import { EnumTimerAction, EnumTimerMode } from "../redux/common";
 import { RootState } from "../redux/store";
+import {changeTimerAction} from "../redux/timerSettingsSlice";
 
 const useStyles = makeStyles({
 	timer: {
@@ -27,33 +29,28 @@ const noAutoStart = false;
 export default function Time() {
 	const dispatch = useDispatch();
 	const classes = useStyles();
-	const { TimerMode, TimerAction } = useSelector(
+	const { TimerMode, TimerAction, AuthFlag } = useSelector(
 		(state: RootState) => state.timerSettings
 	);
+	const {DefaultDuration, ShortBreakDuration, LongBreakDuration} = useSelector((state: RootState) => state.timerSettings.user.TimerSettings)
+const [timerDuration, setTimerDuration] = useState(DefaultDuration)
 
-	let timerDuration: any;
+	useEffect(() => {
 	switch (TimerMode) {
 		case EnumTimerMode.POMODORO:
-			timerDuration = useSelector(
-				(state: RootState) =>
-					state.timerSettings.user.TimerSettings.DefaultDuration
-			);
+			setTimerDuration( DefaultDuration);
 			break;
 		case EnumTimerMode.SHORT_BREAK:
-			timerDuration = useSelector(
-				(state: RootState) =>
-					state.timerSettings.user.TimerSettings.ShortBreakDuration
-			);
+			setTimerDuration(ShortBreakDuration);
 			break;
-		case EnumTimerMode.SHORT_BREAK:
-			timerDuration = useSelector(
-				(state: RootState) =>
-					state.timerSettings.user.TimerSettings.LongBreakDuration
-			);
+		case EnumTimerMode.LONG_BREAK:
+			setTimerDuration(LongBreakDuration);
 			break;
 		default:
 			break;
 	}
+}, [TimerMode, AuthFlag])
+	console.log("timerDuration", timerDuration)
 
 	function getExpiryDate(timerDuration: any) {
 		let expiry = new Date();
@@ -88,6 +85,12 @@ export default function Time() {
 		// @ts-ignore
 		onExpire: () => dispatch(togglePlayRingtone()),
 	});
+
+	// updating time when changing timer mode
+	useEffect(() => {
+		// @ts-ignore
+		restart(getExpiryDate(timerDuration), noAutoStart);
+	}, [timerDuration])
 
 	return (
 		<div className={classes.timer}>
