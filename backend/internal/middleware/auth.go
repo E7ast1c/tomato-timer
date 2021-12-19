@@ -11,7 +11,7 @@ import (
 // AccessToken access header token key
 const AccessToken = "x-access-token"
 
-func (mw *middleware) New() fiber.Handler {
+func (mw *middleware) AuthRoute() fiber.Handler {
 	return func(fc *fiber.Ctx) error {
 		// Don't execute middleware if Next returns true
 		auth := fc.Get(AccessToken)
@@ -23,7 +23,7 @@ func (mw *middleware) New() fiber.Handler {
 
 		userTk := &models.UserToken{}
 		claims, err := jwt.ParseWithClaims(auth, userTk, func(token *jwt.Token) (interface{}, error) {
-			return []byte(mw.Config.SignSecret), nil
+			return []byte(mw.Config.APIServer.SignSecret), nil
 		})
 		if err != nil {
 			return Unauthorized(fc)

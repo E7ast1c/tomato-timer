@@ -10,18 +10,18 @@ import (
 type Handler struct {
 	Repo   dao.Repository
 	DB     *gorm.DB
-	Config config.APIServer
+	Config config.AppConfig
 	Options
 }
 
 func NewHandler(repo dao.Repository, db *gorm.DB,
-	apiConfig config.APIServer, opt *Options) *Handler {
+	apiConfig config.AppConfig, opt *Options) *Handler {
 
 	if opt == nil {
 		opt = new(Options)
 		opt.ContextUser = "user-context"
 	}
-	return &Handler{Repo: repo, DB: db, Config: apiConfig,Options: *opt}
+	return &Handler{Repo: repo, DB: db, Config: apiConfig, Options: *opt}
 }
 
 type Options struct {

@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 	"time"
+
 	"tomato-timer/backend/config"
 	"tomato-timer/backend/internal/handler"
 	"tomato-timer/backend/internal/models"
@@ -40,14 +41,14 @@ func (app *App) RunServer(conf config.AppConfig, ctx context.Context) (*fiber.Ap
 		WriteTimeout:              5 * time.Second,
 	})
 
-	handle := handler.NewHandler(*repo, db, conf.APIServer, nil)
+	handle := handler.NewHandler(*repo, db, conf, nil)
 	handler.Handlers(handle, fApp)
 
 	closer.Subscribe("httpServer", func() error {
 		return fApp.Shutdown()
 	})
 
-	if err := fApp.Listen(handle.Config.Port); err != nil && err != http.ErrServerClosed {
+	if err := fApp.Listen(handle.Config.APIServer.Port); err != nil && err != http.ErrServerClosed {
 		return nil, err
 	}
 

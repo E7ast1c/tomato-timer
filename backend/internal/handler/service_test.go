@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
 	"tomato-timer/backend/config"
 	"tomato-timer/backend/internal/repository/postgres"
 	"tomato-timer/backend/test"
@@ -110,7 +111,7 @@ func newMockHandler() (*Handler, *gorm.DB, error) {
 		},
 	}
 
-	return NewHandler(*repo, gdb, apiConfig.APIServer, nil), gdb, nil
+	return NewHandler(*repo, gdb, apiConfig, nil), gdb, nil
 }
 
 func newFiberGet(path string, handler fiber.Handler) *fiber.App {

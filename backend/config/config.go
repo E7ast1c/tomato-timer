@@ -6,9 +6,10 @@ import (
 )
 
 type AppConfig struct {
-	DBConfig  DBConfig
-	APIServer APIServer
-	Version   string
+	DBConfig    DBConfig
+	APIServer   APIServer
+	Version     string `env:"DB_URI"`
+	Environment string `env:"ENV"`
 }
 
 type DBConfig struct {
@@ -16,17 +17,20 @@ type DBConfig struct {
 }
 
 type APIServer struct {
-	Port       string `env:"PORT"`
-	SignSecret string `env:"SIGN_SECRET"`
+	Port       string `env:"API_PORT"`
+	SignSecret string `env:"API_SIGN_SECRET"`
+	OriginUrl  string `env:"API_ORIGIN_URL"`
 }
 
 func NewAppConfig() AppConfig {
 	return AppConfig{
 		DBConfig: DBConfig{URI: env.MustEnvString("DB_URI")},
 		APIServer: APIServer{
-			Port:       http.PortCombiner(env.MustEnvString("PORT")),
-			SignSecret: env.MustEnvString("SIGN_SECRET"),
+			Port:       http.PortCombiner(env.MustEnvString("API_PORT")),
+			SignSecret: env.MustEnvString("API_SIGN_SECRET"),
+			OriginUrl: env.MustEnvString("API_ORIGIN_URL"),
 		},
-		Version: "1.0.0",
+		Version:     "1.0.0",
+		Environment: env.MustEnvString("ENV"),
 	}
 }

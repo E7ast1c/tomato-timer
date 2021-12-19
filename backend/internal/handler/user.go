@@ -2,6 +2,7 @@ package handler
 
 import (
 	"errors"
+
 	"tomato-timer/backend/internal/auth"
 	"tomato-timer/backend/internal/models"
 
@@ -104,7 +105,7 @@ func (h *Handler) RegisterUser(fCtx *fiber.Ctx) error {
 			JSON(Response("create user db record failed", err.Error()))
 	}
 
-	newAuth := auth.New(h.Repo, h.Config)
+	newAuth := auth.New(h.Repo, h.Config.APIServer)
 	token, tErr := newAuth.JWTCreate(createdUser)
 	if tErr != nil {
 		return fCtx.Status(fiber.StatusInternalServerError).
@@ -156,7 +157,7 @@ func (h *Handler) Login(fCtx *fiber.Ctx) error {
 			JSON(Response("invalid login credentials", dbErr))
 	}
 
-	newAuth := auth.New(h.Repo, h.Config)
+	newAuth := auth.New(h.Repo, h.Config.APIServer)
 	token, tErr := newAuth.JWTCreate(dbUser)
 	if tErr != nil {
 		return fCtx.Status(fiber.StatusInternalServerError).

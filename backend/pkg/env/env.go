@@ -12,3 +12,8 @@ func MustEnvString(key string) string {
 	}
 	return value
 }
+
+const (
+	Production = "Production"
+	Development = "Development"
+)

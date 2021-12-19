@@ -8,17 +8,17 @@ import (
 )
 
 type middleware struct {
-	Repo   dao.Repository
-	DB     *gorm.DB
-	Config config.APIServer
+	Repo              dao.Repository
+	DB                *gorm.DB
+	Config            config.AppConfig
 	MiddlewareContext string
 }
 
-func New (repo dao.Repository, db *gorm.DB, config config.APIServer, mc string) *middleware {
+func New(repo dao.Repository, db *gorm.DB, config config.AppConfig, mc string) *middleware {
 	return &middleware{
-		Repo:   repo,
-		DB:     db,
-		Config: config,
+		Repo:              repo,
+		DB:                db,
+		Config:            config,
 		MiddlewareContext: mc,
 	}
 }

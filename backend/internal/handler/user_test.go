@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strings"
 	"testing"
+
 	"tomato-timer/backend/config"
 	"tomato-timer/backend/internal/models"
 	"tomato-timer/backend/internal/repository"
@@ -18,7 +19,7 @@ import (
 )
 
 func TestLogin(t *testing.T) {
-	const uri = "/login"
+	const uri = "/api/login"
 	testCases := []test.HandlerCase{
 		{
 			Description:   "successful",
@@ -113,7 +114,7 @@ func setup() (*Handler, *gorm.DB, error) {
 		},
 	}
 
-	return NewHandler(*repo, gdb, apiConfig.APIServer, nil), gdb, nil
+	return NewHandler(*repo, gdb, apiConfig, nil), gdb, nil
 }
 
 func newMockRepository(db *gorm.DB) *repository.Repository {
