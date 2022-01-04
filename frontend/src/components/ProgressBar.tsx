@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
+import React, { Component }  from 'react';
 
 const ProgessBar = (props: any): JSX.Element => {
 	const earlyDate: string = "1970-01-01Z00:00:00:000";

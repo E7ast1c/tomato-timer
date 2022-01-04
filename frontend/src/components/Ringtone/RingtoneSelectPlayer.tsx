@@ -4,6 +4,7 @@ import { useCallback, useState } from "react";
 import { RootState } from "../../redux/store";
 import { GetDefaultRingtone } from "./Ringtone"
 import { StyledSound } from "./RingtoneStyle"
+import React, { Component }  from 'react';
 
 import PropTypes from "prop-types";
 import { togglePlayRingtone } from "../../redux/ringtoneSlice";
