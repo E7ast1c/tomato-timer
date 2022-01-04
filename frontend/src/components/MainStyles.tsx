@@ -1,6 +1,13 @@
 import React from "react";
 import styled, {keyframes} from "styled-components";
 
+export const BtnStyled = styled.button`
+background-color: #fff;
+  &:focus{
+    background-color: tomato;
+  }
+`
+
 const animationMusicButton = keyframes`
   0% {
     transform: translate(1px, 1px) rotate(0deg);

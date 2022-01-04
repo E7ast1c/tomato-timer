@@ -2,7 +2,7 @@ import ReactHowler from "react-howler";
 import { useDispatch, useSelector } from "react-redux";
 import { useCallback, useState } from "react";
 import { RootState } from "../../redux/store";
-import { GetDefaultRingtone } from "./Ringtone"
+import {GetDefaultRingtone, returnNameRingtone} from "./Ringtone"
 import { StyledSound } from "./RingtoneStyle"
 import React, { Component }  from 'react';
 
@@ -12,7 +12,7 @@ const RingtonePlayer = () => {
 	const dispatch = useDispatch();
 	const { play } = useSelector((state: RootState) => state.ringtone);
 	const ringtone = useSelector((state: RootState) =>
-		state.timerSettings.user.TimerSettings.TickTrack || GetDefaultRingtone());
+		state.timerSettings.user.TimerSettings.TickTrack)
 
 	const [player, setPlayer] = useState<any>();
 	const volume: number = 1.0;
@@ -31,7 +31,7 @@ const RingtonePlayer = () => {
 	return (
 		<div>
 			<ReactHowler
-				src={[ringtone]}
+				src={[returnNameRingtone(ringtone)]}
 				playing={play}
 				onEnd={playToggle}
 				volume={volume}

@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from "react";
+import React, {ChangeEvent, useEffect, useState} from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -7,7 +7,7 @@ import Backdrop from "@material-ui/core/Backdrop";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 
-import { GetDefaultRingtone, GetRingtones } from "../Ringtone/Ringtone"
+import {GetDefaultRingtone, GetRingtones, returnNameRingtone} from "../Ringtone/Ringtone"
 import { MenuItem } from "@material-ui/core";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -19,6 +19,9 @@ import {
 import { toggleSettingsModal } from "../../redux/openModalSlice";
 import { RootState } from "../../redux/store";
 import RingtoneSelectPlayer from "../Ringtone/RingtoneSelectPlayer";
+import {changeRingtoneSettingsValue, changeSettingsValue} from "../common";
+import {updateTimerSettings} from "../../redux/timerSettingsSlice";
+import {setSettingsThunk} from "../../redux/thunk";
 
 const useStyles = makeStyles((theme) => ({
 	formControl: {
@@ -63,10 +66,14 @@ export default function SettingModal() {
 	};
 
 	const classes = useStyles();
+	const {DefaultDuration, ShortBreakDuration, LongBreakDuration, TickTrack} = useSelector((state: RootState) => state.timerSettings.user.TimerSettings)
 
-	const [valueDefaultTime, setValueDefaultTime] = useState(0);
-	const [valueShortBreak, setValueShortBreak] = useState(0);
-	const [valueLongBreak, setValueLongBreak] = useState(0);
+	const [timerSettings, SetTimerSettings] = useState({
+		DefaultDuration: DefaultDuration,
+		LongBreakDuration: LongBreakDuration,
+		ShortBreakDuration: ShortBreakDuration,
+		TickTrack: TickTrack,
+	})
 
 	const [ringtone, setRingtone] = useState("");
 
@@ -101,91 +108,101 @@ export default function SettingModal() {
 						className={classes.settingsTime}
 					>
 						<h3>Enter pomodoro time</h3>
-						<form
-							noValidate
-							autoComplete="off"
-						>
+						{/*<form*/}
+						{/*	noValidate*/}
+						{/*	autoComplete="off"*/}
+						{/*>*/}
 							<TextField
 								type="number"
 								className={classes.input}
 								id="outlined-basic"
 								label="Minutes"
 								variant="outlined"
-								onChange={(e: ChangeEvent<HTMLInputElement>) =>
-									setValueDefaultTime(0)
-								}
-								value={valueDefaultTime}
+								onChange={changeSettingsValue(
+									"DefaultDuration",
+									timerSettings,
+									SetTimerSettings
+								)}
+								value={timerSettings.DefaultDuration}
 							/>
-						</form>
+						{/*</form>*/}
 					</div>
 					<div
 						id="transition-modal-description"
 						className={classes.settingsTime}
 					>
 						<h3>Enter Short Break</h3>
-						<form
-							noValidate
-							autoComplete="off"
-						>
+						{/*<form*/}
+						{/*	noValidate*/}
+						{/*	autoComplete="off"*/}
+						{/*>*/}
 							<TextField
 								type="number"
 								className={classes.input}
 								id="outlined-basic"
 								label="Minutes"
 								variant="outlined"
-								onChange={(
-									e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-								) => setValueShortBreak(0)}
-								value={valueShortBreak}
+								onChange={changeSettingsValue(
+									"ShortBreakDuration",
+									timerSettings,
+									SetTimerSettings
+								)}
+								value={timerSettings.ShortBreakDuration}
 							/>
-						</form>
+						{/*</form>*/}
 					</div>
 					<div
 						id="transition-modal-description"
 						className={classes.settingsTime}
 					>
 						<h3>Enter Long Break</h3>
-						<form
-							// onSubmit={handleSubmit(onSubmit)}
-							// className={classes.root}
-							noValidate
-							autoComplete="off"
-						>
+						{/*<form*/}
+						{/*	// onSubmit={handleSubmit(onSubmit)}*/}
+						{/*	// className={classes.root}*/}
+						{/*	noValidate*/}
+						{/*	autoComplete="off"*/}
+						{/*>*/}
 							<TextField
 								type="number"
 								className={classes.input}
 								id="outlined-basic"
 								label="Minutes"
 								variant="outlined"
-								onChange={(
-									e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-								) => setValueLongBreak(0)}
-								value={valueLongBreak}
+								onChange={changeSettingsValue(
+									"LongBreakDuration",
+									timerSettings,
+									SetTimerSettings
+								)}
+								value={timerSettings.LongBreakDuration}
 							/>
-						</form>
+						{/*</form>*/}
 					</div>
 					<div className={classes.settingsTime}>
 						<h3>Choose ringtone</h3>
+							<div style={{alignSelf: "center"}}>
+								<RingtoneSelectPlayer sound={returnNameRingtone(timerSettings.TickTrack)} />
+							</div>
 
 						<TextField
 							variant="outlined"
 							className={classes.formControl}
-							onChange={(
-								event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-							) => changeRingtone(event)}
+							onChange={changeRingtoneSettingsValue(
+								"TickTrack",
+								timerSettings,
+								SetTimerSettings
+							)}
 							select
 							label="Ringtone"
-							value={ringtone}
+							value={timerSettings.TickTrack}
 						>
-
 							{GetRingtones().map((option) => (
-								<MenuItem key={option.value} value={option.value}>
+								<MenuItem key={option.label} value={option.label}>
 									{option.label}
 								</MenuItem>
 							))}
 
 						</TextField>
-						<RingtoneSelectPlayer sound={ringtone || GetDefaultRingtone()} />
+
 					</div>
 					<div className={classes.btnGroup}>
 						<Button
@@ -193,7 +210,8 @@ export default function SettingModal() {
 							variant="contained"
 							onClick={() => {
 								dispatch(toggleSettingsModal())
-								dispatch(changeTickTrackAction(ringtone));
+								dispatch(setSettingsThunk(timerSettings))
+								dispatch(updateTimerSettings(timerSettings))
 							}}
 						>
 							Save

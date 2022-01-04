@@ -155,13 +155,13 @@ export default function LoginModal() {
                   {...register("password", {
                     required: true,
                     maxLength: 16,
-                    minLength: 8,
+                    minLength: 6,
                   })}
                 />
                 {errors.password?.type === "maxLength" &&
                   fieldErrorMessage("Max length 16 characters")}
                 {errors.password?.type === "minLength" &&
-                  fieldErrorMessage("Min length 8 characters")}
+                  fieldErrorMessage("Min length 6 characters")}
               </FormControl>
               <div className={classes.btnGroup}>
                 <Button type="submit" color="primary" variant="contained">

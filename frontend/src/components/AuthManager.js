@@ -1,4 +1,4 @@
-import {register, setUserSettings} from "../api/Api";
+import {register} from "../api/Api";
 import {getToken, getUserName, setUserData} from "./LocalStorageManager";
 import {changeAuthFlagAction, getLoginAction,} from "../redux/actions/timerSettingsActions";
 

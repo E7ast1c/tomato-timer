@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { EnumTimerAction, EnumTimerMode, TimerSettingsState } from "./common";
-import {getAuthSettingsThunk, loginThunk} from "./thunk";
+import {getAuthSettingsThunk, loginThunk, registerThunk} from "./thunk";
 import config from "../configuration.json";
 
 export const initialState: TimerSettingsState = {
@@ -24,7 +24,6 @@ export const timerSettings = createSlice({
 	initialState,
 	reducers: {
 		clearTimerSettingsState: () => {
-
 			return initialState;
 		},
 		changeTimerMode: (state: TimerSettingsState, {payload}) => {
@@ -32,21 +31,36 @@ export const timerSettings = createSlice({
 		},
 		changeTimerAction: (state: TimerSettingsState, {payload}) => {
 			state.TimerAction = payload;
-		}
+		},
+		updateTimerSettings: (state: TimerSettingsState, {payload}) => {
+			state.user.TimerSettings = payload;
+		},
 	},
 	extraReducers: (builder) => {
-		builder.addCase(loginThunk.pending, (state) => {
+		builder.addCase(loginThunk.pending || registerThunk.pending, (state) => {
 			state.Loading = true;
 		});
-		builder.addCase(loginThunk.fulfilled, (state, { payload }) => {
+		builder.addCase(loginThunk.fulfilled || registerThunk.pending, (state, { payload }) => {
 			state.Loading = false;
 			state.AuthFlag = true;
 			state.user = payload.user
 		});
-		builder.addCase(loginThunk.rejected, (state) => {
+		builder.addCase(loginThunk.rejected || registerThunk.pending, (state) => {
 			state.Loading = false;
 			state.user = initialState.user
 		});
+		// builder.addCase(registerThunk.pending, (state) => {
+		// 	state.Loading = true;
+		// });
+		// builder.addCase(registerThunk.fulfilled, (state, { payload }) => {
+		// 	state.Loading = false;
+		// 	state.AuthFlag = true;
+		// 	state.user = payload.user
+		// });
+		// builder.addCase(registerThunk.rejected, (state) => {
+		// 	state.Loading = false;
+		// 	state.user = initialState.user
+		// });
 		builder.addCase(getAuthSettingsThunk.pending, (state) => {
 			state.Loading = true;
 		});
@@ -63,4 +77,4 @@ export const timerSettings = createSlice({
 })
 
 export default timerSettings.reducer;
-export const { clearTimerSettingsState, changeTimerMode, changeTimerAction } = timerSettings.actions;
+export const { clearTimerSettingsState, changeTimerMode, changeTimerAction, updateTimerSettings } = timerSettings.actions;

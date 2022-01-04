@@ -17,9 +17,9 @@ export interface UserType {
 }
 export interface UserSettingsType {
 	AlarmTrack?: string;
-	DefaultDuration: any;
-	LongBreakDuration: any;
-	ShortBreakDuration: any;
+	DefaultDuration: number;
+	LongBreakDuration: number;
+	ShortBreakDuration: number;
 	TickTrack: string;
 }
 
@@ -50,6 +50,10 @@ export enum EnumTimerAction {
 export interface LoginData {
 	Email: string;
 	Password: string;
+}
+
+export interface RegisterData extends LoginData {
+	Name: string;
 }
 export interface GetAuthSettingsResponse {
 	data: GetAuthSettingsState

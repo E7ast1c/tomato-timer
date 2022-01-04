@@ -9,7 +9,6 @@ import ProgressBar from "./ProgressBar";
 import { togglePlayRingtone } from "../redux/ringtoneSlice";
 import RingtonePlayer from "./Ringtone/RingtonePlayer";
 import { useDispatch, useSelector } from "react-redux";
-// import { changeTimerAction } from "../redux/actions/timerSettingsActions";
 import { EnumTimerAction, EnumTimerMode } from "../redux/common";
 import { RootState } from "../redux/store";
 import {changeTimerAction} from "../redux/timerSettingsSlice";
@@ -49,7 +48,7 @@ export default function Time() {
 		default:
 			break;
 	}
-}, [TimerMode])
+}, [TimerMode, AuthFlag, DefaultDuration, ShortBreakDuration, LongBreakDuration])
 
 	function getExpiryDate(timerDuration: any) {
 		let expiry = new Date();

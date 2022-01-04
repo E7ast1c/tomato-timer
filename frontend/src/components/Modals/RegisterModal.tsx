@@ -17,6 +17,7 @@ import { AuthRegisterManager } from "../AuthManager";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { toggleRegisterModal } from "../../redux/openModalSlice";
+import {registerThunk} from "../../redux/thunk";
 
 const useStyles = makeStyles((theme) => ({
   emailMargin: {
@@ -69,13 +70,14 @@ export default function RegisterModal() {
 
   const classes = useStyles();
   const [values, setValues] = useState({
-    login: "",
-    email: "",
-    password: "",
+    Name: "",
+    Email: "",
+    Password: "",
     weight: "",
     weightRange: "",
     showPassword: false,
   });
+
   const [captcha, setCaptcha] = useState<string | null>(null);
 
   const handleChange = (prop: string) => (event: any) => {
@@ -95,7 +97,8 @@ export default function RegisterModal() {
   };
 
   const onSubmit = async (data: any) => {
-    dispatch(AuthRegisterManager(data));
+    // dispatch(AuthRegisterManager(data));
+    dispatch(registerThunk(data))
     handleClose();
   };
 
@@ -120,8 +123,8 @@ export default function RegisterModal() {
                 <Input
                   id="login"
                   // @ts-ignore
-                  onChange={handleChange("Login")}
-                  {...register("login", {
+                  onChange={handleChange("Name")}
+                  {...register("Name", {
                     required: true,
                     maxLength: 12,
                     minLength: 4,
@@ -131,11 +134,11 @@ export default function RegisterModal() {
                     },
                   })}
                 />
-                {errors.login?.type === "maxLength" &&
+                {errors.Name?.type === "maxLength" &&
                   fieldErrorMessage("Max length 12 characters")}
-                {errors.login?.type === "minLength" &&
+                {errors.Name?.type === "minLength" &&
                   fieldErrorMessage("Min length 4 characters")}
-                {errors.login?.type === "pattern" &&
+                {errors.Name?.type === "pattern" &&
                   fieldErrorMessage(
                     "Login can contain only letters and numbers"
                   )}
@@ -145,8 +148,8 @@ export default function RegisterModal() {
                 <Input
                   id="Email"
                   // @ts-ignore
-                  onChange={handleChange("email")}
-                  {...register("email", {
+                  onChange={handleChange("Email")}
+                  {...register("Email", {
                     required: true,
                     maxLength: 320,
                     minLength: 6,
@@ -156,11 +159,11 @@ export default function RegisterModal() {
                     },
                   })}
                 />
-                {errors.email?.type === "maxLength" &&
+                {errors.Email?.type === "maxLength" &&
                   fieldErrorMessage("Max length 320 characters")}
-                {errors.email?.type === "minLength" &&
+                {errors.Email?.type === "minLength" &&
                   fieldErrorMessage("Min length 6 characters")}
-                {errors.email?.type === "pattern" &&
+                {errors.Email?.type === "pattern" &&
                   fieldErrorMessage("Enter correct email, example@ya.ru")}
               </FormControl>
 
@@ -186,21 +189,22 @@ export default function RegisterModal() {
                       </IconButton>
                     </InputAdornment>
                   }
-                  {...register("password", {
+                  {...register("Password", {
                     required: true,
                     maxLength: 16,
-                    minLength: 8,
+                    minLength: 6,
                   })}
                 />
-                {errors.password?.type === "maxLength" &&
+                {errors.Password?.type === "maxLength" &&
                   fieldErrorMessage("Max length 16 characters")}
-                {errors.password?.type === "minLength" &&
-                  fieldErrorMessage("Min length 8 characters")}
+                {errors.Password?.type === "minLength" &&
+                  fieldErrorMessage("Min length 6 characters")}
               </FormControl>
 
               <FormControl>
+                {console.log("KEY", process.env.REACT_APP_CAPTCHA_KEY)}
                 <div className={classes.captcha}>
-                  {process.env.REACT_APP_CAPTCHA_KEY !== "" ? (
+                  {process.env.REACT_APP_CAPTCHA_KEY !== undefined && process.env.REACT_APP_CAPTCHA_KEY !== ""  ? (
                     <ReCAPTCHA
                       hl="en"
                       sitekey={process.env.REACT_APP_CAPTCHA_KEY || ""}
@@ -221,6 +225,7 @@ export default function RegisterModal() {
                   color="primary"
                   variant="contained"
                   disabled={captcha === null}
+
                 >
                   Ok
                 </Button>

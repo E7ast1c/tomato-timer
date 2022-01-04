@@ -29,3 +29,12 @@ const DefaultRingtoneArray: Ringtone[] = [
 export const GetRingtones = (): Ringtone[] => DefaultRingtoneArray;
 
 export const GetDefaultRingtone = (): string => DefaultRingtoneArray.find(r => r.priority == 0)!.value;
+
+export const returnNameRingtone = (ringtone : string) => {
+	if(ringtone !== ""){
+		const [name] =  DefaultRingtoneArray.filter((el) => (el.label === ringtone));
+		return name.value;
+	}
+	return GetDefaultRingtone()
+}
+

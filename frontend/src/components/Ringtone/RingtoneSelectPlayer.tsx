@@ -12,7 +12,6 @@ import { togglePlayRingtone } from "../../redux/ringtoneSlice";
 const RingtoneSelectPlayer = (props: any) => {
 	const [player, setPlayer] = useState<any>();
 	const [playing, setPlaying] = useState<boolean>(false);
-
 	const volume: number = 1.0;
 
 	const playToggle = () => setPlaying(!playing);
@@ -35,6 +34,7 @@ const RingtoneSelectPlayer = (props: any) => {
 				ref={playerRef}
 			/>
 			<StyledSound
+				vis={true}
 				onClick={playToggle}
 				dark={true}
 			/>
