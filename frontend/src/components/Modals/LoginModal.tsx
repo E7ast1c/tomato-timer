@@ -50,9 +50,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function LoiginModal() {
-  // const prop = props.prop;
-  const {loginModal} = useSelector((state: RootState) => state.openModal)
+export default function LoginModal() {
+  const { loginModal } = useSelector((state: RootState) => state.openModal);
   const {
     register,
     handleSubmit,
@@ -83,14 +82,16 @@ export default function LoiginModal() {
   };
 
   const onSubmit = async (data: any) => {
-    // dispatch(AuthLoginManager(data));
-    console.log("login modal data", data)
-    dispatch(loginThunk(data))
+    dispatch(loginThunk(data));
     handleClose();
   };
   const handleClose = () => {
     dispatch(toggleLoginModal());
   };
+
+  const fieldErrorMessage = (message: string) => (
+    <p className={classes.txtError}>{message}</p>
+  );
 
   return (
     <div>
@@ -111,21 +112,24 @@ export default function LoiginModal() {
                   // @ts-ignore
                   onChange={handleChange("Email")}
                   type="text"
-                  placeholder="Email"
                   {...register("email", {
                     required: true,
+                    maxLength: 320,
+                    minLength: 6,
                     pattern: {
                       value: /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/,
-                      message: "massage error",
+                      message: "",
                     },
                   })}
                 />
-                {errors.email && (
-                  <p className={classes.txtError}>
-                    Please enter correct email, example@ya.ru
-                  </p>
-                )}
+                {errors.email?.type === "maxLength" &&
+                  fieldErrorMessage("Max length 320 characters")}
+                {errors.email?.type === "minLength" &&
+                  fieldErrorMessage("Min length 6 characters")}
+                {errors.email?.type === "pattern" &&
+                  fieldErrorMessage("Enter correct email, example@ya.ru")}
               </FormControl>
+
               <FormControl>
                 <InputLabel htmlFor="password">Password</InputLabel>
                 <Input
@@ -150,17 +154,14 @@ export default function LoiginModal() {
                   }
                   {...register("password", {
                     required: true,
-                    pattern: {
-                      value: /(?=.{4,})/,
-                      message: "error message",
-                    },
+                    maxLength: 16,
+                    minLength: 8,
                   })}
                 />
-                {errors.password && (
-                  <p className={classes.txtError}>
-                    You must enter more than 8 characters
-                  </p>
-                )}
+                {errors.password?.type === "maxLength" &&
+                  fieldErrorMessage("Max length 16 characters")}
+                {errors.password?.type === "minLength" &&
+                  fieldErrorMessage("Min length 8 characters")}
               </FormControl>
               <div className={classes.btnGroup}>
                 <Button type="submit" color="primary" variant="contained">
@@ -182,7 +183,3 @@ export default function LoiginModal() {
     </div>
   );
 }
-
-// LoiginModal.propTypes = {
-//   prop: PropTypes.object.isRequired,
-// };

@@ -59,8 +59,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Register: FC = ( ) => {
-  // const prop = props.prop;
+export default function RegisterModal() {
   const dispatch = useDispatch();
   const {registerModal} = useSelector((state: RootState) => state.openModal)
   const {
@@ -70,7 +69,6 @@ const Register: FC = ( ) => {
   } = useForm();
 
   const classes = useStyles();
-  // const [modalStyle] = React.useState(getModalStyle);
   const [values, setValues] = useState({
     login: "",
     email: "",
@@ -78,10 +76,6 @@ const Register: FC = ( ) => {
     weight: "",
     weightRange: "",
     showPassword: false,
-  });
-
-  useEffect(() => {
-    // console.log(prop);
   });
 
   const handleChange = (prop: string) => (event: any) => {
@@ -105,6 +99,11 @@ const Register: FC = ( ) => {
     handleClose();
   };
 
+	const fieldErrorMessage = (message: string) => (
+    <p className={classes.txtError}>{message}</p>
+  );
+
+
   return (
     <div>
       <Modal
@@ -117,63 +116,62 @@ const Register: FC = ( ) => {
         <div>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className={classes.paper}>
+
               <FormControl >
                 <InputLabel htmlFor="login">Login</InputLabel>
                 <Input
                   id="login"
-                  placeholder="Login"
-                  // className={clsx(classes.margin, classes.textField)}
                   // @ts-ignore
-                  onChange={handleChange("Name")}
-                  {...register("Name", {
+                  onChange={handleChange("Login")}
+                  {...register("login", {
                     required: true,
+                    maxLength: 12,
+                    minLength: 4,
                     pattern: {
-                      value: /[0-9a-zA-Z]{3,}/,
-                      message: "massage error",
+                      value: /^[a-zA-Z0-9_.-]*$/,
+                      message: "",
                     },
                   })}
                 />
-                {errors.Name && (
-                  <p className={classes.txtError}>
-                    Please enter more than 3 letters or numbers
-                  </p>
-                )}
+                {errors.login?.type === "maxLength" &&
+                  fieldErrorMessage("Max length 12 characters")}
+                {errors.login?.type === "minLength" &&
+                  fieldErrorMessage("Min length 4 characters")}
+								{errors.login?.type === "pattern" &&
+                  fieldErrorMessage("Login can contain only letters and numbers")}
               </FormControl>
 
               <FormControl>
                 <InputLabel htmlFor="Email">Email</InputLabel>
                 <Input
                   id="Email"
-                  placeholder="Email"
-                  className={clsx(
-                    // classes.margin,
-                    // classes.textField,
-                    classes.emailMargin
-                  )}
                   // @ts-ignore
                   onChange={handleChange("email")}
-                  {...register("Email", {
+									{...register("email", {
                     required: true,
+                    maxLength: 320,
+                    minLength: 6,
                     pattern: {
                       value: /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/,
-                      message: "massage error",
+                      message: "",
                     },
                   })}
                 />
-                {errors.Email && (
-                  <p className={classes.txtError}>
-                    Please enter correct email, example@ya.ru
-                  </p>
-                )}
+                {errors.email?.type === "maxLength" &&
+                  fieldErrorMessage("Max length 320 characters")}
+                {errors.email?.type === "minLength" &&
+                  fieldErrorMessage("Min length 6 characters")}
+                {errors.email?.type === "pattern" &&
+                  fieldErrorMessage("Enter correct email, example@ya.ru")}
               </FormControl>
+
               <FormControl>
                 <InputLabel htmlFor="password">Password</InputLabel>
                 <Input
                   id="password"
                   type={values.showPassword ? "text" : "password"}
-                  // value={values.password}
                   // @ts-ignore
-                  onChange={handleChange("password")}
+                  onChange={handleChange("Password")}
                   endAdornment={
                     <InputAdornment position="end">
                       <IconButton
@@ -189,19 +187,16 @@ const Register: FC = ( ) => {
                       </IconButton>
                     </InputAdornment>
                   }
-                  {...register("Password", {
+                  {...register("password", {
                     required: true,
-                    pattern: {
-                      value: /(?=.{4,})/,
-                      message: "error message",
-                    },
+                    maxLength: 16,
+                    minLength: 8,
                   })}
                 />
-                {errors.Password && (
-                  <p className={classes.txtError}>
-                    You must enter more than 8 characters
-                  </p>
-                )}
+                {errors.password?.type === "maxLength" &&
+                  fieldErrorMessage("Max length 16 characters")}
+                {errors.password?.type === "minLength" &&
+                  fieldErrorMessage("Min length 8 characters")}
               </FormControl>
               <div className={classes.btnGroup}>
                 <Button type="submit" color="primary" variant="contained">
@@ -222,9 +217,3 @@ const Register: FC = ( ) => {
     </div>
   );
 }
-
-// Register.propTypes = {
-//   prop: PropTypes.object.isRequired,
-// };
-
-export default Register;

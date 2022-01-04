@@ -7,7 +7,7 @@ import GitHubIcon from "@material-ui/icons/GitHub";
 import Link from "@material-ui/core/Link";
 import Register from "../Modals/RegisterModal";
 import SettingModal from "../Modals/SettingsModal";
-import LoiginModal from "../Modals/LoiginModal";
+import LoiginModal from "../Modals/LoginModal";
 import { clearLocalStorage, getUserName } from "../LocalStorageManager";
 
 import { useDispatch, useSelector } from "react-redux";
