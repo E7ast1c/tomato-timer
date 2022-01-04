@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 
@@ -33,7 +33,7 @@ export default function Time() {
 		(state: RootState) => state.timerSettings
 	);
 	const {DefaultDuration, ShortBreakDuration, LongBreakDuration} = useSelector((state: RootState) => state.timerSettings.user.TimerSettings)
-const [timerDuration, setTimerDuration] = useState(DefaultDuration)
+  const [timerDuration, setTimerDuration] = useState(DefaultDuration)
 
 	useEffect(() => {
 	switch (TimerMode) {
@@ -49,8 +49,7 @@ const [timerDuration, setTimerDuration] = useState(DefaultDuration)
 		default:
 			break;
 	}
-}, [TimerMode, AuthFlag])
-	console.log("timerDuration", timerDuration)
+}, [TimerMode])
 
 	function getExpiryDate(timerDuration: any) {
 		let expiry = new Date();

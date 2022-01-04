@@ -36,9 +36,9 @@ const RingtonePlayer = () => {
 				volume={volume}
 				ref={playerRef}
 			/>
-			{play && <StyledSound
+			<StyledSound vis={play}
 				onClick={playToggle}
-			/>}
+			/>
 		</div>
 	);
 };

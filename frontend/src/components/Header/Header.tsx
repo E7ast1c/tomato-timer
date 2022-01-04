@@ -69,10 +69,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Header() {
-  // const setCurrentDuarationTime = props.setCurrentDuarationTime;
-  // const [registerModal, setRegisterModal] = useState<boolean>(false);
-  // const [settingsModal, setSettingsModal] = useState(false);
-  // const [isLoginModal, setIsLoginModal] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const classes = useStyles();
   const title = "Tomato timer";
