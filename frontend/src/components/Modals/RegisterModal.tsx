@@ -1,5 +1,4 @@
-import React, {FC, SyntheticEvent, useEffect, useState} from "react";
-import clsx from "clsx";
+import { useState } from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
@@ -11,18 +10,13 @@ import FormControl from "@material-ui/core/FormControl";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import IconButton from "@material-ui/core/IconButton";
-import PropTypes from "prop-types";
-import config from "../../configuration.json";
-
+import ReCAPTCHA from "react-google-recaptcha";
 import { useForm } from "react-hook-form";
 
 import { AuthRegisterManager } from "../AuthManager";
-import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "../../redux/store";
-import {
-  toggleLoginModal,
-  toggleRegisterModal,
-} from "../../redux/openModalSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
+import { toggleRegisterModal } from "../../redux/openModalSlice";
 
 const useStyles = makeStyles((theme) => ({
   emailMargin: {
@@ -41,6 +35,11 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+  },
+  captcha: {
+    display: "flex",
+    justifyContent: "center",
+    marginTop: "1.2em",
   },
   paper: {
     display: "flex",
@@ -61,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function RegisterModal() {
   const dispatch = useDispatch();
-  const {registerModal} = useSelector((state: RootState) => state.openModal)
+  const { registerModal } = useSelector((state: RootState) => state.openModal);
   const {
     register,
     handleSubmit,
@@ -77,6 +76,7 @@ export default function RegisterModal() {
     weightRange: "",
     showPassword: false,
   });
+  const [captcha, setCaptcha] = useState<string | null>(null);
 
   const handleChange = (prop: string) => (event: any) => {
     setValues({ ...values, [prop]: event.target.value });
@@ -86,12 +86,12 @@ export default function RegisterModal() {
     setValues({ ...values, showPassword: !values.showPassword });
   };
 
-  const handleMouseDownPassword = (event: { preventDefault: () => void; }) => {
+  const handleMouseDownPassword = (event: { preventDefault: () => void }) => {
     event.preventDefault();
   };
 
   const handleClose = () => {
-    dispatch(toggleRegisterModal())
+    dispatch(toggleRegisterModal());
   };
 
   const onSubmit = async (data: any) => {
@@ -99,10 +99,9 @@ export default function RegisterModal() {
     handleClose();
   };
 
-	const fieldErrorMessage = (message: string) => (
+  const fieldErrorMessage = (message: string) => (
     <p className={classes.txtError}>{message}</p>
   );
-
 
   return (
     <div>
@@ -116,8 +115,7 @@ export default function RegisterModal() {
         <div>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className={classes.paper}>
-
-              <FormControl >
+              <FormControl>
                 <InputLabel htmlFor="login">Login</InputLabel>
                 <Input
                   id="login"
@@ -137,17 +135,18 @@ export default function RegisterModal() {
                   fieldErrorMessage("Max length 12 characters")}
                 {errors.login?.type === "minLength" &&
                   fieldErrorMessage("Min length 4 characters")}
-								{errors.login?.type === "pattern" &&
-                  fieldErrorMessage("Login can contain only letters and numbers")}
+                {errors.login?.type === "pattern" &&
+                  fieldErrorMessage(
+                    "Login can contain only letters and numbers"
+                  )}
               </FormControl>
-
               <FormControl>
                 <InputLabel htmlFor="Email">Email</InputLabel>
                 <Input
                   id="Email"
                   // @ts-ignore
                   onChange={handleChange("email")}
-									{...register("email", {
+                  {...register("email", {
                     required: true,
                     maxLength: 320,
                     minLength: 6,
@@ -198,8 +197,31 @@ export default function RegisterModal() {
                 {errors.password?.type === "minLength" &&
                   fieldErrorMessage("Min length 8 characters")}
               </FormControl>
+
+              <FormControl>
+                <div className={classes.captcha}>
+                  {process.env.REACT_APP_CAPTCHA_KEY !== "" ? (
+                    <ReCAPTCHA
+                      hl="en"
+                      sitekey={process.env.REACT_APP_CAPTCHA_KEY || ""}
+                      onChange={(v) => setCaptcha(v)}
+                      onExpired={() => setCaptcha(null)}
+                    />
+                  ) : (
+                    fieldErrorMessage(
+                      "Missing required parameters: ReCAPTCHA sitekey"
+                    )
+                  )}
+                </div>
+              </FormControl>
+
               <div className={classes.btnGroup}>
-                <Button type="submit" color="primary" variant="contained">
+                <Button
+                  type="submit"
+                  color="primary"
+                  variant="contained"
+                  disabled={captcha === null}
+                >
                   Ok
                 </Button>
                 <Button
