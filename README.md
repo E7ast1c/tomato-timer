@@ -1,9 +1,9 @@
-# 🍅 Tomato timer
+# Another yet, tomato (pomodoro) timer 🍅 
 
-the time management technique created by Francesco Cirillo for a more productive way to work and study.
+the time management technique created by Francesco Cirillo for a more productive way to work and study, [wiki]( https://en.wikipedia.org/wiki/Pomodoro_Technique)
 
 ### Our goal
-👨🏼‍💻🧑🏻‍💻  We are making this project for practice skills in programming, we will be grateful for your feedback about our project.
+👨🏼‍💻🧑🏻‍💻  We are making this project for practice skills in programming, we will be grateful for your feedback about our project
 
 ### Tools
 Here are a list of tools we include in the project :octocat:
@@ -22,11 +22,9 @@ Name | Description
 Name | Description
 ------------ | -------------
 [React](https://reactjs.org) | A JavaScript library for building user interfaces
-[Redux](https://redux.js.org) | A Predictable State Container for JS Apps
+[Redux Toolkit](https://redux-toolkit.js.org) | The official, opinionated, batteries-included toolset for efficient Redux development
 [Material ui](material-ui.com) | React components for web development.
-[Moment js](https://momentjs.com) | Moment js is a great library for time manipulation in js
 [Form validation](https://react-hook-form.com) | Library for form validation in js
 [React timer hook](https://github.com/amrlabib/react-timer-hook) | React custom hook for  handle timer, stopwatch, and time logic/state in your react component.
 
-
-### 👾  You can visit last built version of application by [link](http://code-monkey.tech/)
+### 👾  You can visit last built version of application by [link](https://code-monkey.tech/)
