@@ -12,12 +12,10 @@ import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import IconButton from "@material-ui/core/IconButton";
 import ReCAPTCHA from "react-google-recaptcha";
 import { useForm } from "react-hook-form";
-
-import { AuthRegisterManager } from "../AuthManager";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { toggleRegisterModal } from "../../redux/openModalSlice";
-import {registerThunk} from "../../redux/thunk";
+import { registerThunk } from "../../redux/thunk";
 
 const useStyles = makeStyles((theme) => ({
   emailMargin: {
@@ -97,8 +95,7 @@ export default function RegisterModal() {
   };
 
   const onSubmit = async (data: any) => {
-    // dispatch(AuthRegisterManager(data));
-    dispatch(registerThunk(data))
+    dispatch(registerThunk(data));
     handleClose();
   };
 
@@ -202,9 +199,9 @@ export default function RegisterModal() {
               </FormControl>
 
               <FormControl>
-                {console.log("KEY", process.env.REACT_APP_CAPTCHA_KEY)}
                 <div className={classes.captcha}>
-                  {process.env.REACT_APP_CAPTCHA_KEY !== undefined && process.env.REACT_APP_CAPTCHA_KEY !== ""  ? (
+                  {process.env.REACT_APP_CAPTCHA_KEY !== undefined &&
+                  process.env.REACT_APP_CAPTCHA_KEY !== "" ? (
                     <ReCAPTCHA
                       hl="en"
                       sitekey={process.env.REACT_APP_CAPTCHA_KEY || ""}
@@ -225,7 +222,6 @@ export default function RegisterModal() {
                   color="primary"
                   variant="contained"
                   disabled={captcha === null}
-
                 >
                   Ok
                 </Button>

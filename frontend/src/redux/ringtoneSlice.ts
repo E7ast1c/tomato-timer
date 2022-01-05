@@ -1,22 +1,22 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from "@reduxjs/toolkit";
 
 type RingtoneInitialState = {
-	play: boolean
-}
+  play: boolean;
+};
 
 export const initialState: RingtoneInitialState = {
-	play: false,
+  play: false,
 };
 
 export const ringtone = createSlice({
-	name: "ringtone",
-	initialState,
-	reducers: {
-		togglePlayRingtone: (state: RingtoneInitialState) => {
-			state.play = !state.play
-		},
-	}
-})
+  name: "ringtone",
+  initialState,
+  reducers: {
+    togglePlayRingtone: (state: RingtoneInitialState) => {
+      state.play = !state.play;
+    },
+  },
+});
 
-export default ringtone.reducer
-export const { togglePlayRingtone } = ringtone.actions
+export default ringtone.reducer;
+export const { togglePlayRingtone } = ringtone.actions;

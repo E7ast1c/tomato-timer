@@ -19,7 +19,6 @@ export default function Main() {
   }, []);
 
   const timerSettings = useSelector((state: RootState) => state.timerSettings);
-  console.log("timerSettings", timerSettings);
   return (
     <div>
       {timerSettings.user.TimerSettings.DefaultDuration && <Header />}

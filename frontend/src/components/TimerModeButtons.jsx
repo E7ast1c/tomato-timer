@@ -1,66 +1,48 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
-import ButtonGroup from "@material-ui/core/ButtonGroup";
 import { useDispatch } from "react-redux";
 import { EnumTimerMode } from "../redux/common";
 import { changeTimerMode } from "../redux/timerSettingsSlice";
-import {BtnStyled} from "./MainStyles";
-import BottomNavigation from '@material-ui/core/BottomNavigation';
-import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
+import BottomNavigation from "@material-ui/core/BottomNavigation";
+import BottomNavigationAction from "@material-ui/core/BottomNavigationAction";
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-      "&.MuiBottomNavigation-root": {
-        background: "#282c34",
-        marginTop: "1em",
-      },
-      "&.MuiBottomNavigationAction-root":{
-        color: "#fff !important",
-        "&.Mui-selected": {
-          textShadow: "0px 0px 20px #D72402",
-        },
-      },
-      "&.MuiBottomNavigationAction-root .MuiBottomNavigationAction-label":{
-        fontSize: "1rem !important",
-      },
-      "&.MuiBottomNavigationAction-root .MuiBottomNavigationAction-label.Mui-selected": {
-        fontSize: "1.2rem !important",
-
-      }
-
+  root: {
+    "&.MuiBottomNavigation-root": {
+      background: "#282c34",
+      marginTop: "1em",
     },
+    "&.MuiBottomNavigationAction-root": {
+      color: "#fff !important",
+      "&.Mui-selected": {
+        textShadow: "0px 0px 20px #D72402",
+      },
+    },
+    "&.MuiBottomNavigationAction-root .MuiBottomNavigationAction-label": {
+      fontSize: "1rem !important",
+    },
+    "&.MuiBottomNavigationAction-root .MuiBottomNavigationAction-label.Mui-selected": {
+      fontSize: "1.2rem !important",
+    },
+  },
   navBtn: {
-    "&.MuiBottomNavigationAction-root":{
+    "&.MuiBottomNavigationAction-root": {
       color: "#fff !important",
     },
     "&:.Mui-selected": {
       color: "red !important",
-      fontSize: "40px !important"
-
-    }
-
-
+      fontSize: "40px !important",
+    },
   },
   btngroup: {
     marginTop: "1em",
   },
-  // btn: {
-  //   color: "#fff",
-  //   borderBottom: `3px solid transparent `,
-  //   // "&:focus ": {
-  //   //   borderBottom: `3px solid tomato`
-  //   // },
-  // },
-  // activeBtn: {
-  //   background: "tomato",
-  // },
 }));
 
 export default function TimerModeButtons() {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const [value, setValue] = React.useState('Pomodoro');
+  const [value, setValue] = React.useState("Pomodoro");
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -68,29 +50,31 @@ export default function TimerModeButtons() {
 
   return (
     <div>
-      <BottomNavigation className={classes.root} showLabels value={value} onChange={handleChange}>
+      <BottomNavigation
+        className={classes.root}
+        showLabels
+        value={value}
+        onChange={handleChange}
+      >
         <BottomNavigationAction
           label="Pomodoro"
           value="Pomodoro"
           className={classes.root}
           onClick={() => dispatch(changeTimerMode(EnumTimerMode.POMODORO))}
-        >
-        </BottomNavigationAction>
+        ></BottomNavigationAction>
         <BottomNavigationAction
           label="Short break"
           value="Short break"
           className={classes.root}
           onClick={() => dispatch(changeTimerMode(EnumTimerMode.SHORT_BREAK))}
-        >
-        </BottomNavigationAction>
+        ></BottomNavigationAction>
         <BottomNavigationAction
           label="Long break"
           value="Long break"
           onClick={() => dispatch(changeTimerMode(EnumTimerMode.LONG_BREAK))}
           className={classes.root}
-        >
-        </BottomNavigationAction>
-        </BottomNavigation>
+        ></BottomNavigationAction>
+      </BottomNavigation>
     </div>
   );
 }

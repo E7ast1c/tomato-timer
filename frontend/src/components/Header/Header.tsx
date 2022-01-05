@@ -11,10 +11,6 @@ import LoiginModal from "../Modals/LoginModal";
 import { clearLocalStorage, getUserName } from "../LocalStorageManager";
 
 import { useDispatch, useSelector } from "react-redux";
-import {
-  changeAuthFlagAction,
-  clearUsersSettingsAction,
-} from "../../redux/actions/timerSettingsActions";
 import { RootState } from "../../redux/store";
 import {
   toggleLoginModal,
@@ -27,7 +23,6 @@ const useStyles = makeStyles((theme) => ({
   toolbar: {
     borderBottom: `1px solid `,
     display: "flex",
-    // justifyContent: "space-between",
   },
   toolbarButton: {
     color: "white",
@@ -78,8 +73,10 @@ export default function Header() {
   const dispatch = useDispatch();
 
   // test
-  const {AuthFlag} = useSelector((state: RootState) => state.timerSettings)
-  const {registerModal, settingsModal, loginModal} = useSelector((state: RootState) => state.openModal)
+  const { AuthFlag } = useSelector((state: RootState) => state.timerSettings);
+  const { registerModal, settingsModal, loginModal } = useSelector(
+    (state: RootState) => state.openModal
+  );
 
   useEffect(() => {
     setUserName(getUserName(user));
@@ -167,9 +164,9 @@ export default function Header() {
           )}
         </div>
       </Toolbar>
-      {loginModal && <LoiginModal /> }
-      {registerModal && <Register /> }
-      {settingsModal && <SettingModal /> }
+      {loginModal && <LoiginModal />}
+      {registerModal && <Register />}
+      {settingsModal && <SettingModal />}
     </React.Fragment>
   );
 }
