@@ -1,5 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import login from "../../api/login";
+import setUserSettings from "../../api/setSettings";
+import register from "../../api/register";
 import getAuthSettings from "../../api/getAuthSettings";
 import {
   LoginData,
@@ -8,8 +10,6 @@ import {
   UserSettingsType,
 } from "../common";
 import { getToken, setUserData } from "../../components/LocalStorageManager";
-import setUserSettings from "../../api/setSettings";
-import register from "../../api/register";
 
 export const loginThunk = createAsyncThunk<
   Omit<TimerSettingsState, "Loading">,
