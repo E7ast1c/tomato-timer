@@ -8,8 +8,8 @@ import {
   UserSettingsType,
 } from "../common";
 import { getToken, setUserData } from "../../components/LocalStorageManager";
-import { setUserSettings } from "../../api/setSettings";
 import register from "../../api/register";
+import setUserSettings from "../../api/setSettings";
 
 export const loginThunk = createAsyncThunk<
   Omit<TimerSettingsState, "Loading">,
