@@ -1,8 +1,4 @@
 {
-  "api": {
-    "TOMATO_API_URL_DEV": "https://code-monkey.tech/api",
-    "TOMATO_API_URL_PROD": "http://localhost/api"
-  },
   "defaultDuration": {
     "DefaultDuration": 30,
     "LongBreakDuration": 20,

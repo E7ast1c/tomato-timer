@@ -17,7 +17,7 @@ type DBConfig struct {
 }
 
 type APIServer struct {
-	Port       string `env:"API_PORT"`
+	Port       string `env:"PORT"`
 	SignSecret string `env:"API_SIGN_SECRET"`
 	OriginUrl  string `env:"API_ORIGIN_URL"`
 }
@@ -26,9 +26,9 @@ func NewAppConfig() AppConfig {
 	return AppConfig{
 		DBConfig: DBConfig{URI: env.MustEnvString("DB_URI")},
 		APIServer: APIServer{
-			Port:       http.PortCombiner(env.MustEnvString("API_PORT")),
+			Port:       http.PortCombiner(env.MustEnvString("PORT")),
 			SignSecret: env.MustEnvString("API_SIGN_SECRET"),
-			OriginUrl: env.MustEnvString("API_ORIGIN_URL"),
+			OriginUrl:  env.MustEnvString("API_ORIGIN_URL"),
 		},
 		Version:     "1.0.0",
 		Environment: env.MustEnvString("ENV"),
