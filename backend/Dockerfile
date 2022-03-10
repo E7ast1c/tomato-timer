@@ -1,10 +1,11 @@
-FROM golang:1.16-alpine
-
+FROM alpine:latest
 WORKDIR /app
+RUN cd /app
 
-COPY . ./
+COPY /tomato-timer /app/tomato-timer
 
-RUN go mod download
+EXPOSE ${BACKEND_PORT}
+RUN apk add --no-cache libc6-compat
+RUN apk add --no-cache bash
 
-RUN go build -o main ./cmd
-CMD ["/app/main"]
+ENTRYPOINT ["./tomato-timer"]

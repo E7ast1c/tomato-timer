@@ -1,5 +1,4 @@
 version: "3"
-
 services:
     frontend:
         build:
@@ -12,8 +11,10 @@ services:
     backend:
         environment:
             - DB_URI=${DB_URI}
-            - PORT=${BACKEND_PORT}
-            - SIGN_SECRET=${SIGN_SECRET}
+            - API_PORT=${BACKEND_PORT}
+            - API_SIGN_SECRET=${API_SIGN_SECRET}
+            - API_ORIGIN_URL=${API_ORIGIN_URL}
+            - API_ENV=${API_ENV}
         build:
             context: backend/
         ports:

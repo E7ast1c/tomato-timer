@@ -5,32 +5,37 @@ import (
 	"tomato-timer/backend/pkg/http"
 )
 
+const (
+	EnvDBURI = "DB_URI"
+)
+
 type AppConfig struct {
-	DBConfig    DBConfig
-	APIServer   APIServer
-	Version     string `env:"DB_URI"`
-	Environment string `env:"ENV"`
+	DBConfig  DBConfig
+	APIServer APIServer
+
+	Version     string
+	Environment string
 }
 
 type DBConfig struct {
-	URI string `env:"DB_URI"`
+	URI string
 }
 
 type APIServer struct {
-	Port       string `env:"PORT"`
-	SignSecret string `env:"API_SIGN_SECRET"`
-	OriginUrl  string `env:"API_ORIGIN_URL"`
+	Port       string
+	SignSecret string
+	OriginUrl  string
 }
 
 func NewAppConfig() AppConfig {
 	return AppConfig{
 		DBConfig: DBConfig{URI: env.MustEnvString("DB_URI")},
 		APIServer: APIServer{
-			Port:       http.PortCombiner(env.MustEnvString("PORT")),
+			Port:       http.PortCombiner(env.MustEnvString("API_PORT")),
 			SignSecret: env.MustEnvString("API_SIGN_SECRET"),
 			OriginUrl:  env.MustEnvString("API_ORIGIN_URL"),
 		},
 		Version:     "1.0.0",
-		Environment: env.MustEnvString("ENV"),
+		Environment: env.MustEnvString("API_ENV"),
 	}
 }
