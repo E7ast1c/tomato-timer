@@ -6,6 +6,22 @@ on:
       - main
 
 jobs:
+  setup_key:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - run: set -eu
+      - run: mkdir "$HOME/.ssh"
+      - run: echo "${{ secrets.KEY }}" > "$HOME/.ssh/key"
+      - run: chmod 600 "$HOME/.ssh/key"
+
+      - run: echo "${{ secrets.ENV_SECRET }}" > "$GITHUB_WORKSPACE/.env"
+      - run: echo "DEPLOY_TIMESTAMP=$(date '+%d-%m-%Y %H:%M:%S')" >> "$GITHUB_WORKSPACE/.env"
+      - run: echo "VERSION=branch-${{ github.ref }};gh-run-id-${{ github.run_id }};gh-run-number-${{ github.run_number }}" >> "$GITHUB_WORKSPACE/.env"
+      - run: scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i $HOME/.ssh/key -P ${{ secrets.PORT }} .env ${{ secrets.USER }}@${{ secrets.HOST }}:${{ secrets.API_PATH }}
+
   build_frontend:
     runs-on: ubuntu-latest
     defaults:
