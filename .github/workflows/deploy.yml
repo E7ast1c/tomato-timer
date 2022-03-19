@@ -39,7 +39,7 @@ jobs:
       - run: echo "VERSION=branch-${{ github.ref }};gh-run-id-${{ github.run_id }};gh-run-number-${{ github.run_number }}" >> "$GITHUB_WORKSPACE/.env"
 
       # Deploy
-      - run: rsync -e "ssh -i $HOME/.ssh/key -p ${{ secrets.PORT }} -o StrictHostKeyChecking=no" -avz --no-perms --omit-dir-times --delete --exclude='.*/' $GITHUB_WORKSPACE/build ${{ secrets.USER }}@${{ secrets.HOST }}:${{ secrets.FE_PATH }}
+      - run: rsync -e "ssh -i $HOME/.ssh/key -p ${{ secrets.PORT }} -o StrictHostKeyChecking=no" -avz --no-perms --omit-dir-times --delete --exclude='.*/' $GITHUB_WORKSPACE/frontend/build ${{ secrets.USER }}@${{ secrets.HOST }}:${{ secrets.FE_PATH }}
 
 
 
