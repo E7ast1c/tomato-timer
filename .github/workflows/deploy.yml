@@ -20,3 +20,51 @@ jobs:
       - run: echo "DEPLOY_TIMESTAMP=$(date '+%d-%m-%Y %H:%M:%S')" >> "$GITHUB_WORKSPACE/.env"
       - run: echo "VERSION=branch-${{ github.ref }};gh-run-id-${{ github.run_id }};gh-run-number-${{ github.run_number }}" >> "$GITHUB_WORKSPACE/.env"
       - run: scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i $HOME/.ssh/key -P ${{ secrets.PORT }} .env ${{ secrets.USER }}@${{ secrets.HOST }}:${{ secrets.PATH }}
+
+  deploy_frontend:
+    needs: setup_key
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: frontend
+
+    strategy:
+      matrix:
+        node-version: [ 14.x ]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm ci
+      - run: npm run build
+      - name: 📚 List files in the repository
+        run: ls -all $GITHUB_WORKSPACE/frontend
+
+      # Deploy
+      - run: scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i $HOME/.ssh/key -P ${{ secrets.PORT }} $GITHUB_WORKSPACE/frontend/build ${{ secrets.USER }}@${{ secrets.HOST }}:${{ secrets.PATH }}
+
+  deploy_backend:
+    needs: setup_key
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: backend
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.17
+      - name: Build
+        run: go build -v -o build ./cmd/main.go
+      - name: 📚 List files in the repository
+        run: ls -all $GITHUB_WORKSPACE/frontend
+
+      # Deploy
+      - run: scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i $HOME/.ssh/key -P ${{ secrets.PORT }} $GITHUB_WORKSPACE/backend/build ${{ secrets.USER }}@${{ secrets.HOST }}:${{ secrets.PATH }}
