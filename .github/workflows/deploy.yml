@@ -2,10 +2,11 @@ name: deploy
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
 
 jobs:
-  deploy_frontend:
+  build_frontend:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -24,6 +25,8 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: npm ci
       - run: npm run build
+      - name: "Job status"
+        run: echo "⚡️ ${{ job.name }} status is ${{ job.status }}."
 
       # Setup key
       - run: set -eu
@@ -31,30 +34,10 @@ jobs:
       - run: echo "${{ secrets.KEY }}" > "$HOME/.ssh/key"
       - run: chmod 600 "$HOME/.ssh/key"
 
-      # Deploy
-      - run: scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i $HOME/.ssh/key -P ${{ secrets.PORT }} $GITHUB_WORKSPACE/frontend/build ${{ secrets.USER }}@${{ secrets.HOST }}:${{ secrets.PATH }}
-
-  deploy_backend:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
-        working-directory: backend
-
-    steps:
-      - uses: actions/checkout@v2
-      - name: Set up Go
-        uses: actions/setup-go@v2
-        with:
-          go-version: 1.17
-      - name: Build
-        run: go build -v -o build ./cmd/main.go
-
-      # Setup key
-      - run: set -eu
-      - run: mkdir "$HOME/.ssh"
-      - run: echo "${{ secrets.KEY }}" > "$HOME/.ssh/key"
-      - run: chmod 600 "$HOME/.ssh/key"
+      # Setup env
+      - run: echo "${{ secrets.ENV_SECRET }}" > "$GITHUB_WORKSPACE/.env"
+      - run: echo "DEPLOY_TIMESTAMP=$(date '+%d-%m-%Y %H:%M:%S')" >> "$GITHUB_WORKSPACE/.env"
+      - run: echo "VERSION=branch-${{ github.ref }};gh-run-id-${{ github.run_id }};gh-run-number-${{ github.run_number }}" >> "$GITHUB_WORKSPACE/.env"
 
       # Deploy
-      - run: scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i $HOME/.ssh/key -P ${{ secrets.PORT }} $GITHUB_WORKSPACE/backend/build ${{ secrets.USER }}@${{ secrets.HOST }}:${{ secrets.PATH }}
+      - run: rsync -e "ssh -i $HOME/.ssh/key -p ${{ secrets.PORT }} -o StrictHostKeyChecking=no" -avz --no-perms --omit-dir-times --delete --exclude='.*/' $GITHUB_WORKSPACE/build ${{ secrets.USER }}@${{ secrets.HOST }}:${{ secrets.FE_PATH }}
