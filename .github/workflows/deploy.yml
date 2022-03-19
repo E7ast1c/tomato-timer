@@ -35,4 +35,4 @@ jobs:
       - run: chmod 600 "$HOME/.ssh/key"
 
       # Deploy
-      - run: scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i $HOME/.ssh/key -P ${{ secrets.PORT }} $GITHUB_WORKSPACE/frontend/build ${{ secrets.USER }}@${{ secrets.HOST }}:${{ secrets.FE_PATH }}
+      - run: scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -r -i $HOME/.ssh/key -P ${{ secrets.PORT }} $GITHUB_WORKSPACE/frontend/build ${{ secrets.USER }}@${{ secrets.HOST }}:${{ secrets.FE_PATH }}
