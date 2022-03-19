@@ -69,7 +69,7 @@ jobs:
         with:
           go-version: 1.17
       - name: Build
-        run: go build -v -o main ./cmd/main.go
+        run: go build -v -o build ./cmd/main.go
       - name: "Job status"
         run: echo "⚡️ ${{ job.name }} status is ${{ job.status }}."
 
