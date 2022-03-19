@@ -5,24 +5,18 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
-
+  setup_key:
     runs-on: ubuntu-latest
-
+    defaults:
+      run:
+        shell: bash
     steps:
-      - uses: actions/checkout@v1
+      - run: set -eu
+      - run: mkdir "$HOME/.ssh"
+      - run: echo "${{ secrets.KEY }}" > "$HOME/.ssh/key"
+      - run: chmod 600 "$HOME/.ssh/key"
 
       - run: echo "${{ secrets.ENV_SECRET }}" > "$GITHUB_WORKSPACE/.env"
       - run: echo "DEPLOY_TIMESTAMP=$(date '+%d-%m-%Y %H:%M:%S')" >> "$GITHUB_WORKSPACE/.env"
       - run: echo "VERSION=branch-${{ github.ref }};gh-run-id-${{ github.run_id }};gh-run-number-${{ github.run_number }}" >> "$GITHUB_WORKSPACE/.env"
-
-      - name: Copy env`s contents via scp
-        uses: appleboy/scp-action@master
-        env:
-          HOST: ${{ secrets.HOST }}
-          USERNAME: ${{ secrets.USER }}
-          PORT: ${{ secrets.PORT }}
-          KEY: ${{ secrets.KEY }}
-        with:
-          source: ".env"
-          target: ${{ secrets.PATH }}
+      - run: scp -i "~/.ssh/jino" -P ${{ secrets.PORT }} .env ${{ secrets.USER }}@${{ secrets.HOST }}:${{ secrets.PATH }}
