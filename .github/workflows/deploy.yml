@@ -6,15 +6,27 @@ on:
       - main
 
 jobs:
-  deploy:
+  build_frontend:
+    runs-on: ubuntu-latest
     defaults:
       run:
         shell: bash
-        working-directory: /
+        working-directory: frontend
 
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [ 14.x ]
+
     steps:
       - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm ci
+      - run: npm run build
+      - name: "Job status"
+        run: echo "⚡️ ${{ job.name }} status is ${{ job.status }}."
 
       # Setup key
       - run: set -eu
@@ -28,4 +40,10 @@ jobs:
       - run: echo "VERSION=branch-${{ github.ref }};gh-run-id-${{ github.run_id }};gh-run-number-${{ github.run_number }}" >> "$GITHUB_WORKSPACE/.env"
 
       # Deploy
-      - run: rsync -e "ssh -i $HOME/.ssh/key -p ${{ secrets.PORT }} -o StrictHostKeyChecking=no" -avz --no-perms --omit-dir-times --delete --exclude='.*/' $GITHUB_WORKSPACE/ ${{ secrets.USER }}@${{ secrets.HOST }}:${{ secrets.PATH }}
+      - run: rsync -e "ssh -i $HOME/.ssh/key -p ${{ secrets.PORT }} -o StrictHostKeyChecking=no" -avz --no-perms --omit-dir-times --delete --exclude='.*/' $GITHUB_WORKSPACE/build ${{ secrets.USER }}@${{ secrets.HOST }}:${{ secrets.PATH }}
+
+
+
+
+
+
