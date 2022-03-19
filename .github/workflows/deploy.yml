@@ -24,8 +24,6 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: npm ci
       - run: npm run build
-      - name: 📚 List files in repository
-        run: ls -all
 
       # Setup key
       - run: set -eu
@@ -51,8 +49,6 @@ jobs:
           go-version: 1.17
       - name: Build
         run: go build -v -o build ./cmd/main.go
-      - name: 📚 List files in the repository
-        run: ls -all
 
       # Setup key
       - run: set -eu
