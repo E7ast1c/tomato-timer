@@ -37,7 +37,6 @@ jobs:
       - run: scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i $HOME/.ssh/key -P ${{ secrets.PORT }} $GITHUB_WORKSPACE/frontend/build ${{ secrets.USER }}@${{ secrets.HOST }}:${{ secrets.PATH }}
 
   deploy_backend:
-    needs: setup_key
     runs-on: ubuntu-latest
     defaults:
       run:
