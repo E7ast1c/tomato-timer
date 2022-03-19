@@ -22,7 +22,7 @@ jobs:
       - run: echo "VERSION=branch-${{ github.ref }};gh-run-id-${{ github.run_id }};gh-run-number-${{ github.run_number }}" >> "$GITHUB_WORKSPACE/.env"
       - run: scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i $HOME/.ssh/key -P ${{ secrets.PORT }} .env ${{ secrets.USER }}@${{ secrets.HOST }}:${{ secrets.API_PATH }}
 
-  build_frontend:
+  deploy_frontend:
     runs-on: ubuntu-latest
     needs: deploy_env
     defaults:
@@ -54,7 +54,7 @@ jobs:
       # Deploy
       - run: scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -r -i $HOME/.ssh/key -P ${{ secrets.PORT }} $GITHUB_WORKSPACE/frontend/build ${{ secrets.USER }}@${{ secrets.HOST }}:${{ secrets.FE_PATH }}
 
-  build_backend:
+  deploy_backend:
     runs-on: ubuntu-latest
     needs: deploy_env
     defaults:

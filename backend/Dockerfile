@@ -8,4 +8,4 @@ EXPOSE ${BACKEND_PORT}
 RUN apk add --no-cache libc6-compat
 RUN apk add --no-cache bash
 
-ENTRYPOINT ["./tomato-timer"]
+ENTRYPOINT ["./build"]
