@@ -11,11 +11,11 @@ services:
     backend:
         environment:
             - DB_URI=${DB_URI}
-            - API_PORT=${BACKEND_PORT}
+            - API_PORT=${API_PORT}
             - API_SIGN_SECRET=${API_SIGN_SECRET}
             - API_ORIGIN_URL=${API_ORIGIN_URL}
             - API_ENV=${API_ENV}
         build:
             context: backend/
         ports:
-            - ${BACKEND_PORT}:${BACKEND_PORT}
+            - ${API_PORT}:${API_PORT}

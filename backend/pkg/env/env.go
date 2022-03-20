@@ -15,5 +15,4 @@ func MustEnvString(key string) string {
 
 const (
 	Production = "Production"
-	Development = "Development"
 )

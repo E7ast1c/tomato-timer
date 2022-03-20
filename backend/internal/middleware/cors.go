@@ -13,7 +13,7 @@ func (mw *middleware) Cors() fiber.Handler {
 		AllowHeaders:     "Accept, Content-Type, Content-Length, Accept-Encoding, X-Access-Token",
 		AllowCredentials: true,
 	}
-	if mw.Config.Environment == env.Development {
+	if mw.Config.Environment != env.Production {
 		config.AllowOrigins = "*"
 		return cors.New(config)
 	} else {
