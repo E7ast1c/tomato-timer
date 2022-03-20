@@ -14,7 +14,7 @@ ReactDOM.render(
   document.getElementById("root")
 );
 
-Axios.defaults.baseURL = 'http://localhost/api/';
+Axios.defaults.baseURL = `${process.env.REACT_APP_ORIGIN}/api/`;
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
